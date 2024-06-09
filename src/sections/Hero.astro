@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+
+import pfpImage from "@/images/pfp-image.jpg";
+import info from "@/data/me.json";
+
+const getActualAge =  (birthday: string) => {
+    const birthDate = new Date(birthday);
+    const actualDate = new Date();
+
+    let age = actualDate.getFullYear() - birthDate.getFullYear();
+    
+    if (
+        actualDate.getMonth() < birthDate.getMonth() || 
+        (actualDate.getMonth() === birthDate.getMonth() && actualDate.getDate() < birthDate.getDate())
+    ) {
+        age--;
+    }
+
+    return age;
+}
+---
+
+<section class="snap-start grid grid-cols-12 grid-rows-1 h-svh">
+    <div class="my-4 col-start-2 col-span-10 flex flex-col">
+        <div class="pb-8 flex items-center justify-center">
+            <Image
+                class="rounded-full shadow-xl border-white border-4"
+                src={pfpImage}
+                alt=`Imagen de perfil de ${info.fullname}`
+            />
+        </div>
+        <div class="overflow-hidden">
+            <h1 class="text-center text-2xl font-bold">
+                {info.fullname}
+            </h1>
+            <h2 class="text-center text-xl font-extralight">
+                {info.rol}
+            </h2>
+            <p class="mt-4 text-base font-normal">
+                Hola, soy <span class="text-red-500">{info.username}</span> y tengo {getActualAge(info.birthday)} años.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus.
+            </p>
+        </div>
+    </div>
+</section>

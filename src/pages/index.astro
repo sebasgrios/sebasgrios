@@ -1,9 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 
-import Construction from '@/sections/Construction.astro';
+import Hero from '@/sections/Hero.astro';
+import Jobs from '@/sections/Jobs.astro';
+import Projects from '@/sections/Projects.astro';
 ---
 
 <Layout title="Sebastián González Ríos">
-	<Construction />
+	<main class="h-svh snap-y snap-mandatory overflow-scroll">
+		<Hero />
+		<Jobs />
+		<Projects />
+	</main>
 </Layout>

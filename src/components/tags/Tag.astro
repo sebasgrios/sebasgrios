@@ -1,0 +1,23 @@
+---
+import ReactIcon from "../icons/React-Icon.astro";
+
+const nametag = Astro.props.name;
+
+const renderIcon = (nametag: string) => {
+    switch (nametag) {
+        case "react":
+            return ReactIcon;
+        default:
+            return null;
+    }
+};
+---
+
+<span
+    class="text-xs uppercase inline-flex items-center font-bold px-3 py-1 rounded-full bg-[#61DAFB] bg-opacity-80"
+>
+    <ReactIcon class="size-4 mr-1" /> React
+    <!-- {<tag.icon class="size-4 mr-1" />} {tag} -->
+     <!-- TOD@ -->
+    <!-- {<renderIcon(nametag) class="size-4 mr-1" />} {nametag} -->
+</span>

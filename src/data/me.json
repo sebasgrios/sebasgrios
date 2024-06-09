@@ -1,0 +1,37 @@
+{
+    "name": "Sebastián",
+    "fullname": "Sebastián González Ríos",
+    "username": "Sebas",
+    "birthday": "12/03/2001",
+    "rol": "Frontend Developer",
+    "email": "contact@sebastiangonzalezrios.com",
+    "jobs": [
+        {
+            "position": "Frontend Developer",
+            "date": "06/18/2022",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus.",
+            "tags": ["typescript", "react", "git", "jenkins"]
+        },
+        {
+            "position": "Frontend Developer",
+            "date": "06/18/2022",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus.",
+            "tags": ["typescript", "react", "git", "jenkins"]
+        },
+        {
+            "position": "Frontend Developer",
+            "date": "06/18/2022",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus.",
+            "tags": ["typescript", "react", "git", "jenkins"]
+        }
+    ],
+    "projects": [
+        {
+            "image": "",
+            "title": "Daemon",
+            "date": "2022",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus. Vestibulum vitae malesuada mi. Maecenas commodo bibendum placerat. Maecenas convallis, lacus placerat dignissim laoreet, diam sapien tincidunt metus, vitae varius nisl enim vitae lectus. Sed sollicitudin pellentesque sagittis. Cras vehicula ligula nec tortor tempor, vel tempor massa hendrerit. Fusce in lectus tincidunt, commodo massa quis, molestie neque. Aliquam ut lacus eros. Nunc fermentum est eu condimentum gravida. Duis nibh nisi, blandit vitae arcu a, suscipit cursus magna. Phasellus vulputate dapibus arcu vel varius. Pellentesque hendrerit rhoncus nulla, ut dapibus est mattis sit amet. Suspendisse quam nunc, fringilla vel sodales et, posuere et mi. Aenean egestas leo eget lacus condimentum hendrerit.",
+            "tags": ["typescript", "react", "git", "jenkins"]
+        }
+    ]
+}
