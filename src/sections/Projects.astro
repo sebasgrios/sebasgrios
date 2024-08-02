@@ -1,47 +1,37 @@
 ---
 import Tag from "@/components/tags/Tag.astro";
 
-import EmailIcon from "@/components/icons/Email-Icon.astro";
-import ReactIcon from "@/components/icons/React-Icon.astro";
-import TypescriptIcon from "@/components/icons/Typescript-Icon.astro";
-import CSharpIcon from "@/components/icons/CSharp-Icon.astro";
+import info from "@/data/me.json";
 ---
+
 <section class="snap-start grid grid-cols-12 grid-rows-1 h-svh">
-    <div class="mt-4 pb-4 px-8 col-start-0 col-span-12 flex flex-row gap-4 justify-start items-center overflow-x-scroll snap-x snap-mandatory">
-        <div class="border shadow-lg min-w-full h-full rounded-3xl flex flex-col justify-start gap-4 p-4 snap-center">
-            <div class="bg-sky-500 w-full h-1/3 rounded-xl"></div>
-            <div class="h-2/3 flex flex-col justify-between gap-4">
-                <div class="flex flex-row justify-between items-center">
-                    <h1 class="font-bold text-2xl">Daemon</h1>
-                    <time class="font-semibold text-lg text-gray-400">2022</time>
+    <div
+        class="mt-4 pb-4 px-8 col-start-0 col-span-12 flex flex-row gap-4 justify-start items-center overflow-x-scroll snap-x snap-mandatory"
+    >
+        {
+            info.projects.map((project) => (
+                <div class="border shadow-lg min-w-full h-full rounded-3xl flex flex-col justify-start gap-4 p-4 snap-center">
+                    <div class="overflow-hidden w-full h-1/3 rounded-xl flex align-middle">
+                        <img class="w-full h-full" src={project.image} alt=`Foto del proyecto ${project.title}` />
+                    </div>
+                    <div class="h-2/3 flex flex-col justify-between gap-4">
+                        <div class="flex flex-row justify-between items-center">
+                            <h1 class="font-bold text-2xl">{project.title}</h1>
+                            <time class="font-semibold text-lg text-gray-400">
+                                {project.date}
+                            </time>
+                        </div>
+                        <p class="overflow-auto text-base font-normal flex-1">
+                            {project.description}
+                        </p>
+                        <div class="flex flex-wrap items-center gap-1">
+                            {project.tags.map((tag) => (
+                                <Tag info={tag} />
+                            ))}
+                        </div>
+                    </div>
                 </div>
-                <p class="overflow-auto text-base font-normal flex-1">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-                    luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus.
-                    Donec sagittis, eros quis ultricies semper, magna arcu accumsan
-                    tellus, eget varius lorem mauris at purus. Vestibulum vitae
-                    malesuada mi. Maecenas commodo bibendum placerat. Maecenas
-                    convallis, lacus placerat dignissim laoreet, diam sapien
-                    tincidunt metus, vitae varius nisl enim vitae lectus. Sed
-                    sollicitudin pellentesque sagittis. Cras vehicula ligula nec
-                    tortor tempor, vel tempor massa hendrerit. Fusce in lectus
-                    tincidunt, commodo massa quis, molestie neque. Aliquam ut lacus
-                    eros. Nunc fermentum est eu condimentum gravida. Duis nibh nisi,
-                    blandit vitae arcu a, suscipit cursus magna. Phasellus vulputate
-                    dapibus arcu vel varius. Pellentesque hendrerit rhoncus nulla,
-                    ut dapibus est mattis sit amet. Suspendisse quam nunc, fringilla
-                    vel sodales et, posuere et mi. Aenean egestas leo eget lacus
-                    condimentum hendrerit.
-                </p>
-                <div class="flex flex-wrap items-center gap-2">
-                    <Tag tag={{icon: TypescriptIcon, label: "Typescript"}} />
-                    <Tag tag={{icon: ReactIcon, label: "React"}} />
-                    <Tag tag={{icon: EmailIcon, label: "Email"}} />
-                    <Tag tag={{icon: TypescriptIcon, label: "Typescript"}} />
-                    <Tag tag={{icon: CSharpIcon, label: "C#"}} />
-                    <Tag tag={{icon: TypescriptIcon, label: "Typescript"}} />
-                </div>
-            </div>
-        </div>
+            ))
+        }
     </div>
 </section>

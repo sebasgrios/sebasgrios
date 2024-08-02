@@ -6,36 +6,37 @@ import months from "@/data/months.json";
 
 const formatDate = (date: string) => {
     const dateFormatted = new Date(date);
-    const month = months[dateFormatted.getMonth()]
-    
+    const month = months[dateFormatted.getMonth()];
+
     return `${month} ${dateFormatted.getFullYear()}`;
-}
+};
 ---
 
 <section class="snap-start grid grid-cols-12 grid-rows-1 h-svh overflow-y-auto">
     <div class="my-4 col-start-2 col-span-10 flex flex-col">
         <ol class="relative border-s border-gray-200">
-            {info.jobs.map((job) => (
-                <li class="mb-8 ms-4">
-                    <div
-                        class="absolute size-3 rounded-full -start-1.5 mt-1.5 bg-gray-200 border-white"
-                    >
-                    </div>
-                    <time class="font-semibold text-lg text-gray-400 mb-1">
-                        {formatDate(job.date)}
-                    </time>
-                    <h1 class="font-bold text-xl">
-                        {job.position}
-                    </h1>
-                    <p class="text-base font-normal text-gray-500">
-                        {job.description}
-                    </p>
-                    <div class="mt-4 flex flex-wrap items-center gap-2">
-                        {/* {job.tags.map((tag) => <Tag name={tag} />)} */}
-                        <Tag name="react" />
-                    </div>
-                </li>
-            ))}
+            {
+                info.jobs.map((job) => (
+                    <li class="mb-8 ms-4">
+                        <div class="absolute size-3 rounded-full -start-1.5 mt-1.5 bg-gray-200 border-white"></div>
+                        <time class="font-semibold text-lg text-gray-400 mb-1">
+                            {formatDate(job.date)}
+                        </time>
+                        <h1 class="font-bold text-xl">{job.position}</h1>
+                        <h1 class="font-bold text-sm text-gray-400 mb-1">
+                            {job.business}
+                        </h1>
+                        <p class="text-base font-normal text-gray-500">
+                            {job.description}
+                        </p>
+                        <div class="mt-4 flex flex-wrap items-center gap-1">
+                            {job.tags.map((tag) => (
+                                <Tag info={tag} />
+                            ))}
+                        </div>
+                    </li>
+                ))
+            }
         </ol>
     </div>
 </section>

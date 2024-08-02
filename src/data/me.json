@@ -3,35 +3,190 @@
     "fullname": "Sebastián González Ríos",
     "username": "Sebas",
     "birthday": "12/03/2001",
-    "rol": "Frontend Developer",
+    "rol": "Desarrollador web",
     "email": "contact@sebastiangonzalezrios.com",
     "jobs": [
         {
-            "position": "Frontend Developer",
+            "position": "Desarrollador Frontend",
             "date": "06/18/2022",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus.",
-            "tags": ["typescript", "react", "git", "jenkins"]
-        },
-        {
-            "position": "Frontend Developer",
-            "date": "06/18/2022",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus.",
-            "tags": ["typescript", "react", "git", "jenkins"]
-        },
-        {
-            "position": "Frontend Developer",
-            "date": "06/18/2022",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus.",
-            "tags": ["typescript", "react", "git", "jenkins"]
+            "business": "NTT DATA",
+            "description": "Desarrollo de herramientas webs útiles para facilitar las tareas y los procesos de los empleados que trabajan en el sector de la banca e inmobiliario.",
+            "tags": [
+                {
+                    "nametag": "react",
+                    "label": "React",
+                    "color": "#61DAFB"
+                },
+                {
+                    "nametag": "react-redux",
+                    "label": "Redux",
+                    "color": "#764ABC"
+                },
+                {
+                    "nametag": "react-jest",
+                    "label": "Jest",
+                    "color": "#C21325"
+                },
+                {
+                    "nametag": "git",
+                    "label": "Git",
+                    "color": "#F05032"
+                },
+                {
+                    "nametag": "jenkins",
+                    "label": "Jenkins",
+                    "color": "#D24939"
+                },
+                {
+                    "nametag": "jira",
+                    "label": "Jira",
+                    "color": "#0052CC"
+                }
+            ]
         }
     ],
     "projects": [
         {
-            "image": "",
+            "image": "/images/projects/daemon.jpeg",
             "title": "Daemon",
+            "date": "2024",
+            "url": "https://github.com/sgonzari/Daemon",
+            "description": "Bot de Discord para manejo y reproducción de música en directo.",
+            "tags": [
+                {
+                    "nametag": "javascript",
+                    "label": "JavaScript",
+                    "color": "#F7DF1E"
+                },
+                {
+                    "nametag": "typescript",
+                    "label": "TypeScript",
+                    "color": "#3178C6"
+                },
+                {
+                    "nametag": "discord",
+                    "label": "Discord.JS",
+                    "color": "#5865F2"
+                },
+                {
+                    "nametag": "git",
+                    "label": "Git",
+                    "color": "#F05032"
+                }
+            ]
+        },
+        {
+            "image": "/images/projects/freedom.svg",
+            "title": "Freedom",
             "date": "2022",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus elit vel ipsum laoreet, sit amet tincidunt nunc faucibus. Donec sagittis, eros quis ultricies semper, magna arcu accumsan tellus, eget varius lorem mauris at purus. Vestibulum vitae malesuada mi. Maecenas commodo bibendum placerat. Maecenas convallis, lacus placerat dignissim laoreet, diam sapien tincidunt metus, vitae varius nisl enim vitae lectus. Sed sollicitudin pellentesque sagittis. Cras vehicula ligula nec tortor tempor, vel tempor massa hendrerit. Fusce in lectus tincidunt, commodo massa quis, molestie neque. Aliquam ut lacus eros. Nunc fermentum est eu condimentum gravida. Duis nibh nisi, blandit vitae arcu a, suscipit cursus magna. Phasellus vulputate dapibus arcu vel varius. Pellentesque hendrerit rhoncus nulla, ut dapibus est mattis sit amet. Suspendisse quam nunc, fringilla vel sodales et, posuere et mi. Aenean egestas leo eget lacus condimentum hendrerit.",
-            "tags": ["typescript", "react", "git", "jenkins"]
+            "url": "https://github.com/sgonzari/Freedom",
+            "description": "Freedom es un Trabajo de Fin de Grado el cual consiste en una red social de tipo publicación con el fin de llegar al máximo número de personas. Freedom pretende ser una red social con la que las personas se sientan comodas y puedan expresar su opiniones y/o sentimientos hacia algo y/o alguien. Freedom tiene el objetivo de mostrar a todos sus usuarios las publicaciones del resto de usuarios sin ningún tipo de tabú. Freedom tiene de compromiso que el usuario se sienta cómodo y seguro en dicha red social.",
+            "tags": [
+                {
+                    "nametag": "html5",
+                    "label": "HTML5",
+                    "color": "#E34F26"
+                },
+                {
+                    "nametag": "css3",
+                    "label": "CSS3",
+                    "color": "#1572B6"
+                },
+                {
+                    "nametag": "javascript",
+                    "label": "JavaScript",
+                    "color": "#F7DF1E"
+                },
+                {
+                    "nametag": "jquery",
+                    "label": "JQuery",
+                    "color": "#0769AD"
+                },
+                {
+                    "nametag": "sass",
+                    "label": "Sass",
+                    "color": "#CC6699"
+                },
+                {
+                    "nametag": "php",
+                    "label": "PHP",
+                    "color": "#777BB4"
+                },
+                {
+                    "nametag": "laravel",
+                    "label": "Laravel",
+                    "color": "#FF2D20"
+                },
+                {
+                    "nametag": "mysql",
+                    "label": "MySQL",
+                    "color": "#4479A1"
+                },
+                {
+                    "nametag": "git",
+                    "label": "Git",
+                    "color": "#F05032"
+                },
+                {
+                    "nametag": "aws-ec2",
+                    "label": "Amazon EC2",
+                    "color": "#FF9900"
+                },
+                {
+                    "nametag": "aws-rds",
+                    "label": "Amazon RDS",
+                    "color": "#527FFF"
+                }
+            ]
+        },
+        {
+            "image": "/images/projects/forumgames.png",
+            "title": "ForumGames",
+            "date": "2021",
+            "url": "https://github.com/sgonzari/Freedom",
+            "description": "ForumGames es un Trabajo de Fin de Grado el cual consiste en una herramienta web para crear publicaciones, compartir, organizar y explorar nuevos juegos, ofreciendo apoyo a los pequeños desarrolladores de videojuegos.",
+            "tags": [
+                {
+                    "nametag": "html5",
+                    "label": "HTML5",
+                    "color": "#E34F26"
+                },
+                {
+                    "nametag": "css3",
+                    "label": "CSS3",
+                    "color": "#1572B6"
+                },
+                {
+                    "nametag": "javascript",
+                    "label": "JavaScript",
+                    "color": "#F7DF1E"
+                },
+                {
+                    "nametag": "jquery",
+                    "label": "JQuery",
+                    "color": "#0769AD"
+                },
+                {
+                    "nametag": "bootstrap",
+                    "label": "Bootstrap",
+                    "color": "#7952B3"
+                },
+                {
+                    "nametag": "csharp",
+                    "label": "C#",
+                    "color": "#A179DC"
+                },
+                {
+                    "nametag": "mysql",
+                    "label": "MySQL",
+                    "color": "#4479A1"
+                },
+                {
+                    "nametag": "git",
+                    "label": "Git",
+                    "color": "#F05032"
+                }
+            ]
         }
     ]
 }

@@ -1,23 +1,56 @@
 ---
+import HTML5Icon from "../icons/HTML5-Icon.astro";
+import CSS3Icon from "../icons/CSS3-Icon.astro";
+import JavaScriptIcon from "../icons/JavaScript-Icon.astro";
+import PHPIcon from "../icons/PHP-Icon.astro";
+import CSharpIcon from "../icons/CSharp-Icon.astro";
 import ReactIcon from "../icons/React-Icon.astro";
+import ReactJestIcon from "../icons/React-Jest-Icon.astro";
+import ReactReduxIcon from "../icons/React-Redux-Icon.astro";
+import TypescriptIcon from "../icons/Typescript-Icon.astro";
+import JenkinsIcon from "../icons/Jenkins-Icon.astro";
+import GitIcon from "../icons/Git-Icon.astro";
+import JiraIcon from "../icons/Jira-Icon.astro";
+import LaravelIcon from "../icons/Laravel-Icon.astro";
+import JQueryIcon from "../icons/JQuery-Icon.astro";
+import BootstrapIcon from "../icons/Bootstrap-Icon.astro";
+import SassIcon from "../icons/Sass-Icon.astro";
+import MySQLIcon from "../icons/MySQL-Icon.astro";
+import AmazonEC2Icon from "../icons/Amazon-EC2-Icon.astro";
+import AmazonRDSIcon from "../icons/Amazon-RDS-Icon.astro";
+import DiscordIcon from "../icons/Discord-Icon.astro";
 
-const nametag = Astro.props.name;
+const { nametag, label, color } = Astro.props.info;
 
-const renderIcon = (nametag: string) => {
-    switch (nametag) {
-        case "react":
-            return ReactIcon;
-        default:
-            return null;
-    }
+const iconMap = {
+    "html5": HTML5Icon,
+    "css3": CSS3Icon,
+    "javascript": JavaScriptIcon,
+    "typescript": TypescriptIcon,
+    "php": PHPIcon,
+    "csharp": CSharpIcon,
+    "react": ReactIcon,
+    "react-jest": ReactJestIcon,
+    "react-redux": ReactReduxIcon,
+    "laravel": LaravelIcon,
+    "jquery": JQueryIcon,
+    "bootstrap": BootstrapIcon,
+    "sass": SassIcon,
+    "mysql": MySQLIcon,
+    "jenkins": JenkinsIcon,
+    "git": GitIcon,
+    "aws-ec2": AmazonEC2Icon,
+    "aws-rds": AmazonRDSIcon,
+    "jira": JiraIcon,
+    "discord": DiscordIcon,
 };
+
+const Icon = iconMap[nametag] || null;
 ---
 
 <span
-    class="text-xs uppercase inline-flex items-center font-bold px-3 py-1 rounded-full bg-[#61DAFB] bg-opacity-80"
+    class=`text-xs uppercase inline-flex items-center font-bold px-3 py-1 rounded-full bg-[${color}] bg-opacity-80`
 >
-    <ReactIcon class="size-4 mr-1" /> React
-    <!-- {<tag.icon class="size-4 mr-1" />} {tag} -->
-     <!-- TOD@ -->
-    <!-- {<renderIcon(nametag) class="size-4 mr-1" />} {nametag} -->
+    {Icon && <Icon class="size-4 mr-1" />}
+    {label}
 </span>
