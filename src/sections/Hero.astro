@@ -31,12 +31,12 @@ const getActualAge = (birthday: string) => {
     >
         <div class="pb-8 flex items-center justify-center md:flex-shrink-0">
             <Image
-                class="rounded-full shadow-xl border-white border-4 md:w-96 md:h-96"
+                class="rounded-full shadow-xl border-white dark:border-black border-4 md:w-96 md:h-96"
                 src={pfpImage}
                 alt=`Imagen de perfil de ${info.fullname}`
             />
         </div>
-        <div class="md:flex md:justify-center md:flex-col">
+        <div class="md:flex md:justify-center md:flex-col dark:text-white">
             <h1 class="text-center md:text-left text-2xl font-bold">
                 {info.fullname}
             </h1>
@@ -47,7 +47,7 @@ const getActualAge = (birthday: string) => {
                 <a
                     href={info.linkedin}
                     target="_blank"
-                    class="px-3 py-2 border flex flex-row gap-2 rounded-lg hover:border-gray-900 hover:shadow transition duration-150"
+                    class="px-3 py-2 border dark:border-gray-700 flex flex-row gap-2 rounded-lg hover:border-gray-900 dark:hover:border-gray-100 hover:shadow transition duration-150"
                 >
                     <LinkedInIcon class="size-6 fill-[#007EBB]" />
                     <span class="pt-0.5">LinkedIn</span>
@@ -55,14 +55,14 @@ const getActualAge = (birthday: string) => {
                 <a
                     href={info.github}
                     target="_blank"
-                    class="px-3 py-2 border flex flex-row gap-2 rounded-lg hover:border-gray-900 hover:shadow transition duration-150"
+                    class="px-3 py-2 border dark:border-gray-700 flex flex-row gap-2 rounded-lg hover:border-gray-900 dark:hover:border-gray-100 hover:shadow transition duration-150"
                 >
-                    <GitHubIcon class="size-6 fill-[#181717]" />
+                    <GitHubIcon class="size-6 fill-[#181717] dark:fill-[#E7E8E8]" />
                     <span class="pt-0.5">GitHub</span>
                 </a>
             </div>
             <p class="text-base font-normal">
-                Hola, soy <span class="text-red-500">{info.username}</span> y tengo
+                Hola, soy <span class="text-red-500 dark:text-red-700">{info.username}</span> y tengo
                 {getActualAge(info.birthday)} años. Desde los 14 años, me empezó
                 a interesar por el mundo de la informática es entonces cuando decidí
                 que quería ser informático. Cuando terminé la ESO, emprendí mi camino
