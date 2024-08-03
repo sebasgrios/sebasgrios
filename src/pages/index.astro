@@ -1,9 +1,9 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+import Layout from "@/layouts/Layout.astro";
 
-import Hero from '@/sections/Hero.astro';
-import Jobs from '@/sections/Jobs.astro';
-import Projects from '@/sections/Projects.astro';
+import Hero from "@/sections/Hero.astro";
+import Jobs from "@/sections/Jobs.astro";
+import Projects from "@/sections/Projects.astro";
 ---
 
 <Layout title="Sebastián González Ríos">
@@ -13,3 +13,37 @@ import Projects from '@/sections/Projects.astro';
 		<Projects />
 	</main>
 </Layout>
+
+<script>
+	const main = document.querySelector("main");
+
+	main?.addEventListener("scroll", () => {
+		const jobSection = document.querySelector("#job-section");
+		const jobChildSection = jobSection?.querySelector(
+			".hidden-translateY-animation",
+		);
+
+		if (jobSection && jobChildSection) {
+			const pointbreak =
+				(jobSection.getBoundingClientRect().height / 5) * 4;
+
+			if (jobSection.getBoundingClientRect().top <= pointbreak) {
+				jobChildSection.classList.add("show-translateY-animation");
+			}
+		}
+
+		const projectSection = document.querySelector("#project-section");
+		const projectChildSection = projectSection?.querySelector(
+			".hidden-translateX-animation",
+		);
+
+		if (projectSection && projectChildSection) {
+			const pointbreak =
+				(projectSection.getBoundingClientRect().height / 5) * 4;
+
+			if (projectSection.getBoundingClientRect().top <= pointbreak) {
+				projectChildSection.classList.add("show-translateX-animation");
+			}
+		}
+	});
+</script>
