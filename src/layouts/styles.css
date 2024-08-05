@@ -86,7 +86,7 @@
     animation: rightToCenter 1s;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1279px) {
     .hero_image-animation {
         animation: topToCenter 1s;
     }

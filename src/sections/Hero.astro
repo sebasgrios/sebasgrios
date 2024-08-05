@@ -27,23 +27,23 @@ const getActualAge = (birthday: string) => {
 
 <section class="snap-start grid grid-cols-12 grid-rows-1 h-svh overflow-y-auto">
     <div
-        class="my-4 col-start-2 col-span-10 flex flex-col md:flex-row md:gap-28"
+        class="my-4 col-start-2 col-span-10 flex flex-col xl:flex-row xl:gap-28"
     >
-        <div class="pb-8 flex items-center justify-center md:flex-shrink-0 hero_image-animation">
+        <div class="pb-8 flex items-center justify-center xl:flex-shrink-0 hero_image-animation">
             <Image
-                class="rounded-full shadow-xl border-white dark:border-black border-4 md:w-96 md:h-96"
+                class="rounded-full shadow-xl border-white dark:border-black border-4 sm:w-96 sm:h-96"
                 src={pfpImage}
                 alt=`Imagen de perfil de ${info.fullname}`
             />
         </div>
-        <div class="md:flex md:justify-center md:flex-col dark:text-white hero_info-animation">
-            <h1 class="text-center md:text-left text-2xl font-bold">
+        <div class="xl:flex xl:justify-center xl:flex-col dark:text-white hero_info-animation">
+            <h1 class="text-center xl:text-left text-2xl font-bold">
                 {info.fullname}
             </h1>
-            <h2 class="text-center md:text-left text-xl font-extralight">
+            <h2 class="text-center xl:text-left text-xl font-extralight">
                 {info.rol}
             </h2>
-            <div class="my-4 flex flex-row gap-2 items-center justify-evenly md:justify-start">
+            <div class="my-4 flex flex-row gap-2 items-center justify-evenly xl:justify-start">
                 <a
                     href={info.linkedin}
                     target="_blank"
