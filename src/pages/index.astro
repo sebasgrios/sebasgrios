@@ -16,6 +16,26 @@ import Projects from "@/sections/Projects.astro";
 
 <script>
 	const main = document.querySelector("main");
+	const heroSection = document.querySelector("#hero-section");
+	const heroImageSection = heroSection?.querySelector(
+		".hidden-image_section-animation",
+	);
+	const heroInfoSection = heroSection?.querySelector(
+		".hidden-info_section-animation",
+	);
+
+	if (heroSection && heroImageSection && heroInfoSection) {
+		console.log("y");
+
+		const pointbreak = (heroSection.getBoundingClientRect().height / 5) * 4;
+
+		if (heroSection.getBoundingClientRect().top <= pointbreak) {
+			console.log("yes");
+
+			heroImageSection.classList.add("show-image_section-animation");
+			heroInfoSection.classList.add("show-info_section-animation");
+		}
+	}
 
 	main?.addEventListener("scroll", () => {
 		const jobSection = document.querySelector("#job-section");
