@@ -16,53 +16,29 @@ import Projects from "@/sections/Projects.astro";
 
 <script>
 	const main = document.querySelector("main");
-	const heroSection = document.querySelector("#hero-section");
-	const heroImageSection = heroSection?.querySelector(
-		".hidden-image_section-animation",
-	);
-	const heroInfoSection = heroSection?.querySelector(
-		".hidden-info_section-animation",
-	);
-
-	if (heroSection && heroImageSection && heroInfoSection) {
-		console.log("y");
-
-		const pointbreak = (heroSection.getBoundingClientRect().height / 5) * 4;
-
-		if (heroSection.getBoundingClientRect().top <= pointbreak) {
-			console.log("yes");
-
-			heroImageSection.classList.add("show-image_section-animation");
-			heroInfoSection.classList.add("show-info_section-animation");
-		}
-	}
 
 	main?.addEventListener("scroll", () => {
 		const jobSection = document.querySelector("#job-section");
-		const jobChildSection = jobSection?.querySelector(
-			".hidden-translateY-animation",
-		);
+		const jobList = jobSection?.querySelector("#job-list");
 
-		if (jobSection && jobChildSection) {
+		if (jobSection && jobList) {
 			const pointbreak =
 				(jobSection.getBoundingClientRect().height / 5) * 4;
 
 			if (jobSection.getBoundingClientRect().top <= pointbreak) {
-				jobChildSection.classList.add("show-translateY-animation");
+				jobList.classList.add("job_list-animation");
 			}
 		}
 
 		const projectSection = document.querySelector("#project-section");
-		const projectChildSection = projectSection?.querySelector(
-			".hidden-translateX-animation",
-		);
+		const projectList = projectSection?.querySelector("#project-list");
 
-		if (projectSection && projectChildSection) {
+		if (projectSection && projectList) {
 			const pointbreak =
 				(projectSection.getBoundingClientRect().height / 5) * 4;
 
 			if (projectSection.getBoundingClientRect().top <= pointbreak) {
-				projectChildSection.classList.add("show-translateX-animation");
+				projectList.classList.add("project_list-animation");
 			}
 		}
 	});

@@ -22,8 +22,9 @@ const formatDate = (date: string) => {
         <h1 class="hidden font-bold text-4xl mt-2 md:block">
             Experiencia Laboral
         </h1>
-        <ol
-            class="relative border-s border-gray-200 hidden-translateY-animation"
+        <ol 
+            id="job-list"
+            class="relative border-s border-gray-200 jobs_list-animation"
         >
             {
                 info.jobs.map((job) => (

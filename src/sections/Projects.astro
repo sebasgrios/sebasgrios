@@ -10,7 +10,8 @@ import info from "@/data/me.json";
             <h1 class="hidden font-bold text-4xl mt-2 md:block col-start-2 col-span-10">Proyectos</h1>
         </div>
         <div
-        class="pb-4 px-8 col-start-0 col-span-12 flex flex-row gap-4 justify-start items-center overflow-x-auto snap-x snap-mandatory md:justify-center hidden-translateX-animation overflow-hidden"
+        id="project-list"
+        class="pb-4 px-8 col-start-0 col-span-12 flex flex-row gap-4 justify-start items-center overflow-x-auto snap-x snap-mandatory md:justify-center"
     >
         {
             info.projects.map((project) => (

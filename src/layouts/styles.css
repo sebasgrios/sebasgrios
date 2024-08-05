@@ -78,80 +78,96 @@
     background-color: #A179DC;
 }
 
-.hidden-translateY-animation {
-    opacity: 0;
-    filter: blur(5px);
-    transform: translateY(-100%);
-    transition: all 1s;
+.hero_image-animation {
+    animation: leftToCenter 1s;
 }
 
-.show-translateY-animation {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
+.hero_info-animation {
+    animation: rightToCenter 1s;
 }
 
-.hidden-translateX-animation {
-    opacity: 0;
-    filter: blur(5px);
-    transition: all 1s;
+@media (max-width: 768px) {
+    .hero_image-animation {
+        animation: topToCenter 1s;
+    }
+
+    .hero_info-animation {
+        animation: bottomToCenter 1s;
+    }
 }
 
-.show-translateX-animation {
-    opacity: 1;
-    filter: blur(0);
+.job_list-animation {
+    animation: topToCenter 1s;
 }
 
-.hidden-image_section-animation {
-    opacity: 0;
-    filter: blur(5px);
-    transform: translateY(-100%);
-    transition: all 1s;
+.project_list-animation {
+    animation: opacity 1s;
 }
 
-.show-image_section-animation {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
-}
-
-.hidden-info_section-animation {
-    opacity: 0;
-    filter: blur(5px);
-    transform: translateY(100%);
-    transition: all 1s;
-}
-
-.show-info_section-animation {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
-}
-
-@media (max-height:768px) {
-    .hidden-image_section-animation {
+@keyframes topToCenter {
+    from {
         opacity: 0;
         filter: blur(5px);
-        transform: translateX(-100%);
-        transition: all 1s;
+        transform: translateY(-100%);
     }
-    
-    .show-image_section-animation {
+
+    to {
         opacity: 1;
         filter: blur(0);
-        transform: translateX(0);
+        transform: translateY(0);
     }
-    
-    .hidden-info_section-animation {
+}
+
+@keyframes rightToCenter {
+    from {
         opacity: 0;
         filter: blur(5px);
         transform: translateX(100%);
-        transition: all 1s;
     }
-    
-    .show-info_section-animation {
+
+    to {
         opacity: 1;
         filter: blur(0);
         transform: translateX(0);
+    }
+}
+
+@keyframes leftToCenter {
+    from {
+        opacity: 0;
+        filter: blur(5px);
+        transform: translateX(-100%);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateX(0);
+    }
+}
+
+@keyframes bottomToCenter {
+    from {
+        opacity: 0;
+        filter: blur(5px);
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes opacity {
+    from {
+        opacity: 0;
+        filter: blur(5px);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
     }
 }
