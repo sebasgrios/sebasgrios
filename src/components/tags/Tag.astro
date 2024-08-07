@@ -20,32 +20,55 @@ import AmazonEC2Icon from "../icons/Amazon-EC2-Icon.astro";
 import AmazonRDSIcon from "../icons/Amazon-RDS-Icon.astro";
 import DiscordIcon from "../icons/Discord-Icon.astro";
 
-const { nametag, label, color } = Astro.props.info;
+const { nametag, label } = Astro.props.info;
 
-const iconMap = {
-    "html5": HTML5Icon,
-    "css3": CSS3Icon,
-    "javascript": JavaScriptIcon,
-    "typescript": TypescriptIcon,
-    "php": PHPIcon,
-    "csharp": CSharpIcon,
-    "react": ReactIcon,
+type IconName =
+    | "html5"
+    | "css3"
+    | "javascript"
+    | "typescript"
+    | "php"
+    | "csharp"
+    | "react"
+    | "react-jest"
+    | "react-redux"
+    | "laravel"
+    | "jquery"
+    | "bootstrap"
+    | "sass"
+    | "mysql"
+    | "jenkins"
+    | "git"
+    | "aws-ec2"
+    | "aws-rds"
+    | "jira"
+    | "discord";
+
+const iconMap: Record<IconName, (_props: Record<string, any>) => any> = {
+    html5: HTML5Icon,
+    css3: CSS3Icon,
+    javascript: JavaScriptIcon,
+    typescript: TypescriptIcon,
+    php: PHPIcon,
+    csharp: CSharpIcon,
+    react: ReactIcon,
     "react-jest": ReactJestIcon,
     "react-redux": ReactReduxIcon,
-    "laravel": LaravelIcon,
-    "jquery": JQueryIcon,
-    "bootstrap": BootstrapIcon,
-    "sass": SassIcon,
-    "mysql": MySQLIcon,
-    "jenkins": JenkinsIcon,
-    "git": GitIcon,
+    laravel: LaravelIcon,
+    jquery: JQueryIcon,
+    bootstrap: BootstrapIcon,
+    sass: SassIcon,
+    mysql: MySQLIcon,
+    jenkins: JenkinsIcon,
+    git: GitIcon,
     "aws-ec2": AmazonEC2Icon,
     "aws-rds": AmazonRDSIcon,
-    "jira": JiraIcon,
-    "discord": DiscordIcon,
+    jira: JiraIcon,
+    discord: DiscordIcon,
 };
 
-const Icon = iconMap[nametag] || null;
+const nametagFormat: IconName = nametag;
+const Icon = iconMap[nametagFormat] || null;
 ---
 
 <span
