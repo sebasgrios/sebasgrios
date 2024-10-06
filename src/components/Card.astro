@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets';
+
+import Tooltip from '@/components/Tooltip.astro';
+import WorldIcon from '@/components/icons/World.astro';
+import CodeIcon from '@/components/icons/Code.astro';
+
+interface Util {
+  name: string,
+  Icon: any
+}
+
+interface Data {
+  title: string,
+  description: string,
+  imageCard: ImageMetadata,
+  utils: Util[],
+  urlLive: string,
+  urlCode: string
+}
+
+const { title, description, imageCard, utils, urlLive, urlCode }: Data = Astro.props.data;
+---
+
+<article class='flex flex-col sm:flex-row gap-2 sm:gap-4'>
+  <div class='flex flex-1 flex-col'>
+    <a 
+      class='bg-white dark:bg-gray-700/50 border-gray-200 group overflow-hidden relative rounded-xl shadow-xl' 
+      href={urlLive ?? urlCode}
+      rel='nooponer noreferrer'
+      target='_blank'
+    >
+      <Image 
+        alt=`Captura del proyecto ${title}` 
+        class='duration-500 h-full rounded-lg xl:translate-x-8 xl:group-hover:translate-x-6 xl:translate-y-8 xl:group-hover:translate-y-6' 
+        src={imageCard}
+      />
+    </a>
+  </div>
+  <div class='flex-1 flex flex-col gap-1 md:gap-2 py-2'>
+    <h1 class='font-semibold text-2xl text-gray-600 dark:text-gray-200'>
+      {title}
+    </h1>
+    <h2 class='font-medium text-lg text-gray-400'>
+      {description}
+    </h2>
+    <div class='flex flex-row gap-2 items-center justify-start'>
+      <!-- Languages & Frameworks -->
+       {utils.map(({ name, Icon }) => (
+         <Tooltip description={name} >
+          <Icon class='size-8' />
+         </Tooltip>
+       ))}
+    </div>
+    <div class='flex flex-row gap-2 items-center justify-start'>
+      {urlLive && (
+        <a 
+          class='bg-gray-800 dark:bg-gray-200 flex flex-row font-semibold gap-2 group items-center px-4 py-2 rounded-xl shadow-md text-white dark:text-gray-800 text-xl' 
+          href={urlLive}
+          rel='nooponer noreferrer'
+          target='_blank'
+        >
+         Live <WorldIcon class='duration-200 xl:rotate-12 group-hover:rotate-0 size-6 stroke-white dark:stroke-gray-800' />
+        </a>
+      )}
+      {urlCode && (
+        <a 
+          class='bg-gray-800 dark:bg-gray-200 flex flex-row font-semibold gap-2 group items-center px-4 py-2 rounded-xl shadow-md text-white dark:text-gray-800 text-xl' 
+          href={urlCode}
+          rel='nooponer noreferrer'
+          target='_blank'
+        >
+         Code <CodeIcon class='duration-200 xl:rotate-12 group-hover:rotate-0 size-6 stroke-white dark:stroke-gray-800' />
+        </a>
+      )}
+    </div>
+  </div>
+</article>

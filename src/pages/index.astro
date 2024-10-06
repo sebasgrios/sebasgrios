@@ -1,45 +1,15 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-
-import Hero from "@/sections/Hero.astro";
-import Jobs from "@/sections/Jobs.astro";
-import Projects from "@/sections/Projects.astro";
+import Layout from '@/layouts/Layout.astro';
+import Hero from '@/sections/Hero.astro';
+import Experiences from '@/sections/Experiences.astro';
+import Projects from '@/sections/Projects.astro';
 ---
 
-<Layout title="Sebastián González Ríos">
-	<main class="h-svh snap-y snap-mandatory overflow-y-scroll">
+<Layout title='Sebastián González Ríos'>
+	<main class='flex flex-col gap-16 max-w-3xl mx-auto px-6 mb-8'>
 		<Hero />
-		<Jobs />
+		<hr class='border border-dotted border-gray-300 dark:border-gray-700 rounded-full' />
+		<Experiences />
 		<Projects />
 	</main>
 </Layout>
-
-<script>
-	const main = document.querySelector("main");
-
-	main?.addEventListener("scroll", () => {
-		const jobSection = document.querySelector("#job-section");
-		const jobList = jobSection?.querySelector("#job-list");
-
-		if (jobSection && jobList) {
-			const pointbreak =
-				(jobSection.getBoundingClientRect().height / 5) * 4;
-
-			if (jobSection.getBoundingClientRect().top <= pointbreak) {
-				jobList.classList.add("job_list-animation");
-			}
-		}
-
-		const projectSection = document.querySelector("#project-section");
-		const projectList = projectSection?.querySelector("#project-list");
-
-		if (projectSection && projectList) {
-			const pointbreak =
-				(projectSection.getBoundingClientRect().height / 5) * 4;
-
-			if (projectSection.getBoundingClientRect().top <= pointbreak) {
-				projectList.classList.add("project_list-animation");
-			}
-		}
-	});
-</script>

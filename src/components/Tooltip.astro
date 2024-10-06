@@ -1,0 +1,9 @@
+---
+const { description } = Astro.props;
+---
+<div class='relative group'>
+  <span class='absolute before:absolute bg-white before:bg-white dark:bg-gray-900 before:dark:bg-gray-900 bottom-full before:-bottom-1 before:content-[""] before:h-2.5 left-1/2 before:left-1/2 opacity-0 group-hover:opacity-100 pointer-events-none px-1.5 py-1 before:rotate-45 rounded-md before:rounded-sm text-gray-800 dark:text-white text-xs transition-all -translate-x-1/2 before:-translate-x-1/2 -translate-y-0 group-hover:-translate-y-3 before:w-2.5 whitespace-nowrap z-10 before:-z-0'>
+    {description}
+  </span>
+  <slot />
+</div>

@@ -1,0 +1,25 @@
+---
+import SunIcon from '@/components/icons/Sun.astro';
+import MoonIcon from '@/components/icons/Moon.astro';
+---
+
+<button class='flex items-center' id='theme-toggle-btn'>
+  <SunIcon class='block fill-gray-800 dark:hidden size-8' />
+  <MoonIcon class='dark:block fill-gray-100 hidden size-8'/>
+</button>
+
+<script>
+  const themeButton = document.querySelector('#theme-toggle-btn');
+
+  themeButton?.addEventListener('click', () => {
+    const isDarkTheme = localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    if (isDarkTheme) {
+      localStorage.setItem('theme', 'light');
+    } else {
+      localStorage.setItem('theme', 'dark');
+    }
+
+    document.documentElement.classList[isDarkTheme ? 'remove' : 'add']('dark')
+  })
+</script>

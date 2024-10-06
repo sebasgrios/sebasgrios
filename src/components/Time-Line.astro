@@ -1,0 +1,52 @@
+---
+import JobIcon from './icons/Job.astro';
+import EducationIcon from './icons/Education.astro';
+
+interface Data {
+  title: string,
+  location: string,
+  type: string,
+  date: Date,
+  isActive: boolean,
+  description: string
+}
+
+interface Props {
+  arr: Data[]
+}
+
+const { arr } = Astro.props;
+---
+<div class='w-full mx-auto'>
+    <div class='space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-[8.75rem] md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 dark:before:via-gray-700 before:to-transparent'>
+      {arr.map(({title, location, type, date, isActive, description}: Data) => (
+        <div class='relative'>
+          <div class='md:flex items-center md:space-x-4 mb-3'>
+            <div class='flex items-center space-x-4 md:space-x-2 md:space-x-reverse'>
+              <div class={`flex items-center justify-center w-10 h-10 relative rounded-full bg-white dark:bg-gray-900 shadow md:order-1`}>
+                {isActive && (
+                  <span class='absolute animate-ping bg-blue-400 right-0 rounded-full size-2 top-0' />
+                  <span class='absolute bg-blue-500 right-0 rounded-full size-2 top-0' />
+                )}
+                {type === 'job' && (<JobIcon class='size-6 stroke-black dark:stroke-gray-100' />)}
+                {type === 'education' && (<EducationIcon class='size-6 stroke-black dark:stroke-gray-100' />)}
+              </div>
+                <time class='font-semibold text-sm text-blue-500 first-letter:uppercase md:w-28'>
+                  {date.toLocaleString('es', { month: 'short' })}, {date.getFullYear()}
+                </time>
+              </div>
+              <div class='flex flex-col justify-center ml-14'>
+                <h1 class='font-semibold text-lg text-gray-600 dark:text-gray-200'>{title}</h1>
+                <h2 class='font-medium text-sm text-gray-400'>{location}</h2>
+              </div>
+            </div>
+            {description && (
+              <div 
+                class='bg-white dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 ml-14 md:ml-44 p-4 rounded-xl shadow-md text-gray-500 dark:text-gray-400'
+                set:html={description}
+              />
+            )}
+        </div>
+      ))}
+    </div>
+</div>

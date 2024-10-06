@@ -1,0 +1,41 @@
+---
+import TimeLine from '@/components/Time-Line.astro';
+
+const EXPERIENCES = [
+  {
+    title: 'Sistemas Microinformáticos y Redes',
+    location: 'IES Juan de la Cierva',
+    date: new Date('09/15/2017'),
+    type: 'education',
+    isActive: false,
+    description: '<ul class="list-disc pl-4"><li>Configuración de equipos informáticos.</li><li>Configuración de redes públicas y privadas.</li><li>Configuración de servidores.</li><li>Configuración de servicios daemon.</li><li>Manejo de herramientas ofimáticas.</li><li>Montaje y desmontaje de equipos informáticos.</li></ul>'
+  },
+  {
+    title: 'Desarrollo de Aplicaciones Multiplataformas',
+    location: 'IES Pablo Picasso',
+    date: new Date('09/15/2019'),
+    type: 'education',
+    isActive: false,
+    description: '<ul class="list-disc pl-4"><li>Aprendizaje sobre C#.</li><li>Creación de aplicaciones de escritorio con Java.</li><li>Creación de bases de datos relacionales.</li><li>Encriptación de datos.</li><li>Programación Orientadas a Objetos.</li></lu>'
+  },
+  {
+    title: 'Desarrollo de Aplicaciones Webs',
+    location: 'IES Campanillas',
+    date: new Date('09/15/2021'),
+    type: 'education',
+    isActive: false,
+    description: '<ul class="list-disc pl-4"><li>Aprendizaje sobre JavaScript.</li><li>Creación de aplicaciones webs con PHP.</li><li>Manejo de Amazon Web Service.</li><li>Maquetación y diseño web.</li><li>Programación secuencial.</li></ul>'
+  },
+  {
+    title: 'Desarrollador web',
+    location: 'NTT DATA',
+    date: new Date('07/18/2022'),
+    type: 'job',
+    isActive: true,
+    description: '<p class="pb-4">Desarrollador de aplicaciones webs con React orientado al sector inmobiliario y financiero.</p><ul class="list-disc pl-4"><li>Cobertura del 90% en tests unitarios.</li><li>Encargado de despliegues a entornos previos y productivos.</li><li>Gestión de equipo y de tareas.</li><li>Maquetador, diseñador y programador web.</li><li>Promotor de nuevos diseños e ideas.</li><li>CI/CD</li><li>SCRUM</li></lu>'
+  }
+];
+---
+<section>
+  <TimeLine arr={[ ...EXPERIENCES ]} />
+</section>
