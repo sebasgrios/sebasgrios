@@ -7,7 +7,7 @@
 
 <h3 align="left">🏆 Here are some of my trophies:</h3>  
 <div align="center">
-  <img src="https://github-profile-trophy.vercel.app?username=sebasgrios&theme=dark_lover&column=4&row=2&margin-w=4&margin-h=4&no-bg=true&no-frame=true&order=4" height="150" alt="trophygraph" />
+  <img src="https://github-profile-trophy.vercel.app?username=sebasgrios&theme=gitdimmed&column=4&row=2&no-bg=true&no-frame=true" height="200" alt="trophygraph" />
 </div>
 
 <h3 align="left">⌨️ I usually use all these languages:</h3>
