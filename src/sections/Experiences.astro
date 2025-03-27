@@ -1,41 +1,64 @@
 ---
-import TimeLine from '@/components/Time-Line.astro';
+import TimeLine from "@/components/Time-Line.astro";
 
 const EXPERIENCES = [
   {
-    title: 'Sistemas Microinformáticos y Redes',
-    location: 'IES Juan de la Cierva',
-    date: new Date('09/15/2017'),
-    type: 'education',
-    isActive: false,
-    description: '<ul class="list-disc pl-4"><li>Configuración de equipos informáticos.</li><li>Configuración de redes públicas y privadas.</li><li>Configuración de servidores.</li><li>Configuración de servicios daemon.</li><li>Manejo de herramientas ofimáticas.</li><li>Montaje y desmontaje de equipos informáticos.</li></ul>'
-  },
-  {
-    title: 'Desarrollo de Aplicaciones Multiplataformas',
-    location: 'IES Pablo Picasso',
-    date: new Date('09/15/2019'),
-    type: 'education',
-    isActive: false,
-    description: '<ul class="list-disc pl-4"><li>Aprendizaje sobre C#.</li><li>Creación de aplicaciones de escritorio con Java.</li><li>Creación de bases de datos relacionales.</li><li>Encriptación de datos.</li><li>Programación Orientadas a Objetos.</li></lu>'
-  },
-  {
-    title: 'Desarrollo de Aplicaciones Webs',
-    location: 'IES Campanillas',
-    date: new Date('09/15/2021'),
-    type: 'education',
-    isActive: false,
-    description: '<ul class="list-disc pl-4"><li>Aprendizaje sobre JavaScript.</li><li>Creación de aplicaciones webs con PHP.</li><li>Manejo de Amazon Web Service.</li><li>Maquetación y diseño web.</li><li>Programación secuencial.</li></ul>'
-  },
-  {
-    title: 'Desarrollador web',
-    location: 'NTT DATA',
-    date: new Date('07/18/2022'),
-    type: 'job',
+    title: "Fullstack developer",
+    location: "NTT DATA",
+    date: new Date("02/20/2025"),
+    type: "job",
     isActive: true,
-    description: '<p class="pb-4">Desarrollador de aplicaciones webs con React orientado al sector inmobiliario y financiero.</p><ul class="list-disc pl-4"><li>Cobertura del 90% en tests unitarios.</li><li>Encargado de despliegues a entornos previos y productivos.</li><li>Gestión de equipo y de tareas.</li><li>Maquetador, diseñador y programador web.</li><li>Promotor de nuevos diseños e ideas.</li><li>CI/CD</li><li>SCRUM</li></lu>'
-  }
+    description:
+      '<p class="pb-4">Desarrollando y manteniendo una aplicación web y mobile para el sector ambiental.</p><ul class="list-disc pl-4"><li>Aplicación web desarrollada con React 16.0.</li><li>Aplicación móvil desarrollada con React Native 0.74.</li><li>Backend desarrollado con Moleculer 0.14 y MongoDB.</li><li>Encargado de los despliegues.</li><li>Uso de la metodología SCRUM.</li></lu>',
+  },
+  {
+    title: "Frontend developer",
+    location: "NTT DATA",
+    date: new Date("01/01/2024"),
+    type: "job",
+    isActive: false,
+    description:
+      '<p class="pb-4">Desarrollando una aplicación web para el sector financiero.</p><ul class="list-disc pl-4"><li>Desarrollado con React 16.0.</li><li>Gestión de contextos mediante Redux.</li><li>Cobertura en tests unitarios de >90%.</li><li>Encargado de toda la parte Front del proyecto.</li><li>Encargado del UI/UX.</li><li>Uso de la metodología CI/CD.</li></lu>',
+  },
+  {
+    title: "Frontend junior",
+    location: "NTT DATA",
+    date: new Date("07/18/2022"),
+    type: "job",
+    isActive: false,
+    description:
+      '<p class="pb-4">Desarrollando y manteniendo una aplicación web (PWA) para el sector inmobiliario.</p><ul class="list-disc pl-4"><li>Desarrollado con React 16.0.</li><li>Sincronización de datos mediante bases de datos locales y remotas.</li><li>Cobertura en tests unitarios de >80%.</li><li>Uso de la metodología CI/CD.</li></lu>',
+  },
+  {
+    title: "Desarrollo de Aplicaciones Webs",
+    location: "IES Campanillas",
+    date: new Date("09/15/2021"),
+    type: "education",
+    isActive: false,
+    description:
+      '<ul class="list-disc pl-4"><li>Aprendizaje sobre JavaScript.</li><li>Creación de aplicaciones webs con PHP.</li><li>Manejo de Amazon Web Service.</li><li>Maquetación y diseño web.</li><li>Programación secuencial.</li></ul>',
+  },
+  {
+    title: "Desarrollo de Aplicaciones Multiplataformas",
+    location: "IES Pablo Picasso",
+    date: new Date("09/15/2019"),
+    type: "education",
+    isActive: false,
+    description:
+      '<ul class="list-disc pl-4"><li>Aprendizaje sobre C#.</li><li>Creación de aplicaciones de escritorio con Java.</li><li>Creación de bases de datos relacionales.</li><li>Encriptación de datos.</li><li>Programación Orientadas a Objetos.</li></lu>',
+  },
+  {
+    title: "Sistemas Microinformáticos y Redes",
+    location: "IES Juan de la Cierva",
+    date: new Date("09/15/2017"),
+    type: "education",
+    isActive: false,
+    description:
+      '<ul class="list-disc pl-4"><li>Configuración de equipos informáticos.</li><li>Configuración de redes públicas y privadas.</li><li>Configuración de servidores.</li><li>Configuración de servicios daemon.</li><li>Manejo de herramientas ofimáticas.</li><li>Montaje y desmontaje de equipos informáticos.</li></ul>',
+  },
 ];
 ---
+
 <section>
-  <TimeLine arr={[ ...EXPERIENCES ]} />
+  <TimeLine arr={[...EXPERIENCES]} />
 </section>

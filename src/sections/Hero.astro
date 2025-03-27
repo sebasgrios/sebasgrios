@@ -1,55 +1,63 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import Sgonzari from '@/images/sgonzari.webp';
-import Tooltip from '@/components/Tooltip.astro';
-import DiscountIcon from '@/components/icons/Discount.astro';
-import GithubIcon from '@/components/icons/Github.astro';
-import LinkedinIcon from '@/components/icons/Linkedin.astro';
+import SebasGRios from "@/images/sebasgrios.webp";
+import Tooltip from "@/components/Tooltip.astro";
+import DiscountIcon from "@/components/icons/Discount.astro";
+import GithubIcon from "@/components/icons/Github.astro";
+import LinkedinIcon from "@/components/icons/Linkedin.astro";
 
 const years = new Date().getFullYear() - new Date(2022, 7).getFullYear();
 ---
 
-<section class='flex flex-col md:flex-row gap-4 items-center justify-start'>
-   <div class='relative'>
-     <Image 
-        alt='Foto de Sebastián' 
-        class='bg-clip-padding border-8 border-white dark:border-gray-900 shadow-lg rounded-full size-48' 
-        id='image' 
-        src={Sgonzari} 
-      />
-      <a 
-        class='absolute bottom-3 group right-3'
-        href='mailto:contact@sebastiangonzalezrios.com'
-        rel='nooponer noreferrer'
-        target='_blank'
+<section class="flex flex-col md:flex-row gap-4 items-center justify-start">
+  <div class="relative">
+    <Image
+      alt="Foto de Sebastián"
+      class="bg-clip-padding border-8 border-white dark:border-gray-900 shadow-lg rounded-full size-48"
+      id="image"
+      src={SebasGRios}
+    />
+    <a
+      class="absolute bottom-3 group right-3"
+      href="mailto:contact@sebasgrios.es"
+      rel="nooponer noreferrer"
+      target="_blank"
+    >
+      <Tooltip description="Abierto a propuestas">
+        <DiscountIcon
+          class="duration-200 size-10 stroke-cyan-500 fill-white/50 group-hover:fill-white dark:fill-gray-900/50 group-hover:dark:fill-gray-900 rounded-full shadow-md"
+        />
+      </Tooltip>
+    </a>
+  </div>
+  <div class="flex flex-col gap-4 items-center md:items-start justify-center">
+    <div class="flex flex-col gap-2 items-start justify-center">
+      <h1 class="font-bold text-2xl md:text-4xl text-gray-800 dark:text-white">
+        Sebastián González Ríos
+      </h1>
+      <span
+        class="font-medium text-sm md:text-xl text-gray-600 dark:text-gray-400"
+        ><span class="text-yellow-500">+{years} años de experiencia</span> en desarrollo
+        web.</span
       >
-       <Tooltip description='Abierto a propuestas'>
-         <DiscountIcon class='duration-200 size-10 stroke-cyan-500 fill-white/50 group-hover:fill-white dark:fill-gray-900/50 group-hover:dark:fill-gray-900 rounded-full shadow-md' />
-       </Tooltip>
-     </a>
-   </div>
-  <div class='flex flex-col gap-4 items-center md:items-start justify-center'>
-    <div class='flex flex-col gap-2 items-start justify-center'>
-      <h1 class='font-bold text-2xl md:text-4xl text-gray-800 dark:text-white'>Sebastián González Ríos</h1>
-      <span class='font-medium text-sm md:text-xl text-gray-600 dark:text-gray-400'><span class='text-yellow-500'>+{years} años de experiencia</span> en desarrollo web.</span>
     </div>
-    <div class='flex flex-row gap-2 items-start justify-center'>
-      <a 
-        class='bg-[#0e76a8] hover:bg-[#258dbf] dark:hover:bg-[#0a92d1] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white'
-        href='https://linkedin.com/in/sebasgrios/'
-        rel='nooponer noreferrer'
-        target='_blank'
+    <div class="flex flex-row gap-2 items-start justify-center">
+      <a
+        class="bg-[#0e76a8] hover:bg-[#258dbf] dark:hover:bg-[#0a92d1] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white"
+        href="https://linkedin.com/in/sebasgrios/"
+        rel="nooponer noreferrer"
+        target="_blank"
       >
-        <LinkedinIcon class='size-6 fill-white' /> Linkedin
+        <LinkedinIcon class="size-6 fill-white" /> Linkedin
       </a>
-      <a 
-        class='bg-[#171515] hover:bg-[#2b2a2a] dark:hover:bg-[#1b1a1a] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white'
-        href='https://github.com/sebasgrios'
-        rel='nooponer noreferrer'
-        target='_blank'
+      <a
+        class="bg-[#171515] hover:bg-[#2b2a2a] dark:hover:bg-[#1b1a1a] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white"
+        href="https://github.com/sebasgrios"
+        rel="nooponer noreferrer"
+        target="_blank"
       >
-        <GithubIcon class='size-6 fill-white' /> Github
+        <GithubIcon class="size-6 fill-white" /> Github
       </a>
     </div>
   </div>

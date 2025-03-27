@@ -1,28 +1,63 @@
 ---
-import Card from '@/components/Card.astro'
-import ClaraRomero from '@/images/clararomero.webp';
-import WordPressIcon from '@/components/icons/WordPress.astro';
-import MySQLIcon from '@/components/icons/MySQL.astro';
+import Card from "@/components/Card.astro";
+import MiLista from "@/images/mi-lista.webp";
+import ClaraRomero from "@/images/clararomero.webp";
+import NextJSIcon from "@/components/icons/NextJS.astro";
+import TypeSriptIcon from "@/components/icons/TypeScript.astro";
+import ReduxIcon from "@/components/icons/Redux.astro";
+import TailwindCSSIcon from "@/components/icons/TailwindCSS.astro";
+import CloudflareIcon from "@/components/icons/Cloudflare.astro";
+import WordPressIcon from "@/components/icons/WordPress.astro";
+import MySQLIcon from "@/components/icons/MySQL.astro";
 
 const PROJECTS = [
   {
-    title: 'Clara Romero',
-    description: 'Web corporativa sobre una peluquería local.',
+    title: "Mi lista",
+    description: "Gestiona tu propia lista de manera fácil y sencilla.",
+    imageCard: MiLista,
+    utils: [
+      {
+        name: "Next.js",
+        Icon: NextJSIcon,
+      },
+      {
+        name: "TypeScript",
+        Icon: TypeSriptIcon,
+      },
+      {
+        name: "Redux",
+        Icon: ReduxIcon,
+      },
+      {
+        name: "TailwindCSS",
+        Icon: TailwindCSSIcon,
+      },
+      {
+        name: "Cloudflare",
+        Icon: CloudflareIcon,
+      },
+    ],
+    urlLive: "http://mi-lista.es",
+  },
+  {
+    title: "Clara Romero",
+    description: "Web corporativa sobre una peluquería local.",
     imageCard: ClaraRomero,
     utils: [
       {
-        name: 'WordPress',
-        Icon: WordPressIcon
+        name: "WordPress",
+        Icon: WordPressIcon,
       },
       {
-        name: 'MySQL',
-        Icon: MySQLIcon
-      }
+        name: "MySQL",
+        Icon: MySQLIcon,
+      },
     ],
-    urlLive: 'http://clararomero.com',
-  }
-]
+    urlLive: "http://clararomero.com",
+  },
+];
 ---
-<section class='flex flex-col gap-8'>
-  {PROJECTS.map(project => <Card data={{ ...project }} />)}
+
+<section class="flex flex-col gap-8">
+  {PROJECTS.map((project) => <Card data={{ ...project }} />)}
 </section>
