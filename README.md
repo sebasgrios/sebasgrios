@@ -1,4 +1,4 @@
-<h1 align="center">Hi 👋, I'm <a href="https://sebastiangonzalezrios.com" target="_blank">Sebas</a></h1>
+<h1 align="center">Hi 👋, I'm <a href="https://sebasgrios.es" target="_blank">Sebas</a></h1>
 
 <h3 align="center">Full-stack web developer</h3>
 <p align="left">I love my job and spend many hours in front of my PC developing and debugging code.<br>I'm also interested in everything related to tech (news, languages, cybersecurity...)</p>
