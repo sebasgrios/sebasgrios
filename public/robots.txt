@@ -1,0 +1,25 @@
+User-agent: *
+Disallow: /
+
+User-agent: googlebot
+User-agent: Googlebot-Video
+User-agent: Applebot
+User-agent: bingbot
+User-agent: Baiduspider
+User-agent: Baiduspider-mobile
+User-agent: Baiduspider-video
+User-agent: Baiduspider-image
+User-agent: NaverBot
+User-agent: Y!J-WSC
+User-agent: YJ-WSC
+User-agent: Yeti
+User-agent: Yandex
+User-agent: YandexBot
+User-agent: YandexMobileBot
+User-agent: YandexVideo
+User-agent: YandexWebmaster
+User-agent: YandexSitelinks
+User-agent: SeznamBot
+User-agent: facebookexternalhit
+Allow: /
+
