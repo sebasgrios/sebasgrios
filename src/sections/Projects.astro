@@ -2,6 +2,7 @@
 import Card from "@/components/Card.astro";
 import MiLista from "@/images/mi-lista.webp";
 import UnoCien from "@/images/1-100.webp";
+import BastianGR from "@/images/bastiangr.webp";
 import ClaraRomero from "@/images/clararomero.webp";
 import AstroIcon from "@/components/icons/AstroJS.astro";
 import NextJSIcon from "@/components/icons/NextJS.astro";
@@ -13,10 +14,10 @@ import WordPressIcon from "@/components/icons/WordPress.astro";
 import MySQLIcon from "@/components/icons/MySQL.astro";
 
 const PROJECTS = [
-  {
-    title: "1-100",
-    description: "Entrena tu concentración, reflejos y agudeza visual.",
-    imageCard: UnoCien,
+{
+    title: "BastianGR",
+    description: "Web personal de un particular.",
+    imageCard: BastianGR,
     utils: [
       {
         name: "Astro",
@@ -25,6 +26,27 @@ const PROJECTS = [
       {
         name: "TypeScript",
         Icon: TypeSriptIcon,
+      },
+      {
+        name: "TailwindCSS",
+        Icon: TailwindCSSIcon,
+      },
+      {
+        name: "Cloudflare",
+        Icon: CloudflareIcon,
+      },
+    ],
+    urlLive: "https://bastiangr.es",
+    urlCode: "https://github.com/sebasgrios/bastiangr",
+  },
+  {
+    title: "1-100",
+    description: "Entrena tu concentración, reflejos y agudeza visual.",
+    imageCard: UnoCien,
+    utils: [
+      {
+        name: "Astro",
+        Icon: AstroIcon,
       },
       {
         name: "TailwindCSS",
