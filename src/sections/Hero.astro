@@ -7,14 +7,21 @@ import DiscountIcon from "@/components/icons/Discount.astro";
 import GithubIcon from "@/components/icons/Github.astro";
 import LinkedinIcon from "@/components/icons/Linkedin.astro";
 
-const years = new Date().getFullYear() - new Date(2022, 7).getFullYear();
+const startDate = new Date(2022, 6);
+const currentDate = new Date();
+const yearsDiff = currentDate.getFullYear() - startDate.getFullYear();
+const monthsDiff = currentDate.getMonth() - startDate.getMonth();
+let initialYears = yearsDiff;
+if (monthsDiff < 0 || (monthsDiff === 0 && currentDate.getDate() < startDate.getDate())) {
+  initialYears--;
+}
 ---
 
 <section class="flex flex-col md:flex-row gap-4 items-center justify-start">
   <div class="relative">
     <Image
       alt="Foto de Sebastián"
-      class="bg-clip-padding border-8 border-white dark:border-gray-900 shadow-lg rounded-full size-48"
+      class="bg-clip-padding border-8 border-white dark:border-gray-900/75 shadow-lg rounded-full size-48"
       id="image"
       src={SebasGRios}
     />
@@ -38,11 +45,11 @@ const years = new Date().getFullYear() - new Date(2022, 7).getFullYear();
       </h1>
       <span
         class="font-medium text-sm md:text-xl text-gray-600 dark:text-gray-400"
-        ><span class="text-yellow-500">+{years} años de experiencia</span> en desarrollo
+        ><span class="text-yellow-500" id="years-experience">+{initialYears} años de experiencia</span> en desarrollo
         web.</span
       >
     </div>
-    <div class="flex flex-row gap-2 items-start justify-center">
+    <div class="flex flex-row gap-2 items-center justify-center">
       <a
         class="bg-[#0e76a8] hover:bg-[#258dbf] dark:hover:bg-[#0a92d1] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white"
         href="https://linkedin.com/in/sebasgrios/"
@@ -52,7 +59,7 @@ const years = new Date().getFullYear() - new Date(2022, 7).getFullYear();
         <LinkedinIcon class="size-6 fill-white" /> Linkedin
       </a>
       <a
-        class="bg-[#171515] hover:bg-[#2b2a2a] dark:hover:bg-[#1b1a1a] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white"
+        class="bg-[#171515] hover:bg-[#2b2a2a] dark:hover:bg-[#1b1a1a] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 dark:p-2.5 rounded-xl shadow-md text-white"
         href="https://github.com/sebasgrios"
         rel="nooponer noreferrer"
         target="_blank"
@@ -62,3 +69,24 @@ const years = new Date().getFullYear() - new Date(2022, 7).getFullYear();
     </div>
   </div>
 </section>
+
+<script define:vars={{ initialYears }}>
+  (function() {
+    const startDate = new Date(2022, 7);
+    const currentDate = new Date();
+    const years = currentDate.getFullYear() - startDate.getFullYear();
+    const months = currentDate.getMonth() - startDate.getMonth();
+    
+    let experienceYears = years;
+    if (months < 0 || (months === 0 && currentDate.getDate() < startDate.getDate())) {
+      experienceYears--;
+    }
+    
+    if (experienceYears !== initialYears) {
+      const yearsElement = document.getElementById('years-experience');
+      if (yearsElement) {
+        yearsElement.textContent = `+${experienceYears} años de experiencia`;
+      }
+    }
+  })();
+</script>
