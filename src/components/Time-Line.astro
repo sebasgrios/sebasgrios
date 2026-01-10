@@ -25,19 +25,19 @@ const { arr } = Astro.props;
             <div class='flex items-center space-x-4 md:space-x-2 md:space-x-reverse'>
               <div class={`flex items-center justify-center w-10 h-10 relative rounded-full bg-white dark:bg-gray-900 shadow md:order-1`}>
                 {isActive && (
-                  <span class='absolute animate-ping bg-blue-400 right-0 rounded-full size-2 top-0' />
-                  <span class='absolute bg-blue-500 right-0 rounded-full size-2 top-0' />
+                  <span class='absolute animate-ping bg-green-400 dark:bg-green-500 right-0 rounded-full size-2 top-0' />
+                  <span class='absolute bg-green-500 dark:bg-green-500 right-0 rounded-full size-2 top-0' />
                 )}
                 {type === 'job' && (<JobIcon class='size-6 stroke-black dark:stroke-gray-100' />)}
                 {type === 'education' && (<EducationIcon class='size-6 stroke-black dark:stroke-gray-100' />)}
               </div>
-                <time class='font-semibold text-sm text-blue-500 first-letter:uppercase md:w-28'>
+                <time class='font-semibold text-sm dark:text-white first-letter:uppercase md:w-28'>
                   {date.toLocaleString('es', { month: 'short' })}, {date.getFullYear()}
                 </time>
               </div>
               <div class='flex flex-col justify-center ml-14'>
-                <h1 class='font-semibold text-lg text-gray-600 dark:text-gray-200'>{title}</h1>
-                <h2 class='font-medium text-sm text-gray-400'>{location}</h2>
+                <h1 class='font-semibold text-lg text-black dark:text-gray-200'>{title}</h1>
+                <h2 class='font-medium text-sm text-gray-600 dark:text-gray-400'>{location}</h2>
               </div>
             </div>
             {description && (
