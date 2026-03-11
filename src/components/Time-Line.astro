@@ -1,51 +1,44 @@
 ---
 import JobIcon from './icons/Job.astro';
 import EducationIcon from './icons/Education.astro';
-
-interface Data {
-  title: string,
-  location: string,
-  type: string,
-  date: Date,
-  isActive: boolean,
-  description: string
-}
+import type { ExperienceEntry } from '@/types/content';
+import { formatExperienceDate, toMonthDateTime } from '@/utils/date';
 
 interface Props {
-  arr: Data[]
+  entries: ExperienceEntry[];
 }
 
-const { arr } = Astro.props;
+const { entries } = Astro.props;
 ---
 <div class='w-full mx-auto'>
-    <div class='space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-[8.75rem] md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 dark:before:via-gray-700 before:to-transparent'>
-      {arr.map(({title, location, type, date, isActive, description}: Data) => (
+    <div class='space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-[8.75rem] md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 dark:before:via-neutral-700 before:to-transparent'>
+      {entries.map(({ title, organization, kind, date, isActive = false, summary, highlights }) => (
         <div class='relative'>
           <div class='md:flex items-center md:space-x-4 mb-3'>
             <div class='flex items-center space-x-4 md:space-x-2 md:space-x-reverse'>
-              <div class={`flex items-center justify-center w-10 h-10 relative rounded-full bg-white dark:bg-gray-900 shadow md:order-1`}>
+              <div class={`flex items-center justify-center w-10 h-10 relative rounded-full bg-white dark:bg-[var(--dark-surface-strong)] shadow md:order-1`}>
                 {isActive && (
-                  <span class='absolute animate-ping bg-green-400 dark:bg-green-500 right-0 rounded-full size-2 top-0' />
-                  <span class='absolute bg-green-500 dark:bg-green-500 right-0 rounded-full size-2 top-0' />
+                  <span class='absolute animate-ping bg-emerald-400 dark:bg-emerald-400 right-0 rounded-full size-2 top-0' />
+                  <span class='absolute bg-emerald-500 dark:bg-emerald-400 right-0 rounded-full size-2 top-0' />
                 )}
-                {type === 'job' && (<JobIcon class='size-6 stroke-black dark:stroke-gray-100' />)}
-                {type === 'education' && (<EducationIcon class='size-6 stroke-black dark:stroke-gray-100' />)}
+                {kind === 'job' && (<JobIcon class='size-6 stroke-black dark:stroke-[var(--dark-text)]' />)}
+                {kind === 'education' && (<EducationIcon class='size-6 stroke-black dark:stroke-[var(--dark-text)]' />)}
               </div>
-                <time class='font-semibold text-sm dark:text-white first-letter:uppercase md:w-28'>
-                  {date.toLocaleString('es', { month: 'short' })}, {date.getFullYear()}
+                <time class='font-semibold text-sm dark:text-[var(--dark-text)] first-letter:uppercase md:w-28' datetime={toMonthDateTime(date)}>
+                  {formatExperienceDate(date)}
                 </time>
               </div>
               <div class='flex flex-col justify-center ml-14'>
-                <h1 class='font-semibold text-lg text-black dark:text-gray-200'>{title}</h1>
-                <h2 class='font-medium text-sm text-gray-600 dark:text-gray-400'>{location}</h2>
+                <h3 class='font-semibold text-lg text-black dark:text-[var(--dark-text)]'>{title}</h3>
+                <p class='font-medium text-sm text-gray-600 dark:text-[var(--dark-text-muted)]'>{organization}</p>
               </div>
             </div>
-            {description && (
-              <div 
-                class='bg-white dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 ml-14 md:ml-44 p-4 rounded-xl shadow-md text-gray-500 dark:text-gray-400'
-                set:html={description}
-              />
-            )}
+            <div class='bg-white dark:bg-[var(--dark-surface)] border border-gray-200 dark:border-[var(--dark-border)] ml-14 md:ml-44 p-4 rounded-xl shadow-md text-gray-500 dark:text-[var(--dark-text-muted)]'>
+              {summary && <p class='pb-4'>{summary}</p>}
+              <ul class='list-disc pl-4'>
+                {highlights.map((highlight) => <li>{highlight}</li>)}
+              </ul>
+            </div>
         </div>
       ))}
     </div>

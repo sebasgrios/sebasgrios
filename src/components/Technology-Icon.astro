@@ -1,0 +1,65 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+
+import AstroIcon from '@/components/icons/AstroJS.astro';
+import CloudflareIcon from '@/components/icons/Cloudflare.astro';
+import MySQLIcon from '@/components/icons/MySQL.astro';
+import NextJSIcon from '@/components/icons/NextJS.astro';
+import NextJSLightIcon from '@/components/icons/NextJS-Light.astro';
+import ReduxIcon from '@/components/icons/Redux.astro';
+import TailwindCSSIcon from '@/components/icons/TailwindCSS.astro';
+import TypeScriptIcon from '@/components/icons/TypeScript.astro';
+import WordPressIcon from '@/components/icons/WordPress.astro';
+import { TECHNOLOGY_LABELS } from '@/data/technologies';
+import type { TechnologyId } from '@/types/content';
+
+interface Props {
+  class?: string;
+  technology: TechnologyId;
+}
+
+const { class: className, technology } = Astro.props;
+
+const technologyMap = {
+  astro: {
+    Icon: AstroIcon
+  },
+  cloudflare: {
+    Icon: CloudflareIcon
+  },
+  mysql: {
+    Icon: MySQLIcon
+  },
+  nextjs: {
+    Icon: NextJSIcon
+  },
+  redux: {
+    Icon: ReduxIcon
+  },
+  tailwindcss: {
+    Icon: TailwindCSSIcon
+  },
+  typescript: {
+    Icon: TypeScriptIcon
+  },
+  wordpress: {
+    Icon: WordPressIcon
+  }
+} satisfies Record<TechnologyId, { Icon: AstroComponentFactory }>;
+
+const definition = technologyMap[technology];
+const IconComponent = definition.Icon as AstroComponentFactory;
+---
+
+{technology === 'nextjs' ? (
+  <>
+    <span class='dark:hidden inline-flex'>
+      <IconComponent aria-hidden='true' aria-label={TECHNOLOGY_LABELS[technology]} class={className} />
+    </span>
+    <span class='hidden dark:inline-flex'>
+      <NextJSLightIcon aria-hidden='true' aria-label={TECHNOLOGY_LABELS[technology]} class={className} />
+    </span>
+  </>
+) : (
+  <IconComponent aria-hidden='true' aria-label={TECHNOLOGY_LABELS[technology]} class={className} />
+)}
