@@ -5,6 +5,7 @@ import AstroIcon from '@/components/icons/AstroJS.astro';
 import CloudflareIcon from '@/components/icons/Cloudflare.astro';
 import MySQLIcon from '@/components/icons/MySQL.astro';
 import NextJSIcon from '@/components/icons/NextJS.astro';
+import NextJSLightIcon from '@/components/icons/NextJS-Light.astro';
 import ReduxIcon from '@/components/icons/Redux.astro';
 import TailwindCSSIcon from '@/components/icons/TailwindCSS.astro';
 import TypeScriptIcon from '@/components/icons/TypeScript.astro';
@@ -50,4 +51,15 @@ const definition = technologyMap[technology];
 const IconComponent = definition.Icon as AstroComponentFactory;
 ---
 
-<IconComponent aria-hidden='true' aria-label={TECHNOLOGY_LABELS[technology]} class={className} />
+{technology === 'nextjs' ? (
+  <>
+    <span class='dark:hidden inline-flex'>
+      <IconComponent aria-hidden='true' aria-label={TECHNOLOGY_LABELS[technology]} class={className} />
+    </span>
+    <span class='hidden dark:inline-flex'>
+      <NextJSLightIcon aria-hidden='true' aria-label={TECHNOLOGY_LABELS[technology]} class={className} />
+    </span>
+  </>
+) : (
+  <IconComponent aria-hidden='true' aria-label={TECHNOLOGY_LABELS[technology]} class={className} />
+)}

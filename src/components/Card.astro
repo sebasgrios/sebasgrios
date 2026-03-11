@@ -21,7 +21,7 @@ const previewUrl = liveUrl ?? codeUrl;
   <div class='flex flex-1 flex-col'>
     <a
       aria-label={`Abrir proyecto ${title}`}
-      class='bg-white dark:bg-gray-700/50 border-gray-200 group overflow-hidden relative rounded-xl shadow-xl' 
+      class='bg-white dark:bg-[var(--dark-surface)] border-gray-200 dark:border-[var(--dark-border)] group overflow-hidden relative rounded-xl shadow-xl' 
       href={previewUrl}
       rel='noopener noreferrer'
       target='_blank'
@@ -34,10 +34,10 @@ const previewUrl = liveUrl ?? codeUrl;
     </a>
   </div>
   <div class='flex-1 flex flex-col gap-1 md:gap-2 py-2'>
-    <h2 class='font-semibold text-2xl text-gray-600 dark:text-gray-200'>
+    <h2 class='font-semibold text-2xl text-gray-600 dark:text-[var(--dark-text)]'>
       {title}
     </h2>
-    <p class='font-medium text-lg text-gray-400'>{description}</p>
+    <p class='font-medium text-lg text-gray-400 dark:text-[var(--dark-text-muted)]'>{description}</p>
     <div class='flex flex-row gap-2 items-center justify-start'>
        {technologies.map((technology) => (
          <Tooltip description={TECHNOLOGY_LABELS[technology]}>
@@ -48,22 +48,22 @@ const previewUrl = liveUrl ?? codeUrl;
     <div class='flex flex-row gap-2 items-center justify-start'>
       {liveUrl && (
         <a 
-          class='bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 hover:dark:bg-gray-300 flex flex-row font-semibold gap-2 group items-center px-4 py-2 rounded-xl shadow-md text-white dark:text-gray-800 text-xl' 
+          class='bg-gray-800 hover:bg-gray-700 dark:bg-[var(--dark-surface-strong)] hover:dark:bg-neutral-800 flex flex-row font-semibold gap-2 group items-center px-4 py-2 rounded-xl shadow-md text-white dark:text-[var(--dark-text)] text-xl' 
           href={liveUrl}
           rel='noopener noreferrer'
           target='_blank'
         >
-         Live <WorldIcon class='duration-200 xl:rotate-12 group-hover:rotate-0 size-6 stroke-white dark:stroke-gray-800' />
+         Live <WorldIcon class='duration-200 xl:rotate-12 group-hover:rotate-0 size-6 stroke-white dark:stroke-[var(--dark-text)]' />
         </a>
       )}
       {codeUrl && (
         <a 
-          class='bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 hover:dark:bg-gray-300 flex flex-row font-semibold gap-2 group items-center px-4 py-2 rounded-xl shadow-md text-white dark:text-gray-800 text-xl' 
+          class='bg-gray-800 hover:bg-gray-700 dark:bg-[var(--dark-surface-strong)] hover:dark:bg-neutral-800 flex flex-row font-semibold gap-2 group items-center px-4 py-2 rounded-xl shadow-md text-white dark:text-[var(--dark-text)] text-xl' 
           href={codeUrl}
           rel='noopener noreferrer'
           target='_blank'
         >
-         Code <CodeIcon class='duration-200 xl:rotate-12 group-hover:rotate-0 size-6 stroke-white dark:stroke-gray-800' />
+         Code <CodeIcon class='duration-200 xl:rotate-12 group-hover:rotate-0 size-6 stroke-white dark:stroke-[var(--dark-text)]' />
         </a>
       )}
     </div>

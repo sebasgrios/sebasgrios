@@ -16,7 +16,7 @@ const initialYears = getYearsOfExperience(SITE.experienceStartDate);
   <div class='relative' data-header-avatar-trigger>
     <Image
       alt='Foto de Sebastián'
-      class='bg-clip-padding border-8 border-white dark:border-gray-900/75 shadow-lg rounded-full size-48'
+      class='bg-clip-padding rounded-full border-8 border-white shadow-lg size-48 dark:border-[#121212]'
       src={SebasGRios}
     />
     <a
@@ -28,17 +28,17 @@ const initialYears = getYearsOfExperience(SITE.experienceStartDate);
     >
       <Tooltip description='Abierto a propuestas'>
         <DiscountIcon
-          class='duration-200 size-10 stroke-cyan-500 fill-white/50 group-hover:fill-white dark:fill-gray-900/50 group-hover:dark:fill-gray-900 rounded-full shadow-md'
+          class='duration-200 rounded-full shadow-md size-10 stroke-cyan-500 fill-white/50 group-hover:fill-white dark:fill-[var(--dark-surface)] group-hover:dark:fill-[var(--dark-surface-strong)]'
         />
       </Tooltip>
     </a>
   </div>
   <div class='flex flex-col gap-4 items-center md:items-start justify-center'>
     <div class='flex flex-col gap-2 items-start justify-center'>
-      <h1 class='font-bold text-2xl md:text-4xl text-gray-800 dark:text-white'>
+      <h1 class='font-bold text-2xl md:text-4xl text-gray-800 dark:text-[var(--dark-text)]'>
         Sebastián González Ríos
       </h1>
-      <p class='font-medium text-sm md:text-xl text-gray-600 dark:text-gray-400'>
+      <p class='font-medium text-sm md:text-xl text-gray-600 dark:text-[var(--dark-text-muted)]'>
         <span class='text-yellow-500' data-years-experience>+{initialYears} años de experiencia</span> en {SITE.jobTitle}.
       </p>
     </div>
@@ -52,12 +52,12 @@ const initialYears = getYearsOfExperience(SITE.experienceStartDate);
         <LinkedinIcon class='size-6 fill-white' /> Linkedin
       </a>
       <a
-        class='bg-[#171515] hover:bg-[#2b2a2a] dark:hover:bg-[#1b1a1a] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 dark:p-2.5 rounded-xl shadow-md text-white'
+        class='bg-[#171515] hover:bg-[#2b2a2a] dark:bg-white dark:hover:bg-neutral-200 cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white dark:text-black'
         href='https://github.com/sebasgrios'
         rel='noopener noreferrer'
         target='_blank'
       >
-        <GithubIcon class='size-6 fill-white' /> Github
+        <GithubIcon class='size-6 fill-white dark:fill-black' /> Github
       </a>
     </div>
   </div>
