@@ -2,26 +2,39 @@
 import '@fontsource-variable/libre-franklin';
 import { ViewTransitions } from 'astro:transitions';
 
+import { SITE } from '@/data/site';
 import Header from '@/components/Header.astro';
 
 interface Props {
+	description?: string;
 	title: string;
 }
 
-const { title } = Astro.props;
+const { description = SITE.description, title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang='es'>
+<html lang={SITE.language}>
 	<head>
 		<meta charset='UTF-8' />
-		<meta name='author' content='Sebastián González Ríos' />
-		<meta name='description' content='Portfolio de Sebastián González Ríos' />
+		<meta name='author' content={SITE.author} />
+		<meta name='description' content={description} />
 		<meta name='viewport' content='width=device-width' />
 		<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
 		<meta name='generator' content={Astro.generator} />
 		<title>{title}</title>
 		<ViewTransitions />
+		<script is:inline>
+			const theme = localStorage.theme === 'dark'
+				? 'dark'
+				: localStorage.theme === 'light'
+					? 'light'
+					: window.matchMedia('(prefers-color-scheme: dark)').matches
+						? 'dark'
+						: 'light';
+
+			document.documentElement.classList.toggle('dark', theme === 'dark');
+		</script>
 	</head>
 	<body class='bg-gray-100 dark:bg-gray-800'>
 		<Header />
@@ -41,11 +54,3 @@ const { title } = Astro.props;
 		}
 	}
 </style>
-
-<script is:inline>
-	if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-		document.documentElement.classList.add('dark')
-	} else {
-		document.documentElement.classList.remove('dark')
-	}
-</script>

@@ -1,92 +1,88 @@
 ---
-import { Image } from "astro:assets";
+import { Image } from 'astro:assets';
 
-import SebasGRios from "@/images/sebasgrios.webp";
-import Tooltip from "@/components/Tooltip.astro";
-import DiscountIcon from "@/components/icons/Discount.astro";
-import GithubIcon from "@/components/icons/Github.astro";
-import LinkedinIcon from "@/components/icons/Linkedin.astro";
+import { SITE } from '@/data/site';
+import SebasGRios from '@/images/sebasgrios.webp';
+import Tooltip from '@/components/Tooltip.astro';
+import DiscountIcon from '@/components/icons/Discount.astro';
+import GithubIcon from '@/components/icons/Github.astro';
+import LinkedinIcon from '@/components/icons/Linkedin.astro';
+import { getYearsOfExperience } from '@/utils/date';
 
-const startDate = new Date(2022, 6);
-const currentDate = new Date();
-const yearsDiff = currentDate.getFullYear() - startDate.getFullYear();
-const monthsDiff = currentDate.getMonth() - startDate.getMonth();
-let initialYears = yearsDiff;
-if (monthsDiff < 0 || (monthsDiff === 0 && currentDate.getDate() < startDate.getDate())) {
-  initialYears--;
-}
+const initialYears = getYearsOfExperience(SITE.experienceStartDate);
 ---
 
-<section class="flex flex-col md:flex-row gap-4 items-center justify-start">
-  <div class="relative">
+<section class='flex flex-col md:flex-row gap-4 items-center justify-start'>
+  <div class='relative' data-header-avatar-trigger>
     <Image
-      alt="Foto de Sebastián"
-      class="bg-clip-padding border-8 border-white dark:border-gray-900/75 shadow-lg rounded-full size-48"
-      id="image"
+      alt='Foto de Sebastián'
+      class='bg-clip-padding border-8 border-white dark:border-gray-900/75 shadow-lg rounded-full size-48'
       src={SebasGRios}
     />
     <a
-      class="absolute bottom-3 group right-3"
-      href="mailto:contact@sebasgrios.es"
-      rel="nooponer noreferrer"
-      target="_blank"
+      aria-label='Enviar correo a Sebastián González Ríos'
+      class='absolute bottom-3 group right-3'
+      href='mailto:contact@sebasgrios.es'
+      rel='noopener noreferrer'
+      target='_blank'
     >
-      <Tooltip description="Abierto a propuestas">
+      <Tooltip description='Abierto a propuestas'>
         <DiscountIcon
-          class="duration-200 size-10 stroke-cyan-500 fill-white/50 group-hover:fill-white dark:fill-gray-900/50 group-hover:dark:fill-gray-900 rounded-full shadow-md"
+          class='duration-200 size-10 stroke-cyan-500 fill-white/50 group-hover:fill-white dark:fill-gray-900/50 group-hover:dark:fill-gray-900 rounded-full shadow-md'
         />
       </Tooltip>
     </a>
   </div>
-  <div class="flex flex-col gap-4 items-center md:items-start justify-center">
-    <div class="flex flex-col gap-2 items-start justify-center">
-      <h1 class="font-bold text-2xl md:text-4xl text-gray-800 dark:text-white">
+  <div class='flex flex-col gap-4 items-center md:items-start justify-center'>
+    <div class='flex flex-col gap-2 items-start justify-center'>
+      <h1 class='font-bold text-2xl md:text-4xl text-gray-800 dark:text-white'>
         Sebastián González Ríos
       </h1>
-      <span
-        class="font-medium text-sm md:text-xl text-gray-600 dark:text-gray-400"
-        ><span class="text-yellow-500" id="years-experience">+{initialYears} años de experiencia</span> en desarrollo
-        web.</span
-      >
+      <p class='font-medium text-sm md:text-xl text-gray-600 dark:text-gray-400'>
+        <span class='text-yellow-500' data-years-experience>+{initialYears} años de experiencia</span> en {SITE.jobTitle}.
+      </p>
     </div>
-    <div class="flex flex-row gap-2 items-center justify-center">
+    <div class='flex flex-row gap-2 items-center justify-center'>
       <a
-        class="bg-[#0e76a8] hover:bg-[#258dbf] dark:hover:bg-[#0a92d1] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white"
-        href="https://linkedin.com/in/sebasgrios/"
-        rel="nooponer noreferrer"
-        target="_blank"
+        class='bg-[#0e76a8] hover:bg-[#258dbf] dark:hover:bg-[#0a92d1] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 rounded-xl shadow-md text-white'
+        href='https://linkedin.com/in/sebasgrios/'
+        rel='noopener noreferrer'
+        target='_blank'
       >
-        <LinkedinIcon class="size-6 fill-white" /> Linkedin
+        <LinkedinIcon class='size-6 fill-white' /> Linkedin
       </a>
       <a
-        class="bg-[#171515] hover:bg-[#2b2a2a] dark:hover:bg-[#1b1a1a] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 dark:p-2.5 rounded-xl shadow-md text-white"
-        href="https://github.com/sebasgrios"
-        rel="nooponer noreferrer"
-        target="_blank"
+        class='bg-[#171515] hover:bg-[#2b2a2a] dark:hover:bg-[#1b1a1a] cursor-pointer font-medium flex flex-row gap-2 items-center p-2 dark:p-2.5 rounded-xl shadow-md text-white'
+        href='https://github.com/sebasgrios'
+        rel='noopener noreferrer'
+        target='_blank'
       >
-        <GithubIcon class="size-6 fill-white" /> Github
+        <GithubIcon class='size-6 fill-white' /> Github
       </a>
     </div>
   </div>
 </section>
 
-<script define:vars={{ initialYears }}>
-  (function() {
-    const startDate = new Date(2022, 7);
+<script define:vars={{ initialYears, startMonth: SITE.experienceStartDate.month, startYear: SITE.experienceStartDate.year }} is:inline>
+  const updateExperienceYears = () => {
     const currentDate = new Date();
-    const years = currentDate.getFullYear() - startDate.getFullYear();
-    const months = currentDate.getMonth() - startDate.getMonth();
-    
-    let experienceYears = years;
-    if (months < 0 || (months === 0 && currentDate.getDate() < startDate.getDate())) {
-      experienceYears--;
+    let experienceYears = currentDate.getFullYear() - startYear;
+    const monthDiff = currentDate.getMonth() - (startMonth - 1);
+
+    if (monthDiff < 0) {
+      experienceYears -= 1;
     }
-    
-    if (experienceYears !== initialYears) {
-      const yearsElement = document.getElementById('years-experience');
-      if (yearsElement) {
-        yearsElement.textContent = `+${experienceYears} años de experiencia`;
-      }
+
+    if (experienceYears === initialYears) {
+      return;
     }
-  })();
+
+    const yearsElement = document.querySelector('[data-years-experience]');
+
+    if (yearsElement instanceof HTMLElement) {
+      yearsElement.textContent = `+${experienceYears} años de experiencia`;
+    }
+  };
+
+  updateExperienceYears();
 </script>

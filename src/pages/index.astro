@@ -1,11 +1,12 @@
 ---
+import { SITE } from '@/data/site';
 import Layout from '@/layouts/Layout.astro';
 import Hero from '@/sections/Hero.astro';
 import Experiences from '@/sections/Experiences.astro';
 import Projects from '@/sections/Projects.astro';
 ---
 
-<Layout title='Sebastián González Ríos'>
+<Layout description={SITE.description} title={SITE.title}>
 	<main class='flex flex-col gap-16 max-w-3xl mx-auto px-6 mb-8'>
 		<Hero />
 		<hr class='border border-dotted border-gray-300 dark:border-gray-700 rounded-full' />
