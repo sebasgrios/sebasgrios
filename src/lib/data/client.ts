@@ -24,7 +24,15 @@ export function getServerClient(): AppSupabaseClient {
     PUBLIC_SUPABASE_ANON_KEY: import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
   };
   if (!env.PUBLIC_SUPABASE_URL || !env.PUBLIC_SUPABASE_ANON_KEY) {
-    throw new Error('Missing Supabase env vars: PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY');
+    throw new Error(
+      [
+        'Supabase env vars are missing.',
+        'Required: PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY.',
+        'Local dev: copy .env.local.example to .env.local and fill the values.',
+        'Cloudflare Pages: add them under Settings → Environment variables (Production and Preview).',
+        'See docs/12-deployment.md for the full list.',
+      ].join(' ')
+    );
   }
   return createServerClient(env);
 }
