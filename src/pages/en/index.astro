@@ -1,31 +1,41 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { COPY } from '@/config/copy';
+import { loadHomeData } from '@/lib/data/loaders';
+import { pickLocale } from '@/lib/domain/i18n';
 
 export const prerender = true;
 
 const locale = 'en' as const;
 const copy = COPY[locale];
+const data = await loadHomeData();
+const { profile, stats } = data;
+const role = pickLocale(profile.role, locale);
+const lead = pickLocale(profile.lead, locale);
+const metaTitle = pickLocale(profile.metaTitle, locale);
+const metaDescription = pickLocale(profile.metaDescription, locale);
 ---
 
-<BaseLayout
-  title="Sebastián González Ríos — Software Engineer"
-  description="Portfolio of Sebastián González Ríos · Software Engineer · Frontend"
-  locale={locale}
->
+<BaseLayout title={metaTitle} description={metaDescription} locale={locale}>
   <section class="wrap" style="padding-block: clamp(80px, 14vh, 160px);">
     <p class="font-mono text-sm uppercase tracking-[0.22em] text-[var(--text-faint)]">
-      M2 · skeleton
+      M4 · data from supabase
     </p>
     <h1 class="font-[var(--font-display)] text-5xl mt-3" style="letter-spacing: -0.02em;">
-      Hello, world.
+      {profile.fullName}
     </h1>
-    <p class="mt-4 max-w-prose text-[var(--text-soft)]">
-      Astro 5 + Tailwind v4 + Cloudflare adapter ready. Real sections land in M5.
-    </p>
-    <p class="mt-6 text-sm text-[var(--text-faint)]">
-      Locale: {locale} · Nav: {copy.nav.experience}, {copy.nav.education}, {copy.nav.stack},
-      {copy.nav.projects}, {copy.nav.contact}
+    <p class="mt-3 text-[var(--text-soft)]">{role}</p>
+    <p class="mt-4 max-w-prose text-[var(--text-soft)]">{lead}</p>
+    <div class="mt-8 flex gap-6 flex-wrap text-sm text-[var(--text-faint)]">
+      <span><strong>+{stats.yearsOfExperience}</strong> {copy.hero.statYears}</span>
+      <span><strong>{stats.sectorsCount}</strong> {copy.hero.statSectors}</span>
+      <span><strong>{stats.projectsCount}</strong> {copy.hero.statProjects}</span>
+    </div>
+    <p class="mt-8 text-xs text-[var(--text-faint)]">
+      Locale: {locale} · Roles loaded:
+      {data.companies.reduce((acc, c) => acc + c.roles.length, 0)} · Education:
+      {data.education.length} · Stack groups: {data.stackGroups.length} · Projects:
+      {data.projects.length}
     </p>
   </section>
 </BaseLayout>

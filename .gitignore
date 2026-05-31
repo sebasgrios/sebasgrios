@@ -16,6 +16,10 @@ node_modules/
 .wrangler/
 .dev.vars
 
+# supabase cli local state
+supabase/.temp/
+supabase/.branches/
+
 # environment variables
 .env
 .env.local

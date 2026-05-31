@@ -9,6 +9,7 @@
       ".wrangler",
       "node_modules",
       "src/lib/data/database.types.ts",
+      "supabase/.temp",
       "**/*.astro"
     ]
   },
