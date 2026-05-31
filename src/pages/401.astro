@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { COPY } from '@/config/copy';
+import { getLocaleFromPath } from '@/lib/i18n/getLocale';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const copy = COPY[locale];
+const homeHref = locale === 'es' ? '/' : '/en/';
+---
+
+<BaseLayout
+  title={`401 · ${copy.errors.unauthorizedTitle}`}
+  description={copy.errors.unauthorizedLead}
+  locale={locale}
+>
+  <section class="wrap" style="padding-block: clamp(80px, 14vh, 160px); text-align: center;">
+    <p class="font-mono text-sm uppercase tracking-[0.22em] text-[var(--text-faint)]">401</p>
+    <h1 class="text-5xl mt-3" style="letter-spacing: -0.02em;">
+      {copy.errors.unauthorizedTitle}
+    </h1>
+    <p class="mt-4 mx-auto max-w-prose text-[var(--text-soft)]">
+      {copy.errors.unauthorizedLead}
+    </p>
+    <a href={homeHref} class="mt-8 inline-block underline text-[var(--accent)]">
+      {copy.errors.backToPortfolio}
+    </a>
+  </section>
+</BaseLayout>

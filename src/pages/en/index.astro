@@ -4,24 +4,24 @@ import { COPY } from '@/config/copy';
 
 export const prerender = true;
 
-const locale = 'es' as const;
+const locale = 'en' as const;
 const copy = COPY[locale];
 ---
 
 <BaseLayout
-  title="Sebastián González Ríos — Ingeniero de Software"
-  description="Portfolio de Sebastián González Ríos · Ingeniero de Software · Frontend"
+  title="Sebastián González Ríos — Software Engineer"
+  description="Portfolio of Sebastián González Ríos · Software Engineer · Frontend"
   locale={locale}
 >
   <section class="wrap" style="padding-block: clamp(80px, 14vh, 160px);">
     <p class="font-mono text-sm uppercase tracking-[0.22em] text-[var(--text-faint)]">
-      M2 · esqueleto
+      M2 · skeleton
     </p>
     <h1 class="font-[var(--font-display)] text-5xl mt-3" style="letter-spacing: -0.02em;">
       Hello, world.
     </h1>
     <p class="mt-4 max-w-prose text-[var(--text-soft)]">
-      Astro 5 + Tailwind v4 + Cloudflare adapter listo. Las secciones reales llegan en M5.
+      Astro 5 + Tailwind v4 + Cloudflare adapter ready. Real sections land in M5.
     </p>
     <p class="mt-6 text-sm text-[var(--text-faint)]">
       Locale: {locale} · Nav: {copy.nav.experience}, {copy.nav.education}, {copy.nav.stack},

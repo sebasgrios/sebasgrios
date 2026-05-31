@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
-Sitemap: https://sebasgrios.es/sitemap.xml
+Sitemap: https://sebasgrios.es/sitemap-index.xml

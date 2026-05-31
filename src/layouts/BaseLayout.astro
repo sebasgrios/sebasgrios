@@ -1,0 +1,59 @@
+---
+import type { Locale } from '@/config/i18n';
+import { SITE } from '@/config/site';
+import '@/styles/globals.css';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  canonical?: string;
+}
+
+const { title, description, locale, canonical } = Astro.props;
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, SITE.url).toString();
+const alternateEs = new URL(Astro.url.pathname.replace(/^\/en\//, '/'), SITE.url).toString();
+const alternateEn = new URL(
+  Astro.url.pathname.startsWith('/en/') ? Astro.url.pathname : `/en${Astro.url.pathname}`,
+  SITE.url
+).toString();
+---
+
+<!doctype html>
+<html lang={locale} data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="es" href={alternateEs} />
+    <link rel="alternate" hreflang="en" href={alternateEn} />
+    <link rel="alternate" hreflang="x-default" href={alternateEs} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem('sgr-theme');
+          var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = s || (dark ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="sr-only">Skip to main content</a>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+  </body>
+</html>
