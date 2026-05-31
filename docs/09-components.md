@@ -114,7 +114,17 @@ Recibe `companies: CompanyWithRoles[]`. Itera y monta `<CompanyBlock/>` por cada
 
 ### `RoleCard.astro`
 
-Glass card. Top: title + when. Sub: sector + mode (con iconos `layers`/`remote`). Descripción. Bullets `<ul>`. Tags `<Tag/>[]`.
+Glass card. Top: title + when. Sub: sector (icono `layers`) + mode (icono según `modeKey`, ver tabla más abajo). Descripción. Bullets `<ul>`. Tags `<Tag/>[]`.
+
+**Mapeo `modeKey` → icono**:
+
+| `modeKey` | Etiqueta (es) | Etiqueta (en) | Icono |
+|---|---|---|---|
+| `remote` | Remoto | Remote | `home` |
+| `onsite` | Presencial | On-site | `building` |
+| `hybrid` | Híbrido | Hybrid | `laptop` |
+
+El campo `mode` localizado de `roles` se usa como **label visible**; el campo `modeKey` (enum) se usa para elegir el icono.
 
 ### `CompanyLogo.astro`
 
@@ -200,8 +210,10 @@ Componentes individuales en `/src/components/icons/`. Reutilizables:
 | `chart` | `Chart.astro` | stack analítica |
 | `layers` | `Layers.astro` | role sector / stack CMS |
 | `pin` | `Pin.astro` | education school |
-| `remote` | `Remote.astro` | role mode |
 | `play` | `Play.astro` | project live |
+| `home` | `Home.astro` | role mode `remote` |
+| `building` | `Building.astro` | role mode `onsite` |
+| `laptop` | `Laptop.astro` | role mode `hybrid` |
 
 Cada uno acepta props `class`, `width`, `height` (default 24).
 

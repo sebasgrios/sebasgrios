@@ -1,4 +1,6 @@
 ---
+import BgField from '@/components/BgField.astro';
+import BgNoise from '@/components/BgNoise.astro';
 import type { Locale } from '@/config/i18n';
 import { SITE } from '@/config/site';
 import '@/styles/globals.css';
@@ -51,9 +53,14 @@ const alternateEn = new URL(
     </script>
   </head>
   <body>
+    <BgField />
+    <BgNoise />
     <a href="#main" class="sr-only">Skip to main content</a>
     <main id="main" tabindex="-1">
       <slot />
     </main>
+    <script>
+      import '@/scripts/effects.client.ts';
+    </script>
   </body>
 </html>

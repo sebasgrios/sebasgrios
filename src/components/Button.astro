@@ -1,0 +1,82 @@
+---
+type Variant = 'primary' | 'ghost';
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  target?: string;
+  rel?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  type = 'button',
+  class: className = '',
+  target,
+  rel,
+  ariaLabel,
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const classes = `btn btn-${variant} ${className}`.trim();
+---
+
+<Tag
+  class={classes}
+  href={href}
+  type={href ? undefined : type}
+  target={target}
+  rel={rel}
+  aria-label={ariaLabel}
+>
+  <slot />
+</Tag>
+
+<style is:global>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition:
+      transform 0.4s var(--ease),
+      box-shadow 0.4s var(--ease),
+      background 0.3s,
+      color 0.3s;
+  }
+  .btn svg {
+    width: 17px;
+    height: 17px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+    box-shadow: 0 10px 28px -10px oklch(0.6 0.2 var(--accent-h) / 0.7);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px -10px oklch(0.6 0.2 var(--accent-h) / 0.8);
+  }
+  .btn-ghost {
+    background: var(--glass-bg);
+    color: var(--text);
+    border-color: var(--glass-border);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .btn-ghost:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

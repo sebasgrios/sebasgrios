@@ -1,0 +1,17 @@
+---
+interface Props {
+  as?: string;
+  interactive?: boolean;
+  class?: string;
+}
+
+const props = Astro.props as Props;
+const Tag = (props.as ?? 'div') as keyof HTMLElementTagNameMap;
+const interactive = props.interactive ?? false;
+const className = props.class ?? '';
+const classes = ['glass', interactive ? 'interactive' : '', className].filter(Boolean).join(' ');
+---
+
+<Tag class={classes} data-glass-interactive={interactive ? 'true' : undefined}>
+  <slot />
+</Tag>

@@ -1,0 +1,80 @@
+---
+import IconButton from '@/components/IconButton.astro';
+import Moon from '@/components/icons/Moon.astro';
+import Sun from '@/components/icons/Sun.astro';
+import type { Locale } from '@/config/i18n';
+import { COPY } from '@/config/copy';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const label = COPY[locale].nav.switchTheme;
+---
+
+<IconButton ariaLabel={label} class="theme-toggle">
+  <Sun class="theme-icon theme-icon-sun" />
+  <Moon class="theme-icon theme-icon-moon" />
+</IconButton>
+
+<style is:global>
+  .theme-toggle .theme-icon {
+    position: absolute;
+    transition:
+      opacity 0.25s var(--ease),
+      transform 0.25s var(--ease);
+  }
+  .theme-toggle {
+    position: relative;
+  }
+  [data-theme='light'] .theme-icon-sun {
+    opacity: 0;
+    transform: rotate(40deg) scale(0.6);
+  }
+  [data-theme='light'] .theme-icon-moon {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+  [data-theme='dark'] .theme-icon-sun {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+  [data-theme='dark'] .theme-icon-moon {
+    opacity: 0;
+    transform: rotate(-40deg) scale(0.6);
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = 'sgr-theme';
+
+  function readTheme(): 'light' | 'dark' {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme: 'light' | 'dark') {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem(STORAGE_KEY, theme);
+  }
+
+  function bind() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.theme-toggle');
+    for (const btn of buttons) {
+      btn.addEventListener('click', () => {
+        const current = readTheme();
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    }
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener('change', (e) => {
+      if (localStorage.getItem(STORAGE_KEY)) return;
+      document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
+    });
+  }
+
+  bind();
+  document.addEventListener('astro:after-swap', bind);
+</script>

@@ -94,6 +94,30 @@ git commit -m "🔨 add column X to roles"
 supabase db reset    # drop + migraciones + seed
 ```
 
+## Subir fuentes Satoshi y General Sans (M3)
+
+Las fuentes son de Fontshare. Hay que **descargarlas a mano** una sola vez. Los archivos esperados por `src/styles/fonts.css`:
+
+| Archivo | Familia | Peso | Origen |
+|---|---|---|---|
+| `public/fonts/satoshi/Satoshi-Regular.woff2` | Satoshi | 400 | [fontshare.com/fonts/satoshi](https://www.fontshare.com/fonts/satoshi) |
+| `public/fonts/satoshi/Satoshi-Medium.woff2` | Satoshi | 500 | idem |
+| `public/fonts/satoshi/Satoshi-Bold.woff2` | Satoshi | 700 | idem |
+| `public/fonts/satoshi/Satoshi-Black.woff2` | Satoshi | 900 | idem |
+| `public/fonts/general-sans/GeneralSans-Regular.woff2` | General Sans | 400 | [fontshare.com/fonts/general-sans](https://www.fontshare.com/fonts/general-sans) |
+| `public/fonts/general-sans/GeneralSans-Medium.woff2` | General Sans | 500 | idem |
+| `public/fonts/general-sans/GeneralSans-Semibold.woff2` | General Sans | 600 | idem |
+| `public/fonts/general-sans/GeneralSans-Bold.woff2` | General Sans | 700 | idem |
+
+Pasos:
+
+1. Entrar a Fontshare, "Download" → eliges los 4 pesos de cada familia y descargas el `.zip`.
+2. Descomprimir y copiar **solo los `.woff2`** a las rutas de arriba (renombrar si la descarga viene como `Satoshi-Variable.woff2` — usa los archivos estáticos por peso, no la variable, para evitar carga grande si no la necesitamos).
+3. `pnpm dev` → ya cargan; verifica con DevTools → Network → fuentes.
+4. `git add public/fonts/ && git commit -m "✨ self-host satoshi and general-sans"`.
+
+Mientras los archivos no estén, el portfolio cae a `system-ui` y se ve correcto (peor pero funcional). JetBrains Mono **sí** está ya disponible vía `@fontsource-variable/jetbrains-mono` (instalada como dependencia).
+
 ## Subir imágenes iniciales (M4)
 
 Claude lo orquesta usando la **Supabase CLI local del ingeniero**:

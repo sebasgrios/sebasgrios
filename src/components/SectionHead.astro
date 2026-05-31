@@ -1,0 +1,41 @@
+---
+interface Props {
+  num: string;
+  eyebrow: string;
+  title: string;
+  sub?: string;
+  id?: string;
+}
+
+const { num, eyebrow, title, sub, id } = Astro.props;
+---
+
+<div class="section-head" id={id}>
+  <div class="eyebrow reveal">
+    <span class="sec-num">{num}</span>&nbsp;/&nbsp;{eyebrow}
+  </div>
+  <h2 class="section-title reveal d1">{title}</h2>
+  {sub && <p class="section-sub reveal d2">{sub}</p>}
+</div>
+
+<style is:global>
+  .section-head {
+    margin-bottom: clamp(32px, 5vw, 56px);
+    max-width: 640px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    margin: 12px 0 0;
+  }
+  .section-sub {
+    color: var(--text-soft);
+    margin-top: 14px;
+    font-size: 1.05rem;
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+</style>

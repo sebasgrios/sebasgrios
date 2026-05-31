@@ -1,0 +1,297 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Glass from '@/components/Glass.astro';
+import Button from '@/components/Button.astro';
+import IconButton from '@/components/IconButton.astro';
+import Tag from '@/components/Tag.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import ThemeToggle from '@/components/ThemeToggle.astro';
+import Arrow from '@/components/icons/Arrow.astro';
+import ArrowUp from '@/components/icons/ArrowUp.astro';
+import Building from '@/components/icons/Building.astro';
+import Chart from '@/components/icons/Chart.astro';
+import Code from '@/components/icons/Code.astro';
+import Git from '@/components/icons/Git.astro';
+import GitHub from '@/components/icons/GitHub.astro';
+import Home from '@/components/icons/Home.astro';
+import Laptop from '@/components/icons/Laptop.astro';
+import Layers from '@/components/icons/Layers.astro';
+import LinkedIn from '@/components/icons/LinkedIn.astro';
+import Mail from '@/components/icons/Mail.astro';
+import Mobile from '@/components/icons/Mobile.astro';
+import Moon from '@/components/icons/Moon.astro';
+import Pin from '@/components/icons/Pin.astro';
+import Play from '@/components/icons/Play.astro';
+import Spark from '@/components/icons/Spark.astro';
+import Sun from '@/components/icons/Sun.astro';
+
+export const prerender = false;
+
+if (import.meta.env.PROD) {
+  return new Response(null, { status: 404 });
+}
+
+const icons = [
+  { name: 'sun', component: Sun },
+  { name: 'moon', component: Moon },
+  { name: 'arrow', component: Arrow },
+  { name: 'arrowUp', component: ArrowUp },
+  { name: 'github', component: GitHub },
+  { name: 'linkedin', component: LinkedIn },
+  { name: 'mail', component: Mail },
+  { name: 'code', component: Code },
+  { name: 'mobile', component: Mobile },
+  { name: 'git', component: Git },
+  { name: 'spark', component: Spark },
+  { name: 'chart', component: Chart },
+  { name: 'layers', component: Layers },
+  { name: 'pin', component: Pin },
+  { name: 'play', component: Play },
+  { name: 'home', component: Home },
+  { name: 'building', component: Building },
+  { name: 'laptop', component: Laptop },
+];
+
+const modeIconMap = [
+  { mode: 'remoto', icon: Home, key: 'home' },
+  { mode: 'presencial', icon: Building, key: 'building' },
+  { mode: 'híbrido', icon: Laptop, key: 'laptop' },
+];
+---
+
+<BaseLayout
+  title="Design system · dev"
+  description="Internal showcase of the v3 design system primitives."
+  locale="es"
+>
+  <header class="dev-bar">
+    <div class="wrap dev-bar-inner">
+      <div>
+        <p class="eyebrow">M3 · Design system</p>
+        <h1>Liquid Glass · primitives</h1>
+      </div>
+      <ThemeToggle locale="es" />
+    </div>
+  </header>
+
+  <section class="wrap dev-section">
+    <SectionHead num="01" eyebrow="Typography" title="Typography" sub="Display, body and mono families with the actual tokens." />
+    <div class="dev-grid">
+      <Glass class="dev-card">
+        <h1 class="display">Display H1 — Satoshi 900</h1>
+        <h2 class="display" style="font-size: 2rem;">Display H2 — Satoshi 700</h2>
+        <p class="lead">
+          Lead in General Sans 400. The quick brown fox jumps over the lazy dog 0123456789.
+        </p>
+        <p class="mono">Mono in JetBrains Mono — 0123456789 · ss01</p>
+      </Glass>
+    </div>
+  </section>
+
+  <section class="wrap dev-section">
+    <SectionHead num="02" eyebrow="Glass" title="Glass primitive" sub="Static and interactive (hover to see the cursor specular)." />
+    <div class="dev-grid two">
+      <Glass class="dev-card">
+        <strong>Static glass</strong>
+        <p>No hover effect. Used for chrome where interactivity is not desired.</p>
+      </Glass>
+      <Glass interactive class="dev-card">
+        <strong>Interactive glass</strong>
+        <p>Move the cursor inside this card to see the radial specular highlight.</p>
+      </Glass>
+    </div>
+  </section>
+
+  <section class="wrap dev-section">
+    <SectionHead num="03" eyebrow="Buttons" title="Buttons & icon buttons" sub="Primary, ghost, and circular icon button." />
+    <div class="dev-row">
+      <Button href="#">
+        Primary <Arrow />
+      </Button>
+      <Button variant="ghost" href="#">
+        <GitHub /> Ghost
+      </Button>
+      <IconButton ariaLabel="GitHub" href="https://github.com" target="_blank" rel="noopener">
+        <GitHub />
+      </IconButton>
+      <IconButton ariaLabel="Mail">
+        <Mail />
+      </IconButton>
+    </div>
+  </section>
+
+  <section class="wrap dev-section">
+    <SectionHead num="04" eyebrow="Tags" title="Tags" sub="JetBrains Mono pills used across role cards and projects." />
+    <div class="tags">
+      <Tag>TypeScript</Tag>
+      <Tag>Astro</Tag>
+      <Tag>React</Tag>
+      <Tag>TailwindCSS</Tag>
+      <Tag>Cloudflare</Tag>
+      <Tag>Supabase</Tag>
+    </div>
+  </section>
+
+  <section class="wrap dev-section">
+    <SectionHead num="05" eyebrow="Icons" title="Icon catalog" sub="18 icons used across the portfolio. All zero JS." />
+    <div class="dev-icons">
+      {
+        icons.map(({ name, component: Icon }) => (
+          <Glass class="dev-icon-cell">
+            <Icon size={28} />
+            <span class="mono">{name}</span>
+          </Glass>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wrap dev-section">
+    <SectionHead num="06" eyebrow="Mode mapping" title="Role mode → icon" sub="Mapping of the role.mode value (used in Experience cards in M5) to its icon." />
+    <div class="dev-row">
+      {
+        modeIconMap.map(({ mode, icon: Icon, key }) => (
+          <Glass class="dev-mode-cell">
+            <Icon size={20} />
+            <div class="dev-mode-text">
+              <strong>{mode}</strong>
+              <span class="mono">{key}</span>
+            </div>
+          </Glass>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wrap dev-section">
+    <SectionHead num="07" eyebrow="Reveal" title="Reveal on scroll" sub="Items below appear with a fade + slide once they enter the viewport." />
+    <div class="dev-reveal">
+      <Glass class="dev-card reveal">
+        <strong>Reveal 1</strong>
+      </Glass>
+      <Glass class="dev-card reveal d1">
+        <strong>Reveal 2 (d1)</strong>
+      </Glass>
+      <Glass class="dev-card reveal d2">
+        <strong>Reveal 3 (d2)</strong>
+      </Glass>
+      <Glass class="dev-card reveal d3">
+        <strong>Reveal 4 (d3)</strong>
+      </Glass>
+    </div>
+  </section>
+
+  <section class="wrap dev-section">
+    <SectionHead num="08" eyebrow="Parallax" title="Parallax with cursor" sub="The card below shifts ±14px following the cursor (disabled if prefers-reduced-motion)." />
+    <div class="dev-parallax">
+      <div data-parallax>
+        <Glass interactive class="dev-card">
+          <strong>data-parallax</strong>
+          <p>Move the cursor anywhere on the page to see this card drift.</p>
+        </Glass>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .dev-bar {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--bg);
+  }
+  .dev-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .dev-bar h1 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 4px;
+  }
+  .dev-section {
+    padding-block: clamp(48px, 7vw, 96px);
+  }
+  .dev-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .dev-grid.two {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .dev-card {
+    padding: clamp(20px, 3vw, 30px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .dev-card p {
+    color: var(--text-soft);
+  }
+  .dev-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .lead {
+    color: var(--text-soft);
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+  .dev-icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+  .dev-icon-cell {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+  }
+  .dev-icon-cell .mono {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+  }
+  .dev-reveal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .dev-parallax {
+    max-width: 480px;
+  }
+  .dev-mode-cell {
+    padding: 14px 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--accent);
+  }
+  .dev-mode-text {
+    display: flex;
+    flex-direction: column;
+    color: var(--text);
+  }
+  .dev-mode-text strong {
+    text-transform: capitalize;
+  }
+  .dev-mode-text .mono {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+  }
+</style>

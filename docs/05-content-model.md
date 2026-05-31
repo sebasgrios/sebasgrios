@@ -64,7 +64,8 @@ Tabla `roles`. FK a `companies`.
 | `companyId` | `uuid` FK | |
 | `title` | `jsonb {es,en}` | "Ingeniero de Software" |
 | `sector` | `jsonb {es,en}` | "Banca privada · FinTech" |
-| `mode` | `jsonb {es,en}` | "En remoto" |
+| `mode` | `jsonb {es,en}` | Label visible: "En remoto", "Presencial", "Híbrido". |
+| `modeKey` | `'remote'\|'onsite'\|'hybrid'` | Enum estable para mapear al icono (`home`/`building`/`laptop`). Ver [docs/09-components.md](./09-components.md). |
 | `startDate` | `date` | nullable end implícito por presencia de `endDate` |
 | `endDate` | `date?` | null = "actualidad" |
 | `description` | `jsonb {es,en}` | Párrafo. |

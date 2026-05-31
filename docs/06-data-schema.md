@@ -72,6 +72,7 @@ create table roles (
   title       jsonb not null,
   sector      jsonb not null,
   mode        jsonb not null,
+  mode_key    text not null check (mode_key in ('remote', 'onsite', 'hybrid')),
   start_date  date not null,
   end_date    date,
   description jsonb not null,

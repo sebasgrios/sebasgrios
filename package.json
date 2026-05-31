@@ -32,6 +32,7 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.2.1",
     "@astrojs/sitemap": "^3.2.1",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.2",
     "@tailwindcss/vite": "^4.0.0",
