@@ -25,31 +25,35 @@
 
 ```
 PUBLIC_SITE_URL=http://localhost:4321
-PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+PUBLIC_SUPABASE_URL=https://nzbodijggjxhshqqpnue.supabase.co
 PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...   # solo si se hace seed/admin desde local
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+SESSION_SECRET=
+PUBLIC_CF_BEACON_TOKEN=8f473ccd761a49589834e22ace97d751
 ```
 
 ### Cloudflare Pages (Settings → Environment variables)
 
 **Production**:
 - `PUBLIC_SITE_URL=https://sebasgrios.es`
-- `PUBLIC_SUPABASE_URL`
-- `PUBLIC_SUPABASE_ANON_KEY`
+- `PUBLIC_SUPABASE_URL=https://nzbodijggjxhshqqpnue.supabase.co`
+- `PUBLIC_SUPABASE_ANON_KEY` (plain — public anon key)
 - `SUPABASE_SERVICE_ROLE_KEY` (Secret)
 - `SESSION_SECRET` (Secret, 32+ random bytes, para futuras cookies de admin)
+- `PUBLIC_CF_BEACON_TOKEN=8f473ccd761a49589834e22ace97d751` (plain — public client snippet)
 
 **Preview**:
-- Mismas vars apuntando a un branch DB de Supabase o al mismo (decisión M2).
+- Mismas vars apuntando al mismo proyecto Supabase (no hay branch DB en v3).
+- `PUBLIC_CF_BEACON_TOKEN` puede dejarse vacío en preview para no ensuciar las métricas con visitas de QA.
 
 ## Cloudflare Pages config
 
 | Setting | Valor |
 |---|---|
-| Build command | `npm run build` |
+| Build command | `pnpm build` |
 | Build output | `dist` |
 | Root directory | `/` |
-| Node version | `20` |
+| Node version | `22` |
 | Compatibility date | reciente (revisar al ramp-up) |
 | Compatibility flags | `nodejs_compat` |
 

@@ -12,7 +12,16 @@ Estás en la **rama `v3`**, una reescritura completa que:
 - Implementa un nuevo diseño "Liquid Glass" con i18n es/en.
 - Deja preparada la base para un **backoffice** privado (`/admin`, Google OAuth via Supabase, RLS), implementación posterior.
 
-Estado actual: docs y planificación cerrados. Implementación pendiente.
+Estado actual: **v3 implementada end-to-end** (M1–M7 cerrados). Falta M8 (PR `v3 → develop`).
+
+Hitos cerrados:
+- **M1** docs + AGENTS.md (`d5c9600`)
+- **M2** scaffold Astro 5 + Tailwind 4 + Cloudflare + i18n skeleton (`abe2f42`)
+- **M3** design system: glass, atoms, icons, theme toggle, effects (`1c8c5ee`)
+- **M4** Supabase data layer con seed bilingüe (`6e4f33f`)
+- **M5** secciones públicas wired a Supabase (`fb667a2`)
+- **M6** hreflang alternates + filter de rutas internas en sitemap (`fe4d274`)
+- **M7** OG dinámica Satori + schema.org Person + CF Analytics hook (`6ebf6a9`)
 
 ## Documentación de referencia
 
@@ -33,7 +42,7 @@ Documentos críticos:
 | Framework | Astro 5 + `@astrojs/cloudflare`, SSR híbrido (prerender público, SSR `/admin`). |
 | Estilo | Tailwind v4 (via `@tailwindcss/vite`), TypeScript strict. |
 | Tooling | **Biome** (lint+format), Vitest, Playwright, Supabase CLI. NO ESLint/Prettier. |
-| BD | Supabase. Claude opera vía el **Supabase CLI ya instalado localmente** en la máquina del ingeniero (crea proyecto/link, push migrations, gen types, db reset, etc.). Storage para imágenes/logos. |
+| BD | Supabase. Proyecto creado: **`sebasgrios`** (ref `nzbodijggjxhshqqpnue`, Frankfurt eu-central-1, free tier). Claude opera vía el **Supabase CLI ya instalado localmente**. Storage para imágenes/logos. |
 | i18n | `jsonb {es, en}` en columnas traducibles. Routing `/` (es) + `/en/` con `prefixDefaultLocale:false`. |
 | Schema | Híbrido: `text[]` para highlights, tabla `technologies` reutilizable con pivots M:N. |
 | Hero | Stats computadas (años, sectores, proyectos). Badges flotantes + status pill editables desde `profile`. |

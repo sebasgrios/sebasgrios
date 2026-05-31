@@ -9,7 +9,7 @@ Versiones objetivo (las pinearemos en `package.json`). Cualquier upgrade mayor r
 | `astro` | `^5.x` (latest stable) | View transitions nativas, content layer, server islands, mejor adapter Cloudflare. |
 | `@astrojs/cloudflare` | `^11.x` | Adapter oficial para Cloudflare Pages/Workers. |
 | `typescript` | `^5.x` strict | Type safety, sin `any` sin justificar. |
-| `node` (local dev) | `>=20.10` | Requisito de Astro 5. |
+| `node` (local dev) | `>=22.0` (LTS activo, `.nvmrc=22`) | Requisito de Astro 5 + Cloudflare Workers compat. |
 
 ## Estilo
 
@@ -50,8 +50,10 @@ Cargadas con `@font-face` desde `/src/styles/fonts.css`, con `font-display: swap
 
 | Paquete | Versión | Notas |
 |---|---|---|
-| `satori` | `^0.10.x` | Render JSX → SVG. Compatible con Workers. |
-| `@resvg/resvg-wasm` o `satori-wasm` | última | SVG → PNG sin dependencias nativas. Variante wasm compatible con Cloudflare. |
+| `satori` | `^0.26.x` | Render JSX-like → SVG. Compatible con Workers. |
+| `@resvg/resvg-wasm` | `^2.6.x` | SVG → PNG vía WASM. Compatible con Cloudflare Workers. |
+
+Endpoint en `src/pages/og/[locale].png.ts` con `prerender = true` → genera `/og/es.png` y `/og/en.png` en build (sin coste runtime). Fuente Inter cargada desde Google Fonts en build time.
 
 ## Analytics
 
