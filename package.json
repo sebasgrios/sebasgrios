@@ -33,10 +33,12 @@
     "@astrojs/cloudflare": "^12.2.1",
     "@astrojs/sitemap": "^3.2.1",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@resvg/resvg-wasm": "^2.6.2",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.2",
     "@tailwindcss/vite": "^4.0.0",
     "astro": "^5.1.1",
+    "satori": "^0.26.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.2",
     "zod": "^3.24.1"

@@ -10,7 +10,8 @@
       "node_modules",
       "src/lib/data/database.types.ts",
       "supabase/.temp",
-      "**/*.astro"
+      "**/*.astro",
+      "**/*.d.ts"
     ]
   },
   "formatter": {
