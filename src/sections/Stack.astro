@@ -1,0 +1,88 @@
+---
+import Glass from '@/components/Glass.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import Tag from '@/components/Tag.astro';
+import Chart from '@/components/icons/Chart.astro';
+import Code from '@/components/icons/Code.astro';
+import Git from '@/components/icons/Git.astro';
+import Layers from '@/components/icons/Layers.astro';
+import Mobile from '@/components/icons/Mobile.astro';
+import Spark from '@/components/icons/Spark.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import { pickLocale } from '@/lib/domain/i18n';
+import type { StackGroup } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  stackGroups: StackGroup[];
+}
+
+const { locale, stackGroups } = Astro.props;
+const copy = COPY[locale].sections.stack;
+
+const iconRegistry: Record<string, typeof Code> = {
+  code: Code,
+  mobile: Mobile,
+  git: Git,
+  spark: Spark,
+  chart: Chart,
+  layers: Layers,
+};
+---
+
+<section id="stack" aria-labelledby="stack-title" class="wrap">
+  <SectionHead num="03" eyebrow={copy.eyebrow} title={copy.title} sub={copy.sub} id="stack-title" />
+  <div class="stack-grid">
+    {
+      stackGroups.map((group, index) => {
+        const Icon = iconRegistry[group.iconKey] ?? Layers;
+        const label = pickLocale(group.label, locale);
+        const delayClass = `d${(index % 3) + 1}`;
+        return (
+          <Glass interactive class={`stack-card reveal ${delayClass}`}>
+            <div class="sc-head">
+              <div class="sc-ic"><Icon size={19} /></div>
+              <h3>{label}</h3>
+            </div>
+            <div class="tags">
+              {group.technologies.map((t) => <Tag>{t.label}</Tag>)}
+            </div>
+          </Glass>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style is:global>
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+  }
+  .stack-card {
+    padding: 24px;
+  }
+  .stack-card .sc-head {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 16px;
+  }
+  .stack-card .sc-ic {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .stack-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+</style>

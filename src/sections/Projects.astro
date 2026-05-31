@@ -1,0 +1,185 @@
+---
+import Glass from '@/components/Glass.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import Tag from '@/components/Tag.astro';
+import GitHub from '@/components/icons/GitHub.astro';
+import Play from '@/components/icons/Play.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import { pickLocale } from '@/lib/domain/i18n';
+import type { Project } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  projects: Project[];
+}
+
+const { locale, projects } = Astro.props;
+const copy = COPY[locale].sections.projects;
+const liveLabel = locale === 'es' ? 'Live' : 'Live';
+const codeLabel = locale === 'es' ? 'Code' : 'Code';
+---
+
+<section id="projects" aria-labelledby="projects-title" class="wrap">
+  <SectionHead num="04" eyebrow={copy.eyebrow} title={copy.title} sub={copy.sub} id="projects-title" />
+  <div class="proj-grid">
+    {
+      projects.map((project, index) => {
+        const description = pickLocale(project.description, locale);
+        const delayClass = `d${(index % 2) + 1}`;
+        return (
+          <Glass as="article" interactive class={`proj-card reveal ${delayClass}`}>
+            {project.liveUrl ? (
+              <a class="proj-media" href={project.liveUrl} target="_blank" rel="noopener" aria-label={`${project.name} live site`}>
+                {project.imageUrl && (
+                  <img
+                    src={project.imageUrl}
+                    alt={`${project.name} screenshot`}
+                    loading="lazy"
+                    width="800"
+                    height="500"
+                  />
+                )}
+                <div class="proj-overlay" aria-hidden="true" />
+              </a>
+            ) : (
+              <div class="proj-media">
+                {project.imageUrl && (
+                  <img
+                    src={project.imageUrl}
+                    alt={`${project.name} screenshot`}
+                    loading="lazy"
+                    width="800"
+                    height="500"
+                  />
+                )}
+              </div>
+            )}
+            <div class="proj-body">
+              <div class="proj-top">
+                <h3>{project.name}</h3>
+              </div>
+              <p>{description}</p>
+              {project.technologies.length > 0 && (
+                <div class="tags">
+                  {project.technologies.map((t) => <Tag>{t.label}</Tag>)}
+                </div>
+              )}
+              <div class="proj-links">
+                {project.liveUrl && (
+                  <a class="plink live" href={project.liveUrl} target="_blank" rel="noopener">
+                    <Play size={15} /> {liveLabel}
+                  </a>
+                )}
+                {project.codeUrl && (
+                  <a class="plink code" href={project.codeUrl} target="_blank" rel="noopener">
+                    <GitHub size={15} /> {codeLabel}
+                  </a>
+                )}
+              </div>
+            </div>
+          </Glass>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style is:global>
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .proj-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  .proj-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 1px solid var(--glass-border);
+    display: block;
+  }
+  .proj-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease);
+  }
+  .proj-card:hover .proj-media img {
+    transform: scale(1.06);
+  }
+  .proj-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, oklch(0.15 0.02 285 / 0.5), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .proj-card:hover .proj-overlay {
+    opacity: 1;
+  }
+  .proj-body {
+    padding: 22px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+  .proj-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .proj-body h3 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    flex: 1;
+    min-width: 0;
+  }
+  .proj-body p {
+    color: var(--text-soft);
+    font-size: 0.96rem;
+  }
+  .proj-links {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+  .plink {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    padding: 9px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    transition: all 0.3s var(--ease);
+  }
+  .plink.live:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .plink.code:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+  @media (max-width: 940px) {
+    .proj-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

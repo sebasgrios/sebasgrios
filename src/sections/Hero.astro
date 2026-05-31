@@ -1,0 +1,304 @@
+---
+import Button from '@/components/Button.astro';
+import Glass from '@/components/Glass.astro';
+import Arrow from '@/components/icons/Arrow.astro';
+import GitHub from '@/components/icons/GitHub.astro';
+import LinkedIn from '@/components/icons/LinkedIn.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import { pickLocale, pickLocaleArray } from '@/lib/domain/i18n';
+import type { Profile } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  profile: Profile;
+  stats: {
+    yearsOfExperience: number;
+    sectorsCount: number;
+    projectsCount: number;
+  };
+}
+
+const { locale, profile, stats } = Astro.props;
+const copy = COPY[locale];
+const role = pickLocale(profile.role, locale);
+const lead = pickLocale(profile.lead, locale);
+const status = pickLocale(profile.statusLabel, locale);
+const floatBadges = pickLocaleArray(profile.heroBadges, locale);
+const nameParts = profile.fullName.split(' ');
+const firstName = nameParts[0] ?? profile.fullName;
+const lastName = nameParts.slice(1).join(' ');
+const sectorsLabel = `${stats.sectorsCount === 1 ? '1' : stats.sectorsCount} ${copy.hero.statSectors}`;
+---
+
+<header id="top" class="hero wrap">
+  <div class="hero-grid">
+    <Glass class="hero-badge reveal">
+      <span class="hero-status-dot" data-active={profile.isOpenToWork} aria-hidden="true"></span>
+      {status}
+    </Glass>
+    <div class="hero-photo reveal d2">
+      <div class="hero-photo-inner" data-parallax>
+        <Glass interactive class="hero-frame">
+          {
+            profile.photoUrl && (
+              <img
+                src={profile.photoUrl}
+                alt={profile.fullName}
+                width="480"
+                height="600"
+                loading="eager"
+                fetchpriority="high"
+              />
+            )
+          }
+        </Glass>
+        {
+          floatBadges[0] && (
+            <Glass class="hero-float hero-float-1">
+              <span class="hero-fdot" aria-hidden="true" />
+              {floatBadges[0]}
+            </Glass>
+          )
+        }
+        {
+          floatBadges[1] && (
+            <Glass class="hero-float hero-float-2">
+              <span class="hero-fdot" aria-hidden="true" />
+              {floatBadges[1]}
+            </Glass>
+          )
+        }
+      </div>
+    </div>
+    <div class="hero-main">
+      <h1 class="hero-title reveal d1">
+        {firstName}<br />{lastName}
+      </h1>
+      <p class="hero-role reveal d2">{role}</p>
+      <p class="hero-lead reveal d2">{lead}</p>
+      <div class="hero-cta reveal d3">
+        <Button href="#contact">
+          {copy.hero.cta} <Arrow />
+        </Button>
+        {
+          profile.githubUrl && (
+            <Button href={profile.githubUrl} variant="ghost" target="_blank" rel="noopener">
+              <GitHub /> GitHub
+            </Button>
+          )
+        }
+        {
+          profile.linkedinUrl && (
+            <Button href={profile.linkedinUrl} variant="ghost" target="_blank" rel="noopener">
+              <LinkedIn /> LinkedIn
+            </Button>
+          )
+        }
+      </div>
+      <div class="stat-strip reveal d3">
+        <Glass class="stat">
+          <div class="stat-num">+{stats.yearsOfExperience} {locale === 'es' ? 'años' : 'years'}</div>
+          <div class="stat-lbl">{copy.hero.statYears}</div>
+        </Glass>
+        <Glass class="stat">
+          <div class="stat-num">{stats.sectorsCount}</div>
+          <div class="stat-lbl">{sectorsLabel}</div>
+        </Glass>
+        <Glass class="stat">
+          <div class="stat-num">{stats.projectsCount}</div>
+          <div class="stat-lbl">{copy.hero.statProjects}</div>
+        </Glass>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style is:global>
+  .hero {
+    padding-top: clamp(116px, 16vh, 188px);
+    padding-bottom: clamp(50px, 7vw, 90px);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.85fr;
+    grid-template-areas:
+      'badge photo'
+      'main photo';
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(28px, 4vw, 56px);
+    align-items: start;
+  }
+  .hero-badge {
+    grid-area: badge;
+    justify-self: start;
+    align-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 26px;
+    padding: 7px 15px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .hero-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: oklch(0.72 0.2 150);
+  }
+  .hero-status-dot[data-active='true'] {
+    animation: pulse 2.4s infinite;
+  }
+  .hero-main {
+    grid-area: main;
+    align-self: start;
+    min-width: 0;
+  }
+  .hero-photo {
+    grid-area: photo;
+    align-self: center;
+    position: relative;
+  }
+  .hero-photo-inner {
+    position: relative;
+    will-change: transform;
+  }
+  .hero-frame {
+    padding: 10px;
+    border-radius: 28px;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--glass-bg);
+  }
+  .hero-frame img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
+  }
+  .hero-float {
+    position: absolute;
+    padding: 10px 16px;
+    border-radius: 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in oklab, var(--bg-2) 80%, transparent);
+  }
+  .hero-float-1 {
+    bottom: 22px;
+    left: -18px;
+  }
+  .hero-float-2 {
+    top: 26px;
+    right: -16px;
+  }
+  .hero-fdot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .hero-role {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+    color: var(--text-soft);
+    margin-top: 14px;
+    letter-spacing: -0.01em;
+  }
+  .hero-lead {
+    color: var(--text-soft);
+    font-size: 1.1rem;
+    margin-top: 22px;
+    max-width: 48ch;
+    text-wrap: pretty;
+  }
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .stat-strip {
+    display: flex;
+    gap: 14px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    padding: 16px 20px;
+    border-radius: var(--radius-sm);
+    min-width: 120px;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(
+      120deg,
+      var(--accent-bright),
+      oklch(0.7 0.18 calc(var(--accent-h) + 55))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat-lbl {
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    margin-top: 6px;
+  }
+
+  @media (max-width: 940px) {
+    .hero {
+      padding-top: clamp(92px, 13vh, 116px);
+    }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'badge'
+        'photo'
+        'main';
+      grid-template-rows: auto auto auto;
+      column-gap: 0;
+    }
+    .hero-photo {
+      max-width: min(380px, calc(50% + 150px));
+      margin: 4px auto 26px;
+    }
+  }
+  @media (max-width: 720px) {
+    .stat {
+      flex: 1 1 140px;
+      min-width: 0;
+    }
+    .hero-float-1 {
+      left: 8px;
+    }
+    .hero-float-2 {
+      right: 8px;
+    }
+  }
+  @media (max-width: 460px) {
+    .stat-strip {
+      gap: 10px;
+    }
+  }
+</style>

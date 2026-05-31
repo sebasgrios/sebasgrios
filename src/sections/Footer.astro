@@ -1,0 +1,73 @@
+---
+import IconButton from '@/components/IconButton.astro';
+import GitHub from '@/components/icons/GitHub.astro';
+import LinkedIn from '@/components/icons/LinkedIn.astro';
+import Mail from '@/components/icons/Mail.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import type { Profile } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  profile: Profile;
+}
+
+const { locale, profile } = Astro.props;
+const copy = COPY[locale].footer;
+const year = new Date().getFullYear();
+---
+
+<footer class="wrap site-footer">
+  <div class="foot-inner">
+    <div class="foot-text">
+      © {year} {profile.fullName} · {copy.madeWith}
+    </div>
+    <div class="foot-soc">
+      {
+        profile.githubUrl && (
+          <IconButton href={profile.githubUrl} ariaLabel="GitHub" target="_blank" rel="noopener">
+            <GitHub />
+          </IconButton>
+        )
+      }
+      {
+        profile.linkedinUrl && (
+          <IconButton
+            href={profile.linkedinUrl}
+            ariaLabel="LinkedIn"
+            target="_blank"
+            rel="noopener"
+          >
+            <LinkedIn />
+          </IconButton>
+        )
+      }
+      <IconButton href={`mailto:${profile.email}`} ariaLabel="Email">
+        <Mail />
+      </IconButton>
+    </div>
+  </div>
+</footer>
+
+<style is:global>
+  .site-footer {
+    padding: 40px 0 60px;
+    border-top: 1px solid var(--hairline);
+    margin-top: 80px;
+  }
+  .foot-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .foot-text {
+    color: var(--text-faint);
+    font-size: 0.85rem;
+  }
+  .foot-soc {
+    display: flex;
+    gap: 8px;
+  }
+</style>
