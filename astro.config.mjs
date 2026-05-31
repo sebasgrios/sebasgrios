@@ -20,7 +20,16 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: 'es',
+        locales: { es: 'es-ES', en: 'en-US' },
+      },
+      filter: (page) =>
+        !page.includes('/401') && !page.includes('/404') && !page.includes('/dev/'),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
