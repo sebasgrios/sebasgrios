@@ -125,6 +125,11 @@ body {
   padding-inline: clamp(20px, 4vw, 32px);
 }
 
+main > section.wrap {
+  padding-block: clamp(80px, 11vw, 160px);
+  scroll-margin-top: clamp(60px, 7vw, 96px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
