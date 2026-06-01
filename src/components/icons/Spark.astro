@@ -1,23 +1,7 @@
 ---
-interface Props {
-  class?: string;
-  size?: number;
-}
-const { class: className = '', size = 24 } = Astro.props;
+import IconBase from './IconBase.astro';
 ---
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 24 24"
-  width={size}
-  height={size}
-  fill="none"
-  stroke="currentColor"
-  stroke-width="1.9"
-  stroke-linecap="round"
-  stroke-linejoin="round"
-  class={className}
-  aria-hidden="true"
->
-  <path d="M12 3l1.9 5.6L19.5 10l-5.6 1.4L12 17l-1.9-5.6L4.5 10l5.6-1.4z"></path>
-</svg>
+<IconBase {...Astro.props}>
+  <path d="M12 3l1.9 5.6L19.5 10l-5.6 1.4L12 17l-1.9-5.6L4.5 10l5.6-1.4z" />
+</IconBase>

@@ -48,6 +48,8 @@ const person = personName
       sameAs: [SITE.defaultLinkedin, SITE.defaultGithub],
     }
   : null;
+
+const personJson = person ? JSON.stringify(person).replace(/</g, '\\u003c') : null;
 ---
 
 <!doctype html>
@@ -75,10 +77,12 @@ const person = personName
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImageUrl} />
     {
-      person && (
-        <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
+      personJson && (
+        <script is:inline type="application/ld+json" set:html={personJson} />
       )
     }
+    <link rel="preconnect" href="https://nzbodijggjxhshqqpnue.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://nzbodijggjxhshqqpnue.supabase.co" />
     <script is:inline>
       (function () {
         try {
