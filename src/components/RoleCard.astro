@@ -65,6 +65,7 @@ const dateRange = formatDateRange(role.startDate, role.endDate, locale);
 </Glass>
 
 <style is:global>
+  @layer utilities {
   .role-card {
     padding: clamp(20px, 3vw, 30px);
     position: relative;
@@ -155,5 +156,6 @@ const dateRange = formatDateRange(role.startDate, role.endDate, locale);
     .role-when {
       width: 100%;
     }
+  }
   }
 </style>

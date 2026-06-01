@@ -24,6 +24,7 @@ const ariaLabel = current === 'es' ? 'Switch to English' : 'Cambiar a español';
 </a>
 
 <style is:global>
+  @layer components {
   .locale-switch {
     font-family: var(--font-mono);
     font-size: 0.78rem;
@@ -40,5 +41,6 @@ const ariaLabel = current === 'es' ? 'Switch to English' : 'Cambiar a español';
   .locale-switch:hover {
     color: var(--accent);
     background: var(--accent-soft);
+  }
   }
 </style>

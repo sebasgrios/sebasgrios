@@ -115,6 +115,7 @@ const sectorsLabel = `${stats.sectorsCount === 1 ? '1' : stats.sectorsCount} ${c
 </header>
 
 <style is:global>
+  @layer components {
   .hero {
     padding-top: clamp(116px, 16vh, 188px);
   }
@@ -320,5 +321,6 @@ const sectorsLabel = `${stats.sectorsCount === 1 ? '1' : stats.sectorsCount} ${c
     .stat-strip {
       gap: 10px;
     }
+  }
   }
 </style>

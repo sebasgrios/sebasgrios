@@ -19,6 +19,7 @@ const label = COPY[locale].nav.switchTheme;
 </IconButton>
 
 <style is:global>
+  @layer components {
   .theme-toggle .theme-icon {
     position: absolute;
     transition:
@@ -43,6 +44,7 @@ const label = COPY[locale].nav.switchTheme;
   [data-theme='dark'] .theme-icon-moon {
     opacity: 0;
     transform: rotate(-40deg) scale(0.6);
+  }
   }
 </style>
 

@@ -86,6 +86,7 @@ const codeLabel = locale === 'es' ? 'Code' : 'Code';
 </section>
 
 <style is:global>
+  @layer components {
   .proj-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -181,5 +182,6 @@ const codeLabel = locale === 'es' ? 'Code' : 'Code';
     .proj-grid {
       grid-template-columns: 1fr;
     }
+  }
   }
 </style>
