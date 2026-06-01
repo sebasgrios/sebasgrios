@@ -1,17 +1,15 @@
 ---
-interface Props {
-  as?: string;
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  as?: keyof HTMLElementTagNameMap;
   interactive?: boolean;
-  class?: string;
 }
 
-const props = Astro.props as Props;
-const Tag = (props.as ?? 'div') as keyof HTMLElementTagNameMap;
-const interactive = props.interactive ?? false;
-const className = props.class ?? '';
+const { as: Tag = 'div', interactive = false, class: className, ...rest } = Astro.props;
 const classes = ['glass', interactive ? 'interactive' : '', className].filter(Boolean).join(' ');
 ---
 
-<Tag class={classes} data-glass-interactive={interactive ? 'true' : undefined}>
+<Tag class={classes} data-glass-interactive={interactive ? 'true' : undefined} {...rest}>
   <slot />
 </Tag>

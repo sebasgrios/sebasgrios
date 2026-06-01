@@ -153,13 +153,15 @@ const homeHref = locale === 'es' ? '/' : '/en/';
     right: 16px;
     z-index: 99;
     padding: 12px;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 4px;
     transform-origin: top;
   }
-  .nav-mobile[hidden] {
-    display: none;
+  @media (max-width: 720px) {
+    .nav-mobile:not([hidden]) {
+      display: flex;
+    }
   }
   .nav-mobile-link {
     color: var(--text);
