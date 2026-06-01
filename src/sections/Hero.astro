@@ -31,15 +31,30 @@ const lastName = nameParts.slice(1).join(' ');
 const sectorsLabel = `${stats.sectorsCount === 1 ? '1' : stats.sectorsCount} ${copy.hero.statSectors}`;
 ---
 
-<header id="top" class="hero wrap">
-  <div class="hero-grid">
-    <Glass class="hero-badge reveal">
-      <span class="hero-status-dot" data-active={profile.isOpenToWork} aria-hidden="true"></span>
+<header
+  id="top"
+  class="wrap pt-[clamp(116px,16vh,188px)] max-[940px]:pt-[clamp(92px,13vh,116px)]"
+>
+  <div
+    class="grid items-start gap-x-[clamp(28px,4vw,56px)] grid-cols-[1.25fr_0.85fr] grid-rows-[auto_1fr] [grid-template-areas:'badge_photo''main_photo'] max-[940px]:grid-cols-[1fr] max-[940px]:grid-rows-[auto_auto_auto] max-[940px]:[grid-template-areas:'badge''photo''main'] max-[940px]:gap-x-0"
+  >
+    <Glass
+      class="reveal [grid-area:badge] justify-self-start self-start inline-flex items-center gap-2.5 mb-[26px] px-[15px] py-[7px] rounded-full text-[0.85rem] font-medium"
+    >
+      <span
+        class="w-[7px] h-[7px] rounded-full bg-[oklch(0.72_0.2_150)] data-[active=true]:animate-[status-pulse_2.4s_infinite]"
+        data-active={profile.isOpenToWork}
+        aria-hidden="true"></span>
       {status}
     </Glass>
-    <div class="hero-photo reveal d2">
-      <div class="hero-photo-inner" data-parallax>
-        <Glass interactive class="hero-frame">
+    <div
+      class="reveal [transition-delay:0.16s] [grid-area:photo] self-center relative max-[940px]:max-w-[min(380px,calc(50%+150px))] max-[940px]:mx-auto max-[940px]:mt-1 max-[940px]:mb-[26px]"
+    >
+      <div class="relative will-change-transform" data-parallax>
+        <Glass
+          interactive
+          class="p-2.5 rounded-[28px] [-webkit-backdrop-filter:none] [backdrop-filter:none] bg-glass-bg"
+        >
           {
             profile.photoUrl && (
               <img
@@ -49,35 +64,52 @@ const sectorsLabel = `${stats.sectorsCount === 1 ? '1' : stats.sectorsCount} ${c
                 height="600"
                 loading="eager"
                 fetchpriority="high"
+                class="w-full aspect-[4/5] object-cover rounded-[20px] block"
               />
             )
           }
         </Glass>
         {
           floatBadges[0] && (
-            <div class="hero-float hero-float-1">
-              <span class="hero-fdot" aria-hidden="true" />
+            <div
+              class="absolute z-[2] px-4 py-2.5 rounded-[14px] text-[0.82rem] font-semibold flex items-center gap-2 max-w-[calc(100%-16px)] whitespace-nowrap border border-glass-border bg-[color-mix(in_oklab,var(--bg-2)_85%,transparent)] bottom-[22px] -left-[18px] max-[940px]:left-3 max-[940px]:bottom-[18px] max-[720px]:left-2"
+            >
+              <span class="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
               {floatBadges[0]}
             </div>
           )
         }
         {
           floatBadges[1] && (
-            <div class="hero-float hero-float-2">
-              <span class="hero-fdot" aria-hidden="true" />
+            <div
+              class="absolute z-[2] px-4 py-2.5 rounded-[14px] text-[0.82rem] font-semibold flex items-center gap-2 max-w-[calc(100%-16px)] whitespace-nowrap border border-glass-border bg-[color-mix(in_oklab,var(--bg-2)_85%,transparent)] top-[26px] -right-[16px] max-[940px]:right-3 max-[940px]:top-[18px] max-[720px]:right-2"
+            >
+              <span class="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
               {floatBadges[1]}
             </div>
           )
         }
       </div>
     </div>
-    <div class="hero-main">
-      <h1 class="hero-title reveal d1">
+    <div class="[grid-area:main] self-start min-w-0">
+      <h1
+        class="reveal [transition-delay:0.08s] font-display text-[clamp(2.6rem,7vw,5rem)] font-black tracking-[-0.02em] leading-[1.05]"
+      >
         {firstName}<br />{lastName}
       </h1>
-      <p class="hero-role reveal d2">{role}</p>
-      <p class="hero-lead reveal d2">{lead}</p>
-      <div class="hero-cta reveal d3">
+      <p
+        class="reveal [transition-delay:0.16s] mt-3.5 font-display font-semibold text-[clamp(1.1rem,2.4vw,1.5rem)] text-text-soft tracking-[-0.01em]"
+      >
+        {role}
+      </p>
+      <p
+        class="reveal [transition-delay:0.16s] mt-[22px] max-w-[48ch] text-text-soft text-[1.1rem] text-pretty"
+      >
+        {lead}
+      </p>
+      <div
+        class="reveal [transition-delay:0.24s] flex flex-wrap gap-3 mt-8 max-[720px]:gap-2.5 max-[720px]:[&_.btn]:justify-center max-[720px]:[&_.btn-ghost]:flex-1 max-[720px]:[&_.btn-ghost]:basis-0 max-[720px]:[&_.btn-ghost]:min-w-0 max-[720px]:[&_.btn-ghost]:order-1 max-[720px]:[&_.btn-primary]:basis-full max-[720px]:[&_.btn-primary]:order-2"
+      >
         <Button href="#contact">
           {copy.hero.cta} <Arrow />
         </Button>
@@ -96,229 +128,34 @@ const sectorsLabel = `${stats.sectorsCount === 1 ? '1' : stats.sectorsCount} ${c
           )
         }
       </div>
-      <div class="stat-strip reveal d3">
-        <Glass class="stat">
-          <div class="stat-num">+{stats.yearsOfExperience} {locale === 'es' ? 'años' : 'years'}</div>
-          <div class="stat-lbl">{copy.hero.statYears}</div>
+      <div
+        class="reveal [transition-delay:0.24s] flex flex-wrap gap-3.5 mt-10 max-[720px]:[&>.stat]:flex-1 max-[720px]:[&>.stat]:basis-[140px] max-[720px]:[&>.stat]:min-w-0 max-[460px]:gap-2.5"
+      >
+        <Glass class="stat px-5 py-4 rounded-[var(--radius-glass-sm)] min-w-[120px]">
+          <div
+            class="font-display font-black text-[clamp(1.8rem,4vw,2.6rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
+          >
+            +{stats.yearsOfExperience} {locale === 'es' ? 'años' : 'years'}
+          </div>
+          <div class="text-[0.8rem] text-text-soft mt-1.5">{copy.hero.statYears}</div>
         </Glass>
-        <Glass class="stat">
-          <div class="stat-num">{stats.sectorsCount}</div>
-          <div class="stat-lbl">{sectorsLabel}</div>
+        <Glass class="stat px-5 py-4 rounded-[var(--radius-glass-sm)] min-w-[120px]">
+          <div
+            class="font-display font-black text-[clamp(1.8rem,4vw,2.6rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
+          >
+            {stats.sectorsCount}
+          </div>
+          <div class="text-[0.8rem] text-text-soft mt-1.5">{sectorsLabel}</div>
         </Glass>
-        <Glass class="stat">
-          <div class="stat-num">{stats.projectsCount}</div>
-          <div class="stat-lbl">{copy.hero.statProjects}</div>
+        <Glass class="stat px-5 py-4 rounded-[var(--radius-glass-sm)] min-w-[120px]">
+          <div
+            class="font-display font-black text-[clamp(1.8rem,4vw,2.6rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
+          >
+            {stats.projectsCount}
+          </div>
+          <div class="text-[0.8rem] text-text-soft mt-1.5">{copy.hero.statProjects}</div>
         </Glass>
       </div>
     </div>
   </div>
 </header>
-
-<style is:global>
-  .hero {
-    padding-top: clamp(116px, 16vh, 188px);
-  }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1.25fr 0.85fr;
-    grid-template-areas:
-      'badge photo'
-      'main photo';
-    grid-template-rows: auto 1fr;
-    column-gap: clamp(28px, 4vw, 56px);
-    align-items: start;
-  }
-  .hero-badge {
-    grid-area: badge;
-    justify-self: start;
-    align-self: start;
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    margin-bottom: 26px;
-    padding: 7px 15px;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 500;
-  }
-  .hero-status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: oklch(0.72 0.2 150);
-  }
-  .hero-status-dot[data-active='true'] {
-    animation: pulse 2.4s infinite;
-  }
-  .hero-main {
-    grid-area: main;
-    align-self: start;
-    min-width: 0;
-  }
-  .hero-photo {
-    grid-area: photo;
-    align-self: center;
-    position: relative;
-  }
-  .hero-photo-inner {
-    position: relative;
-    will-change: transform;
-  }
-  .hero-frame {
-    padding: 10px;
-    border-radius: 28px;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    background: var(--glass-bg);
-  }
-  .hero-frame img {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border-radius: 20px;
-    display: block;
-  }
-  .hero-float {
-    position: absolute;
-    z-index: 2;
-    padding: 10px 16px;
-    border-radius: 14px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    max-width: calc(100% - 16px);
-    white-space: nowrap;
-    border: 1px solid var(--glass-border);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    background: color-mix(in oklab, var(--bg-2) 85%, transparent);
-  }
-  .hero-float-1 {
-    bottom: 22px;
-    left: -18px;
-  }
-  .hero-float-2 {
-    top: 26px;
-    right: -16px;
-  }
-  .hero-fdot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-  }
-  .hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(2.6rem, 7vw, 5rem);
-    font-weight: 900;
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-  }
-  .hero-role {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
-    color: var(--text-soft);
-    margin-top: 14px;
-    letter-spacing: -0.01em;
-  }
-  .hero-lead {
-    color: var(--text-soft);
-    font-size: 1.1rem;
-    margin-top: 22px;
-    max-width: 48ch;
-    text-wrap: pretty;
-  }
-  .hero-cta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 32px;
-  }
-  .stat-strip {
-    display: flex;
-    gap: 14px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-  }
-  .stat {
-    padding: 16px 20px;
-    border-radius: var(--radius-sm);
-    min-width: 120px;
-  }
-  .stat-num {
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    line-height: 1;
-    letter-spacing: -0.03em;
-    background: linear-gradient(
-      120deg,
-      var(--accent-bright),
-      oklch(0.7 0.18 calc(var(--accent-h) + 55))
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .stat-lbl {
-    font-size: 0.8rem;
-    color: var(--text-soft);
-    margin-top: 6px;
-  }
-
-  @media (max-width: 940px) {
-    .hero {
-      padding-top: clamp(92px, 13vh, 116px);
-    }
-    .hero-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        'badge'
-        'photo'
-        'main';
-      grid-template-rows: auto auto auto;
-      column-gap: 0;
-    }
-    .hero-photo {
-      max-width: min(380px, calc(50% + 150px));
-      margin: 4px auto 26px;
-    }
-    .hero-float-1 {
-      left: 12px;
-      bottom: 18px;
-    }
-    .hero-float-2 {
-      right: 12px;
-      top: 18px;
-    }
-  }
-  @media (max-width: 720px) {
-    .stat {
-      flex: 1 1 140px;
-      min-width: 0;
-    }
-    .hero-cta {
-      gap: 10px;
-    }
-    .hero-cta .btn {
-      justify-content: center;
-    }
-    .hero-cta .btn-ghost {
-      flex: 1 1 0;
-      min-width: 0;
-      order: 1;
-    }
-    .hero-cta .btn-primary {
-      flex: 1 1 100%;
-      order: 2;
-    }
-  }
-  @media (max-width: 460px) {
-    .stat-strip {
-      gap: 10px;
-    }
-  }
-</style>
