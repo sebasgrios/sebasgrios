@@ -36,6 +36,8 @@
     "@resvg/resvg-wasm": "^2.6.2",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.2",
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.0.0",
     "astro": "^5.1.1",
     "satori": "^0.26.0",
