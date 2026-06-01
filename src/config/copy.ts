@@ -30,9 +30,6 @@ interface ChromeCopy {
     projects: SectionCopy;
     contact: SectionCopy;
   };
-  footer: {
-    madeWith: string;
-  };
   errors: {
     notFoundTitle: string;
     notFoundLead: string;
@@ -87,9 +84,6 @@ export const COPY: Record<Locale, ChromeCopy> = {
         sub: 'Estoy abierto a nuevas propuestas y colaboraciones. Si tienes un proyecto en mente, hablemos.',
       },
     },
-    footer: {
-      madeWith: 'Hecho con ♥ y mucho café',
-    },
     errors: {
       notFoundTitle: 'Página no encontrada',
       notFoundLead: 'La ruta que intentas visitar no existe o ha sido movida.',
@@ -141,9 +135,6 @@ export const COPY: Record<Locale, ChromeCopy> = {
         title: 'Shall we build something?',
         sub: "I'm open to new proposals and collaborations. If you have a project in mind, let's talk.",
       },
-    },
-    footer: {
-      madeWith: 'Made with ♥ and lots of coffee',
     },
     errors: {
       notFoundTitle: 'Page not found',

@@ -3,17 +3,13 @@ import IconButton from '@/components/IconButton.astro';
 import GitHub from '@/components/icons/GitHub.astro';
 import LinkedIn from '@/components/icons/LinkedIn.astro';
 import Mail from '@/components/icons/Mail.astro';
-import { COPY } from '@/config/copy';
-import type { Locale } from '@/config/i18n';
 import type { Profile } from '@/lib/domain/types';
 
 interface Props {
-  locale: Locale;
   profile: Profile;
 }
 
-const { locale, profile } = Astro.props;
-const copy = COPY[locale].footer;
+const { profile } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
@@ -45,7 +41,6 @@ const year = new Date().getFullYear();
       </IconButton>
     </div>
   </div>
-  <p class="foot-made-with">{copy.madeWith}</p>
 </footer>
 
 <style is:global>
@@ -68,11 +63,5 @@ const year = new Date().getFullYear();
   .foot-soc {
     display: flex;
     gap: 8px;
-  }
-  .foot-made-with {
-    text-align: center;
-    margin-top: 28px;
-    font-size: 0.85rem;
-    color: var(--text-faint);
   }
 </style>
