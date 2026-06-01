@@ -13,10 +13,10 @@ const { profile } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class="wrap site-footer">
-  <div class="foot-top">
-    <div class="foot-text">© {year} {profile.fullName}</div>
-    <div class="foot-soc">
+<footer class="wrap py-10 pb-[60px] border-t border-hairline mt-20">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div class="text-text-faint text-[0.85rem]">© {year} {profile.fullName}</div>
+    <div class="flex gap-2">
       {
         profile.githubUrl && (
           <IconButton href={profile.githubUrl} ariaLabel="GitHub" target="_blank" rel="noopener">
@@ -42,26 +42,3 @@ const year = new Date().getFullYear();
     </div>
   </div>
 </footer>
-
-<style is:global>
-  .site-footer {
-    padding-block: 40px 60px;
-    border-top: 1px solid var(--hairline);
-    margin-top: 80px;
-  }
-  .foot-top {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  .foot-text {
-    color: var(--text-faint);
-    font-size: 0.85rem;
-  }
-  .foot-soc {
-    display: flex;
-    gap: 8px;
-  }
-</style>

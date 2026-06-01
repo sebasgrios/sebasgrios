@@ -29,23 +29,27 @@ const iconRegistry: Record<string, typeof Code> = {
   chart: Chart,
   layers: Layers,
 };
+
+const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[transition-delay:0.24s]'];
 ---
 
 <section id="stack" aria-labelledby="stack-title" class="wrap">
   <SectionHead num="03" eyebrow={copy.eyebrow} title={copy.title} sub={copy.sub} id="stack-title" />
-  <div class="stack-grid">
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-4">
     {
       stackGroups.map((group, index) => {
         const Icon = iconRegistry[group.iconKey] ?? Layers;
         const label = pickLocale(group.label, locale);
-        const delayClass = `d${(index % 3) + 1}`;
+        const delayClass = delays[(index % 3) + 1];
         return (
-          <Glass interactive class={`stack-card reveal ${delayClass}`}>
-            <div class="sc-head">
-              <div class="sc-ic"><Icon size={19} /></div>
-              <h3>{label}</h3>
+          <Glass interactive class={`reveal ${delayClass} p-6`}>
+            <div class="flex items-center gap-[11px] mb-4">
+              <div class="w-9 h-9 rounded-[10px] grid place-items-center text-accent bg-accent-soft">
+                <Icon size={19} />
+              </div>
+              <h3 class="font-display text-[1.05rem] font-bold tracking-[-0.01em]">{label}</h3>
             </div>
-            <div class="tags">
+            <div class="flex flex-wrap gap-2">
               {group.technologies.map((t) => <Tag>{t.label}</Tag>)}
             </div>
           </Glass>
@@ -54,35 +58,3 @@ const iconRegistry: Record<string, typeof Code> = {
     }
   </div>
 </section>
-
-<style is:global>
-  .stack-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 16px;
-  }
-  .stack-card {
-    padding: 24px;
-  }
-  .stack-card .sc-head {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    margin-bottom: 16px;
-  }
-  .stack-card .sc-ic {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    color: var(--accent);
-    background: var(--accent-soft);
-  }
-  .stack-card h3 {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }
-</style>
