@@ -126,7 +126,7 @@ body {
 }
 
 main > section.wrap {
-  padding-block: clamp(80px, 11vw, 160px);
+  padding-block: clamp(48px, 7vw, 96px);
   scroll-margin-top: clamp(110px, 9vw, 140px);
 }
 
