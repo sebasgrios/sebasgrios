@@ -27,161 +27,91 @@ const links = [
 const homeHref = locale === 'es' ? '/' : '/en/';
 ---
 
-<nav class="nav">
-  <Glass class="nav-inner">
-    <a href={`${homeHref}#top`} class="nav-brand">
+<nav
+  class="fixed top-4 left-0 right-0 mx-auto z-[100] w-[calc(100%-32px)] max-w-[var(--maxw)]"
+>
+  <Glass
+    class="flex items-center justify-between gap-3 px-3 py-2.5 pl-4 rounded-full"
+  >
+    <a
+      href={`${homeHref}#top`}
+      class="flex items-center gap-2.5 font-display font-bold tracking-[-0.02em] text-text no-underline"
+    >
       {
         avatarUrl ? (
-          <img src={avatarUrl} alt={shortName} width="30" height="30" loading="eager" />
+          <img
+            src={avatarUrl}
+            alt={shortName}
+            width="30"
+            height="30"
+            loading="eager"
+            class="w-[30px] h-[30px] rounded-full object-cover border border-glass-border"
+          />
         ) : (
-          <span class="nav-brand-fallback" aria-hidden="true">{shortName.charAt(0)}</span>
+          <span
+            class="w-[30px] h-[30px] rounded-full grid place-items-center bg-accent-soft text-accent font-bold"
+            aria-hidden="true"
+          >
+            {shortName.charAt(0)}
+          </span>
         )
       }
       <span>{shortName}</span>
     </a>
-    <div class="nav-links">
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    <div class="nav-links flex items-center gap-1 max-[720px]:hidden">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class="text-text-soft no-underline text-[0.9rem] font-medium px-3.5 py-2 rounded-full transition-[color,background] duration-[250ms] hover:text-text hover:bg-accent-soft"
+          >
+            {link.label}
+          </a>
+        ))
+      }
     </div>
-    <div class="nav-actions">
+    <div class="flex items-center gap-2">
       <LocaleSwitch current={locale} />
       <ThemeToggle locale={locale} />
       <button
-        class="icon-btn nav-burger"
+        class="icon-btn nav-burger relative max-[720px]:grid! hidden"
         type="button"
         aria-label={copy.nav.openMenu}
         aria-expanded="false"
         aria-controls="nav-mobile"
       >
-        <Code class="nav-burger-icon nav-burger-open" />
-        <ArrowUp class="nav-burger-icon nav-burger-close" />
+        <Code
+          class="nav-burger-icon nav-burger-open absolute transition-[opacity,transform] duration-200"
+        />
+        <ArrowUp
+          class="nav-burger-icon nav-burger-close absolute transition-[opacity,transform] duration-200"
+        />
       </button>
     </div>
   </Glass>
-  <Glass id="nav-mobile" class="nav-mobile" hidden>
-    {links.map((link) => <a class="nav-mobile-link" href={link.href}>{link.label}</a>)}
+  <Glass
+    id="nav-mobile"
+    class="nav-mobile fixed top-[74px] left-4 right-4 z-[99] p-3 flex-col gap-1 origin-top hidden max-[720px]:[&:not([hidden])]:flex"
+    hidden
+  >
+    {
+      links.map((link) => (
+        <a
+          class="text-text no-underline font-medium px-4 py-3 rounded-xl hover:bg-accent-soft hover:text-accent"
+          href={link.href}
+        >
+          {link.label}
+        </a>
+      ))
+    }
   </Glass>
 </nav>
 
 <style is:global>
-  .nav {
-    position: fixed;
-    top: 16px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    z-index: 100;
-    width: calc(100% - 32px);
-    max-width: var(--maxw);
-  }
-  .nav .nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px 10px 18px;
-    border-radius: 999px;
-    gap: 12px;
-  }
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: inherit;
-    text-decoration: none;
-  }
-  .nav-brand img {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--glass-border);
-  }
-  .nav-brand-fallback {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-weight: 700;
-  }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .nav-links a {
-    color: var(--text-soft);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 8px 14px;
-    border-radius: 999px;
-    transition:
-      color 0.25s,
-      background 0.25s;
-  }
-  .nav-links a:hover {
-    color: var(--text);
-    background: var(--accent-soft);
-  }
-  .nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .icon-btn.nav-burger {
-    display: none;
-  }
-  .nav-burger-icon {
-    position: absolute;
-    transition:
-      opacity 0.2s,
-      transform 0.2s;
-  }
   .nav-burger[aria-expanded='false'] .nav-burger-close,
   .nav-burger[aria-expanded='true'] .nav-burger-open {
     opacity: 0;
     transform: scale(0.6);
-  }
-  .nav-mobile {
-    position: fixed;
-    top: 74px;
-    left: 16px;
-    right: 16px;
-    z-index: 99;
-    padding: 12px;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    transform-origin: top;
-  }
-  @media (max-width: 720px) {
-    .nav-mobile:not([hidden]) {
-      display: flex;
-    }
-  }
-  .nav-mobile-link {
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 12px 16px;
-    border-radius: 12px;
-  }
-  .nav-mobile-link:hover {
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-  @media (max-width: 720px) {
-    .nav-links {
-      display: none;
-    }
-    .icon-btn.nav-burger {
-      display: grid;
-    }
   }
 </style>
 
@@ -201,11 +131,8 @@ const homeHref = locale === 'es' ? '/' : '/en/';
         const next = !expanded;
         burger.setAttribute('aria-expanded', String(next));
         burger.setAttribute('aria-label', next ? closeLabel : openLabel);
-        if (next) {
-          menu.removeAttribute('hidden');
-        } else {
-          menu.setAttribute('hidden', '');
-        }
+        if (next) menu.removeAttribute('hidden');
+        else menu.setAttribute('hidden', '');
       });
 
       for (const link of menu.querySelectorAll('a')) {
