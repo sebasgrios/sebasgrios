@@ -15,15 +15,19 @@ const homeHref = locale === 'es' ? '/' : '/en/';
   description={copy.errors.unauthorizedLead}
   locale={locale}
 >
-  <section class="wrap" style="padding-block: clamp(80px, 14vh, 160px); text-align: center;">
-    <p class="font-mono text-sm uppercase tracking-[0.22em] text-[var(--text-faint)]">401</p>
-    <h1 class="text-5xl mt-3" style="letter-spacing: -0.02em;">
+  <section class="wrap py-[clamp(80px,14vh,160px)] text-center">
+    <p
+      class="font-mono text-sm uppercase tracking-[0.22em] text-text-faint"
+    >
+      401
+    </p>
+    <h1 class="text-5xl mt-3 tracking-[-0.02em] font-display font-black">
       {copy.errors.unauthorizedTitle}
     </h1>
-    <p class="mt-4 mx-auto max-w-prose text-[var(--text-soft)]">
+    <p class="mt-4 mx-auto max-w-prose text-text-soft">
       {copy.errors.unauthorizedLead}
     </p>
-    <a href={homeHref} class="mt-8 inline-block underline text-[var(--accent)]">
+    <a href={homeHref} class="mt-8 inline-block underline text-accent">
       {copy.errors.backToPortfolio}
     </a>
   </section>
