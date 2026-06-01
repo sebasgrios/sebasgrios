@@ -2,8 +2,8 @@
 import IconButton from '@/components/IconButton.astro';
 import Moon from '@/components/icons/Moon.astro';
 import Sun from '@/components/icons/Sun.astro';
-import type { Locale } from '@/config/i18n';
 import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
 
 interface Props {
   locale: Locale;
@@ -13,21 +13,16 @@ const { locale } = Astro.props;
 const label = COPY[locale].nav.switchTheme;
 ---
 
-<IconButton ariaLabel={label} class="theme-toggle">
-  <Sun class="theme-icon theme-icon-sun" />
-  <Moon class="theme-icon theme-icon-moon" />
+<IconButton ariaLabel={label} class="theme-toggle relative">
+  <Sun
+    class="theme-icon theme-icon-sun absolute transition-[opacity,transform] duration-[250ms]"
+  />
+  <Moon
+    class="theme-icon theme-icon-moon absolute transition-[opacity,transform] duration-[250ms]"
+  />
 </IconButton>
 
 <style is:global>
-  .theme-toggle .theme-icon {
-    position: absolute;
-    transition:
-      opacity 0.25s var(--ease),
-      transform 0.25s var(--ease);
-  }
-  .theme-toggle {
-    position: relative;
-  }
   [data-theme='light'] .theme-icon-sun {
     opacity: 0;
     transform: rotate(40deg) scale(0.6);

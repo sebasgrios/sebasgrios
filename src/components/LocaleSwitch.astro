@@ -14,7 +14,7 @@ const ariaLabel = current === 'es' ? 'Switch to English' : 'Cambiar a español';
 ---
 
 <a
-  class="locale-switch"
+  class="font-mono text-[0.78rem] font-semibold leading-none px-3 py-2 rounded-full text-text-soft no-underline transition-[color,background] duration-[250ms] hover:text-accent hover:bg-accent-soft"
   href={targetHref}
   aria-label={ariaLabel}
   title={ariaLabel}
@@ -22,23 +22,3 @@ const ariaLabel = current === 'es' ? 'Switch to English' : 'Cambiar a español';
 >
   {targetLabel}
 </a>
-
-<style is:global>
-  .locale-switch {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--text-soft);
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 999px;
-    transition:
-      color 0.25s,
-      background 0.25s;
-    line-height: 1;
-  }
-  .locale-switch:hover {
-    color: var(--accent);
-    background: var(--accent-soft);
-  }
-</style>
