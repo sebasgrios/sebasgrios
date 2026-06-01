@@ -18,10 +18,8 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="wrap site-footer">
-  <div class="foot-inner">
-    <div class="foot-text">
-      © {year} {profile.fullName} · {copy.madeWith}
-    </div>
+  <div class="foot-top">
+    <div class="foot-text">© {year} {profile.fullName}</div>
     <div class="foot-soc">
       {
         profile.githubUrl && (
@@ -47,15 +45,16 @@ const year = new Date().getFullYear();
       </IconButton>
     </div>
   </div>
+  <p class="foot-made-with">{copy.madeWith}</p>
 </footer>
 
 <style is:global>
   .site-footer {
-    padding: 40px 0 60px;
+    padding-block: 40px 60px;
     border-top: 1px solid var(--hairline);
     margin-top: 80px;
   }
-  .foot-inner {
+  .foot-top {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -69,5 +68,11 @@ const year = new Date().getFullYear();
   .foot-soc {
     display: flex;
     gap: 8px;
+  }
+  .foot-made-with {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 0.85rem;
+    color: var(--text-faint);
   }
 </style>
