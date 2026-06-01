@@ -123,6 +123,14 @@
     outline-offset: 3px;
     border-radius: 6px;
   }
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(48px, 7vw, 96px);
+  }
+  main > section {
+    scroll-margin-top: clamp(110px, 9vw, 140px);
+  }
 }
 
 @utility wrap {
