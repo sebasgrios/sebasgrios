@@ -8,7 +8,6 @@ const { class: className = '' } = Astro.props;
 <span class={`tag ${className}`}><slot /></span>
 
 <style is:global>
-  @layer utilities {
   .tag {
     font-family: var(--font-mono);
     font-size: 0.74rem;
@@ -34,6 +33,5 @@ const { class: className = '' } = Astro.props;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-  }
   }
 </style>
