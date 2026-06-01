@@ -127,7 +127,7 @@ body {
 
 main > section.wrap {
   padding-block: clamp(80px, 11vw, 160px);
-  scroll-margin-top: clamp(60px, 7vw, 96px);
+  scroll-margin-top: clamp(110px, 9vw, 140px);
 }
 
 @media (prefers-reduced-motion: reduce) {
