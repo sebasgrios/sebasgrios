@@ -1,6 +1,7 @@
 ---
 import BgField from '@/components/BgField.astro';
 import BgNoise from '@/components/BgNoise.astro';
+import { CLOUDFLARE_WEB_ANALYTICS } from '@/config/analytics';
 import type { Locale } from '@/config/i18n';
 import { SITE } from '@/config/site';
 import '@/styles/globals.css';
@@ -33,7 +34,7 @@ const alternateEn = new URL(
 ).toString();
 const ogImageUrl = ogImage ?? new URL(`/og/${locale}.png`, SITE.url).toString();
 
-const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN as string | undefined;
+const beaconToken = CLOUDFLARE_WEB_ANALYTICS.beaconToken;
 const showAnalytics = import.meta.env.PROD && !!beaconToken;
 
 const person = personName

@@ -6,12 +6,8 @@ declare module '*.wasm' {
 }
 
 interface ImportMetaEnv {
-  readonly PUBLIC_SITE_URL: string;
-  readonly PUBLIC_SUPABASE_URL: string;
-  readonly PUBLIC_SUPABASE_ANON_KEY: string;
-  readonly SUPABASE_SERVICE_ROLE_KEY: string;
-  readonly SESSION_SECRET: string;
-  readonly PUBLIC_CF_BEACON_TOKEN?: string;
+  readonly SUPABASE_SERVICE_ROLE_KEY?: string;
+  readonly SESSION_SECRET?: string;
 }
 
 interface ImportMeta {
@@ -27,10 +23,6 @@ declare namespace App {
 }
 
 interface Env {
-  PUBLIC_SITE_URL: string;
-  PUBLIC_SUPABASE_URL: string;
-  PUBLIC_SUPABASE_ANON_KEY: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
-  SESSION_SECRET: string;
-  PUBLIC_CF_BEACON_TOKEN?: string;
+  SUPABASE_SERVICE_ROLE_KEY?: string;
+  SESSION_SECRET?: string;
 }
