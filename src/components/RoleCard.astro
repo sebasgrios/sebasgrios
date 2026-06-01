@@ -33,29 +33,38 @@ const bullets = pickLocaleArray(role.bullets, locale);
 const dateRange = formatDateRange(role.startDate, role.endDate, locale);
 ---
 
-<Glass as="article" interactive class={`role-card reveal ${single ? 'single-role' : ''}`}>
-  {!single && <span class="role-node" aria-hidden="true" />}
-  <div class="role-top">
-    <div class="role-title">{title}</div>
-    <div class="role-when mono">{dateRange}</div>
-  </div>
-  <div class="role-sub">
-    <span><Layers size={13} /> {sector}</span>
-    <span><ModeIcon size={13} /> {mode}</span>
-  </div>
-  <p class="role-desc">{description}</p>
+<Glass
+  as="article"
+  interactive
+  class={`reveal role-card-base ${single ? 'pl-[clamp(20px,3vw,30px)]' : ''}`}
+>
   {
-    bullets.length > 0 && (
-      <ul class="role-list">
-        {bullets.map((b) => (
-          <li>{b}</li>
-        ))}
-      </ul>
+    !single && (
+      <span
+        class="role-node absolute -left-[29px] top-7 w-3 h-3 rounded-full bg-accent shadow-[0_0_0_4px_var(--bg),0_0_14px_oklch(0.7_0.18_var(--accent-h)/0.7)] max-[720px]:-left-[22px]"
+        aria-hidden="true"
+      />
     )
   }
+  <div class="flex flex-wrap items-baseline justify-between gap-y-2 gap-x-4">
+    <div class="font-display font-bold text-[1.2rem]">{title}</div>
+    <div
+      class="font-mono text-[0.78rem] text-accent whitespace-nowrap max-[460px]:w-full"
+    >
+      {dateRange}
+    </div>
+  </div>
+  <div
+    class="flex flex-wrap gap-y-2 gap-x-3.5 mt-1.5 text-[0.84rem] text-text-faint"
+  >
+    <span class="inline-flex items-center gap-1.5"><Layers size={13} /> {sector}</span>
+    <span class="inline-flex items-center gap-1.5"><ModeIcon size={13} /> {mode}</span>
+  </div>
+  <p class="text-text mt-4 text-base text-pretty">{description}</p>
+  {bullets.length > 0 && <ul class="role-bullet-list">{bullets.map((b) => <li>{b}</li>)}</ul>}
   {
     role.technologies.length > 0 && (
-      <div class="tags role-tags">
+      <div class="flex flex-wrap gap-2 mt-[18px]">
         {role.technologies.map((t) => (
           <Tag>{t.label}</Tag>
         ))}
@@ -63,97 +72,3 @@ const dateRange = formatDateRange(role.startDate, role.endDate, locale);
     )
   }
 </Glass>
-
-<style is:global>
-  .role-card {
-    padding: clamp(20px, 3vw, 30px);
-    position: relative;
-  }
-  .role-node {
-    position: absolute;
-    left: -29px;
-    top: 28px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 4px var(--bg), 0 0 14px oklch(0.7 0.18 var(--accent-h) / 0.7);
-  }
-  .role-top {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px 16px;
-  }
-  .role-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.2rem;
-  }
-  .role-when {
-    font-size: 0.78rem;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-  .role-sub {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 14px;
-    margin: 6px 0 0;
-    font-size: 0.84rem;
-    color: var(--text-faint);
-  }
-  .role-sub span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .role-desc {
-    color: var(--text);
-    margin: 16px 0 0;
-    font-size: 1rem;
-    text-wrap: pretty;
-  }
-  .role-list {
-    list-style: none;
-    margin: 16px 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .role-list li {
-    position: relative;
-    padding-left: 24px;
-    color: var(--text-soft);
-    font-size: 0.95rem;
-    text-wrap: pretty;
-  }
-  .role-list li::before {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 9px;
-    width: 7px;
-    height: 7px;
-    border-radius: 3px;
-    background: var(--accent);
-    transform: rotate(45deg);
-    opacity: 0.85;
-  }
-  .role-tags {
-    margin-top: 18px;
-  }
-  .single-role {
-    padding-left: clamp(20px, 3vw, 30px);
-  }
-  .single-role .role-node {
-    display: none;
-  }
-  @media (max-width: 460px) {
-    .role-when {
-      width: 100%;
-    }
-  }
-</style>
