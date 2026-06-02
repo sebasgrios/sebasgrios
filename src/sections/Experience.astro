@@ -31,8 +31,8 @@ const copy = COPY[locale].sections.experience;
         const metaLine = pickLocale(company.metaLine, locale);
         return (
           <div class="reveal relative">
-            <div class="flex items-center gap-3.5 my-2">
-              <Glass class="w-[46px] h-[46px] rounded-[13px] flex-shrink-0 overflow-hidden">
+            <div class="flex items-center gap-3.5 mb-4">
+              <Glass class="w-[46px] h-[46px] rounded-[13px] shrink-0 overflow-hidden">
                 {company.logoUrl && (
                   <img
                     src={company.logoUrl}
@@ -44,16 +44,16 @@ const copy = COPY[locale].sections.experience;
                   />
                 )}
               </Glass>
-              <div>
-                <div class="font-display font-bold text-[1.25rem]">{company.name}</div>
-                <div class="font-mono text-[0.85rem] text-text-faint">{metaLine}</div>
+              <div class="min-w-0">
+                <div class="font-display font-bold text-[1.25rem] leading-tight">{company.name}</div>
+                <div class="font-mono text-[0.85rem] text-text-faint mt-0.5">{metaLine}</div>
               </div>
             </div>
             <div
               class:list={[
                 single
                   ? ''
-                  : 'flex flex-col gap-4 relative pl-[30px] before:content-[""] before:absolute before:left-[5px] before:top-3.5 before:bottom-3.5 before:w-[2px] before:bg-[linear-gradient(var(--accent),transparent)] before:opacity-50 max-[720px]:pl-[22px]',
+                  : 'flex flex-col gap-5 relative pl-[30px] before:content-[""] before:absolute before:left-[5px] before:top-3.5 before:bottom-3.5 before:w-[2px] before:bg-[linear-gradient(var(--accent),transparent)] before:opacity-50 max-[720px]:pl-[22px]',
               ]}
             >
               {company.roles.map((role) => (

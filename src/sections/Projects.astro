@@ -40,11 +40,11 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
           <Glass
             as="article"
             interactive
-            class={`reveal ${delayClass} flex flex-col md:flex-row p-0 group overflow-hidden`}
+            class={`reveal ${delayClass} flex flex-col min-[720px]:flex-row p-0 group overflow-hidden`}
           >
             {project.liveUrl ? (
               <a
-                class="relative block overflow-hidden border-b border-glass-border md:border-b-0 md:border-r aspect-[16/10] md:aspect-auto md:w-[42%] md:shrink-0 md:self-stretch"
+                class="relative block overflow-hidden border-b border-glass-border min-[720px]:border-b-0 min-[720px]:border-r aspect-[16/10] min-[720px]:aspect-auto min-[720px]:w-[42%] min-[720px]:shrink-0 min-[720px]:self-stretch"
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener"
@@ -57,7 +57,7 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
                     loading="lazy"
                     width="800"
                     height="500"
-                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] md:absolute md:inset-0"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] min-[720px]:absolute min-[720px]:inset-0"
                   />
                 )}
                 <div
@@ -66,7 +66,7 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
                 />
               </a>
             ) : (
-              <div class="relative block overflow-hidden border-b border-glass-border md:border-b-0 md:border-r aspect-[16/10] md:aspect-auto md:w-[42%] md:shrink-0 md:self-stretch">
+              <div class="relative block overflow-hidden border-b border-glass-border min-[720px]:border-b-0 min-[720px]:border-r aspect-[16/10] min-[720px]:aspect-auto min-[720px]:w-[42%] min-[720px]:shrink-0 min-[720px]:self-stretch">
                 {project.imageUrl && (
                   <img
                     src={project.imageUrl}
@@ -74,13 +74,13 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
                     loading="lazy"
                     width="800"
                     height="500"
-                    class="w-full h-full object-cover md:absolute md:inset-0"
+                    class="w-full h-full object-cover min-[720px]:absolute min-[720px]:inset-0"
                   />
                 )}
               </div>
             )}
-            <div class="p-6 pt-[22px] md:p-7 flex flex-col gap-3 flex-1 min-w-0">
-              <h3 class="font-display text-[1.35rem] md:text-[1.5rem] font-bold tracking-[-0.02em] min-w-0">
+            <div class="p-[clamp(20px,3vw,30px)] flex flex-col gap-3 flex-1 min-w-0">
+              <h3 class="font-display text-[1.35rem] min-[720px]:text-[1.5rem] font-bold tracking-[-0.02em] min-w-0">
                 {project.name}
               </h3>
               <p class="text-text-soft text-[0.96rem] text-pretty">{description}</p>
