@@ -31,8 +31,7 @@ Color en `oklch()` para gradientes perceptualmente uniformes y soporte sólido e
   --glass-highlight: 0.31;     /* 0.25 + intensity*0.6 */
   --glass-spec: 0.21;          /* 0.15 + intensity*0.55 */
 
-  --radius: 22px;
-  --radius-sm: 14px;
+  /* radios: tokens en @theme → --radius-glass: 22px; --radius-glass-sm: 14px; */
   --maxw: 1120px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -92,8 +91,8 @@ Color en `oklch()` para gradientes perceptualmente uniformes y soporte sólido e
 
 | Rol | Familia | Peso | Uso |
 |---|---|---|---|
-| Display / H1-H3 | Satoshi | 700, 900 | Hero, section titles, stat numbers. |
-| Body | General Sans | 400, 500, 600 | Párrafos, navegación, UI. |
+| Display / H1-H3 | Satoshi | 400, 500, 700, 900 | Hero, section titles, stat numbers. |
+| Body | General Sans | 400, 500, 600, 700 | Párrafos, navegación, UI. |
 | Mono / eyebrow | JetBrains Mono | 400, 500 | Eyebrows ("01 / Trayectoria"), `role-when`, `tag`. |
 
 - `font-feature-settings: "ss01"` en JetBrains Mono.
@@ -108,8 +107,8 @@ Color en `oklch()` para gradientes perceptualmente uniformes y soporte sólido e
 ## Layout
 
 - Contenedor: `width: 100%; max-width: 1120px; padding-inline: clamp(20px, 4vw, 32px);`.
-- Section padding vertical: `clamp(64px, 9vw, 130px)`.
-- Scroll margin top: `clamp(0px, calc(112px - 9vw), 60px)` para compensar nav fijo.
+- Gap entre secciones (`main`): `clamp(48px, 7vw, 96px)`.
+- Scroll margin top (`main > section`): `clamp(110px, 9vw, 140px)` para compensar el nav fijo.
 - Gap entre tarjetas en grids: `16-20px`.
 
 ## Glass primitive
@@ -121,7 +120,7 @@ Componente `Glass.astro` con prop `interactive: boolean`. Estructura:
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-glass);
   box-shadow: var(--glass-shadow),
               inset 0 1px 0 0 var(--glass-border),
               inset 0 0 0 1px var(--glass-edge);

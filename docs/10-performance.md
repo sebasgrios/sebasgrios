@@ -37,9 +37,9 @@
 
 - Self-host (ver [02-tech-stack](./02-tech-stack.md)).
 - `font-display: swap` para todas.
-- Preload solo:
+- Preload solo la fuente del H1 (Satoshi Black, candidata a LCP) y el cuerpo (General Sans Regular):
   ```html
-  <link rel="preload" href="/fonts/satoshi/Satoshi-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/satoshi/Satoshi-Black.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/general-sans/GeneralSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
   ```
 - Subset Latin only (`.woff2` con `unicode-range U+0000-024F, U+1E00-1EFF, U+20A0-20CF`).
@@ -54,7 +54,7 @@
 
 - Tailwind v4 con `@tailwindcss/vite` produce CSS optimizado.
 - CSS crítico inline en `<head>` solo si Lighthouse lo pide en M7.
-- `content-visibility: auto` en secciones below-the-fold.
+- `content-visibility: auto` en secciones: **evaluado y descartado**. Rompía la precisión de la navegación por anclas del nav (`#experience`…) porque los placeholders `contain-intrinsic-size` desajustaban el scroll al saltar entre secciones colapsadas. El beneficio en una página de 5 secciones cortas y estáticas no compensa; no se usa.
 
 ### HTML
 

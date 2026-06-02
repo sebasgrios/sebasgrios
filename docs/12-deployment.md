@@ -21,30 +21,24 @@
 
 ## Variables de entorno
 
-### Local (`.env.local`, gitignored)
+### Config pública: **en código, no en env** `[DECIDIDO]`
 
-```
-PUBLIC_SITE_URL=http://localhost:4321
-PUBLIC_SUPABASE_URL=https://nzbodijggjxhshqqpnue.supabase.co
-PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-SESSION_SECRET=
-PUBLIC_CF_BEACON_TOKEN=8f473ccd761a49589834e22ace97d751
-```
+Los valores **públicos** (URL del sitio, URL + anon key de Supabase, token de Cloudflare Web Analytics) viven hardcodeados en `src/config/*` (`site.ts`, `supabase.ts`, `analytics.ts`), que son la **única fuente de verdad**.
 
-### Cloudflare Pages (Settings → Environment variables)
+**Por qué no se leen de `.env`/dashboard**: las páginas públicas son `prerender`, así que `loadHomeData()` → `getServerClient()` se ejecuta durante `astro build`. Cloudflare Pages **no expone** las variables del dashboard al proceso de build/prerender, así que `import.meta.env.PUBLIC_SUPABASE_*` resolvía a `undefined` y el deploy **fallaba** en el prerender (`Supabase env vars are missing… at getServerClient`). Son valores públicos por diseño (la anon key está protegida por RLS; el beacon token es un snippet público de cliente), por lo que vivir en el repo es seguro y evita el fallo.
 
-**Production**:
-- `PUBLIC_SITE_URL=https://sebasgrios.es`
-- `PUBLIC_SUPABASE_URL=https://nzbodijggjxhshqqpnue.supabase.co`
-- `PUBLIC_SUPABASE_ANON_KEY` (plain — public anon key)
-- `SUPABASE_SERVICE_ROLE_KEY` (Secret)
-- `SESSION_SECRET` (Secret, 32+ random bytes, para futuras cookies de admin)
-- `PUBLIC_CF_BEACON_TOKEN=8f473ccd761a49589834e22ace97d751` (plain — public client snippet)
+> No re-introducir lectura de `import.meta.env.PUBLIC_*` para estos valores sin resolver antes la disponibilidad en build de Cloudflare Pages.
 
-**Preview**:
-- Mismas vars apuntando al mismo proyecto Supabase (no hay branch DB en v3).
-- `PUBLIC_CF_BEACON_TOKEN` puede dejarse vacío en preview para no ensuciar las métricas con visitas de QA.
+### Secretos: solo dashboard (futuro backoffice SSR)
+
+Estos **sí** son secretos y solo se usarán cuando exista `/admin` (SSR, no prerender), nunca llegan al cliente:
+
+| Variable | Dónde | Uso |
+|---|---|---|
+| `SUPABASE_SERVICE_ROLE_KEY` | Cloudflare Pages (Secret) + `.env.local` | Mutaciones server-side del backoffice. |
+| `SESSION_SECRET` | Cloudflare Pages (Secret) + `.env.local` | Cookies de sesión admin (32+ bytes aleatorios). |
+
+Declarados (opcionales) en `src/env.d.ts`. En el dashboard pueden coexistir las `PUBLIC_*` antiguas sin efecto (el código no las lee); pueden borrarse.
 
 ## Cloudflare Pages config
 

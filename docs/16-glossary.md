@@ -25,8 +25,8 @@ Términos del dominio del portfolio.
 | **Eyebrow** | Texto pequeño y monospace sobre el título de sección (`01 / Trayectoria`). |
 | **Anchor** | Hash en URL para saltar a sección. Estables en inglés: `#experience`, etc. |
 | **Localized field** | Campo `jsonb` con shape `{es, en}`. Resuelto en runtime con `pickLocale`. |
-| **HomeViewModel** | Estructura de datos compuesta que la home recibe para renderizar todas las secciones. Definida en `/src/lib/domain/viewModels.ts`. |
-| **Repo (repository)** | Función o módulo en `/src/lib/data/<entity>.ts` que encapsula queries a Supabase y devuelve tipos de dominio. |
+| **HomeViewModel** | Estructura de datos compuesta que la home recibe para renderizar todas las secciones. Definida en `/src/lib/domain/types.ts`. |
+| **Repo (repository)** | Funciones en `/src/lib/data/repos.ts` que encapsulan queries a Supabase y devuelven tipos de dominio (vía `mappers.ts`). |
 | **Mapper** | Función pura que convierte row de DB (snake_case) a tipo de dominio (camelCase). |
 | **Prerender** | Página generada en build time, servida como HTML estático. |
 | **SSR** | Server-side render por request. Solo `/admin/**` y endpoints `/api`. |

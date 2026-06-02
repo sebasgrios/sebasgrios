@@ -11,7 +11,7 @@
                      │  /en/         → prerender (estático)    │
    Editor admin ───▶ │  /admin/**    → SSR (server)            │
                      │  /api/**      → server endpoints        │
-                     │  /og/*.png    → SSR (Satori)            │
+                     │  /og/*.png    → prerender (Satori)      │
                      └──────────┬─────────────────────────────┘
                                 │
                                 │ supabase-js (server-side)
@@ -52,19 +52,20 @@
 - Cliente Supabase tipado (`createServerClient(env)`).
 - Repositorios por agregado: `profileRepo.get()`, `companyRepo.listWithRoles()`, etc.
 - Cada repo devuelve **tipos de dominio**, no rows de la BD (mapper en medio).
-- Cache: las funciones repo usan `astro:cache` por defecto en build; en SSR cachean en memoria del worker durante 60s.
+- El cliente Supabase es un **singleton** en memoria (`getServerClient()`); como las páginas públicas son prerender, las queries solo corren en build (cero round-trip en el hot path). No hay capa `astro:cache`.
 
 ### Server (`/src/pages/api`, `/src/pages/og`)
 
 - Endpoints de mutación (backoffice, futuro).
-- Generación de OG images con Satori + `@vercel/og` (compatible con Cloudflare Workers).
-- Webhook receiver para invalidación de cache.
+- Generación de OG images con `satori` (JSX→SVG) + `@resvg/resvg-wasm` (SVG→PNG), compatible con Cloudflare Workers. Prerender en build.
+- Webhook receiver para invalidación de cache (futuro).
 
 ### Configuración (`/src/config`)
 
-- `site.ts`: URL canónica, locales, links sociales por defecto (en caso de no haber profile aún).
-- `theme.ts`: tokens de diseño exportados a Tailwind config y a CSS variables.
+- `site.ts`: URL canónica, dominio, nombre, links sociales por defecto.
+- `i18n.ts`: locales, `Localized<T>`, helpers de locale. `copy.ts`: chrome copy es/en. `analytics.ts`, `supabase.ts`: config pública.
 - `tweaks.ts`: valores fijos sin UI — `glassIntensity = 0.1`, `accentHue = 264`, `parallax = true`, `entryAnimations = true`.
+- Los **tokens de diseño** no viven en un `theme.ts`: se declaran como CSS variables y `@theme` en `/src/styles/globals.css`.
 
 ## Flujo de datos público
 
@@ -96,7 +97,7 @@ Admin (browser) ──▶ /admin/* (SSR Astro)
 
 ## Contratos clave
 
-- **HomeViewModel**: shape estable, definido en `/src/lib/domain/viewModels.ts`. Cualquier cambio en este shape requiere actualizar todas las secciones y la documentación.
+- **HomeViewModel**: shape estable, definido en `/src/lib/domain/types.ts`. Cualquier cambio en este shape requiere actualizar todas las secciones y la documentación.
 - **Repos**: cada método es async, devuelve `Promise<DomainType>` o `Promise<DomainType[]>`. Errores se propagan; no se silencian.
 - **Cliente Supabase**: solo se instancia en server. Nunca llega al bundle de cliente.
 

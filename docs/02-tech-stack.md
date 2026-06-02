@@ -7,7 +7,7 @@ Versiones objetivo (las pinearemos en `package.json`). Cualquier upgrade mayor r
 | Paquete | Versión objetivo | Por qué |
 |---|---|---|
 | `astro` | `^5.x` (latest stable) | View transitions nativas, content layer, server islands, mejor adapter Cloudflare. |
-| `@astrojs/cloudflare` | `^11.x` | Adapter oficial para Cloudflare Pages/Workers. |
+| `@astrojs/cloudflare` | `^12.x` | Adapter oficial para Cloudflare Pages/Workers. |
 | `typescript` | `^5.x` strict | Type safety, sin `any` sin justificar. |
 | `node` (local dev) | `>=22.0` (LTS activo, `.nvmrc=22`) | Requisito de Astro 5 + Cloudflare Workers compat. |
 
@@ -40,11 +40,11 @@ Versiones objetivo (las pinearemos en `package.json`). Cualquier upgrade mayor r
 
 | Familia | Pesos | Origen | Carpeta |
 |---|---|---|---|
-| Satoshi | 400, 500, 700, 900 | Fontshare (descarga manual, licencia comercial gratuita) | `/public/fonts/satoshi/` |
-| General Sans | 400, 500, 600, 700 | Fontshare | `/public/fonts/general-sans/` |
-| JetBrains Mono | 400, 500 | Google Fonts (OFL) | `/public/fonts/jetbrains-mono/` |
+| Satoshi | 400, 500, 700, 900 | Fontshare (subset Latin, licencia ITF gratuita) | `/public/fonts/satoshi/` |
+| General Sans | 400, 500, 600, 700 | Fontshare (subset Latin) | `/public/fonts/general-sans/` |
+| JetBrains Mono | variable | `@fontsource-variable/jetbrains-mono` (npm, OFL) | importada en `fonts.css` |
 
-Cargadas con `@font-face` desde `/src/styles/fonts.css`, con `font-display: swap` y `preload` solo para Satoshi 700 y General Sans 400 (las que aparecen above-the-fold).
+Satoshi y General Sans se cargan con `@font-face` desde `/src/styles/fonts.css`, con `font-display: swap` y `preload` (en `BaseLayout.astro`) solo para **Satoshi 900** (H1, candidata a LCP) y **General Sans 400** (cuerpo). JetBrains Mono se importa como fuente variable vía el paquete fontsource, no desde `public/`.
 
 ## OG image dinámica
 
@@ -53,7 +53,7 @@ Cargadas con `@font-face` desde `/src/styles/fonts.css`, con `font-display: swap
 | `satori` | `^0.26.x` | Render JSX-like → SVG. Compatible con Workers. |
 | `@resvg/resvg-wasm` | `^2.6.x` | SVG → PNG vía WASM. Compatible con Cloudflare Workers. |
 
-Endpoint en `src/pages/og/[locale].png.ts` con `prerender = true` → genera `/og/es.png` y `/og/en.png` en build (sin coste runtime). Fuente Inter cargada desde Google Fonts en build time.
+Endpoint en `src/pages/og/[locale].png.ts` con `prerender = true` → genera `/og/es.png` y `/og/en.png` en build (sin coste runtime; `/og/*` queda excluido del worker en `_routes.json`). La fuente Inter está **self-hosteada** en `src/assets/og/inter-latin-500.ttf` y se lee del disco con `node:fs` en build (sin red, sin CDN).
 
 ## Analytics
 

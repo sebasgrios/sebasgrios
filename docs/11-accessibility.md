@@ -83,7 +83,7 @@ JS:
 
 Usar mínimo necesario. Lo nativo prima sobre ARIA. Casos justificados:
 
-- `aria-current="page"` en nav link activo.
+- `aria-current="true"` en el nav link de la sección visible (scrollspy con `IntersectionObserver` en `effects.client.ts`; se aplica a los enlaces desktop y mobile).
 - `aria-expanded` en burger.
 - `aria-controls` en burger apuntando a `nav-mobile`.
 - `aria-hidden="true"` en background blobs/noise y en iconos puramente decorativos dentro de botones que ya tienen label.

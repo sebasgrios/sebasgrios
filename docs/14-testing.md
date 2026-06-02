@@ -26,12 +26,13 @@ Configuración en `vitest.config.ts`. Carpetas `**/*.test.ts` colocadas junto al
 
 | Módulo | Test |
 |---|---|
-| `lib/domain/dates.ts` | `formatMonthYear`, `formatDateRange` con varios locales y casos endDate=null. |
-| `lib/domain/i18n.ts` | `pickLocale` con fallback, claves vacías, jsonb malformado. |
-| `lib/domain/stats.ts` | `computeYearsOfExperience` (frontera de año), `countUniqueSectors`. |
+| `lib/domain/dates.ts` | `formatMonthYear`, `formatDateRange`, `yearsBetween` con varios locales y casos endDate=null. |
+| `lib/domain/i18n.ts` | `pickLocale`/`pickLocaleArray` con fallback, claves vacías. |
+| `lib/domain/stats.ts` | `computeYearsOfExperience` (frontera de año), `countUniqueSectors`, `countProjects`. |
 | `lib/data/mappers.ts` | row snake_case → camelCase para cada entidad. |
-| `lib/data/companies.ts` (cuando exista) | `groupRolesByCompany` ordenado correctamente. |
-| `config/copy.ts` | Snapshot de claves para detectar drift entre `es` y `en`. |
+| `lib/i18n/getLocale.ts` | `getLocaleFromPath` (prefijo `/en/`, fallback). |
+
+Suite actual: **29 tests** en 5 ficheros (`*.test.ts` colocados junto al código).
 
 ### Patrón de test
 
@@ -58,7 +59,8 @@ Smoke tests en `/e2e/`:
 
 1. `public.spec.ts`: visita `/` y `/en/`, verifica que se renderizan secciones esperadas y links sociales presentes.
 2. `theme.spec.ts`: click theme toggle alterna `data-theme` y persiste tras reload.
-3. `responsive.spec.ts`: viewport 360px, 768px, 1280px → screenshots stable.
+
+(Pendiente: `responsive.spec.ts` con viewports 360/768/1280 → screenshots estables.)
 
 ### Futuros (cuando exista backoffice)
 

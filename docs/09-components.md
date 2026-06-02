@@ -2,6 +2,8 @@
 
 Catálogo. Todos son `.astro` salvo nota en contrario.
 
+> **Estado de implementación.** Las **secciones** (`Hero`, `Experience`, `Education`, `Stack`, `Projects`, `Contact`, `Footer`) son **un único fichero `.astro` cada una**, con su markup inline. No existen como ficheros separados los sub-componentes que antes se anticipaban aquí (`HeroBadge`, `HeroPhoto`, `StatCard`, `CompanyBlock`, `ProjectCard`, `StackCard`, `EducationCard`, `NavMobile`…): su HTML vive inline dentro de la sección. Los componentes reutilizables que **sí** existen como fichero son: `Glass`, `Button`, `IconButton`, `Tag`, `TechIcon`, `SectionHead`, `RoleCard`, `Nav`, `LocaleSwitch`, `ThemeToggle`, `BgField`, `BgNoise` y los iconos en `icons/`.
+
 ## Layouts
 
 ### `BaseLayout.astro`
@@ -12,18 +14,22 @@ Props:
   title: string;
   description: string;
   locale: Locale;
-  canonical: string;
+  canonical?: string;
   ogImage?: string;
+  ogImageAlt?: string;
+  personName?: string;   // habilita el nodo Person del JSON-LD
+  personRole?: string;
+  noindex?: boolean;     // robots noindex + omite hreflang/JSON-LD
 }
 ```
 
 Responsabilidades:
-- Renderiza `<html><head><body>`.
-- Inyecta anti-flash theme script (inline).
-- Carga `fonts.css` y `globals.css`.
-- Pinta `<BgField/>` y `<BgNoise/>`.
-- Pinta `<Nav/>` y `<Footer/>` (slot en medio).
-- Mete Cloudflare Web Analytics snippet en prod.
+- Renderiza `<html><head><body>` y todo el SEO del `<head>` (ver [08-routing-pages](./08-routing-pages.md)).
+- Inyecta anti-flash theme script (inline) y carga `globals.css` (que a su vez importa `fonts.css`).
+- Pinta `<BgField/>`, `<BgNoise/>`, el skip-link y `<main id="main">` con el `<slot/>`.
+- Carga `effects.client.ts` (reveal/parallax/specular) e inyecta el snippet de Cloudflare Web Analytics en prod.
+
+> El `Nav` y el `Footer` **no** los pinta el layout: cada **página** (`index.astro`, `en/index.astro`) los incluye explícitamente alrededor de las secciones.
 
 ## Background
 
@@ -184,7 +190,11 @@ Circular icon button, 40×40. Hover rotación -12deg + escala.
 
 ### `Tag.astro`
 
-JetBrains Mono pequeño, border hairline.
+JetBrains Mono pequeño (`tag-pill`), border hairline. Recibe `slug` para tomar el color de marca de la tecnología.
+
+### `TechIcon.astro`
+
+Logo SVG inline de una tecnología (registro en `/src/lib/icons/techIconRegistry.ts`, basado en `simple-icons`). Tooltip con el label (CSS, `::after`), accesible con `role="img"` + `aria-label` y `tabindex="0"`. Si no hay icono para el `slug`, cae a un `Tag` con el texto.
 
 ### `SectionHead.astro`
 
@@ -219,10 +229,13 @@ Cada uno acepta props `class`, `width`, `height` (default 24).
 
 ## JS cliente (mínimo)
 
-Solo 3 piezas JS reales en el sitio público:
+Piezas JS reales en el sitio público:
 
-1. **Anti-flash theme** (inline en `<head>`, < 1 KB).
-2. **Theme toggle + burger** (`/src/scripts/nav.client.ts`, cargado con `<script>` defer).
-3. **Reveal-on-scroll + parallax hero + specular** (`/src/scripts/effects.client.ts`, defer). Único `IntersectionObserver` global; respeta `prefers-reduced-motion`.
+1. **Anti-flash theme** — inline en `<head>` de `BaseLayout.astro`, < 1 KB.
+2. **Theme toggle** — `<script>` inline en `ThemeToggle.astro` (lee/escribe `localStorage('sgr-theme')`, escucha `matchMedia change`).
+3. **Burger nav** — `<script>` inline en `Nav.astro` (toggle `aria-expanded`/`data-open`, cierre con `Escape`).
+4. **Reveal-on-scroll + parallax hero + specular** — `/src/scripts/effects.client.ts`, cargado por `BaseLayout`. Único `IntersectionObserver` global; respeta `prefers-reduced-motion` y `hover/pointer`.
+
+No existe `nav.client.ts`: el JS de nav y theme vive inline en sus componentes. Todos los scripts se re-enganchan en `astro:after-swap`.
 
 Total JS objetivo: **< 5 KB** gzipped.
