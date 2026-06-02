@@ -1,6 +1,28 @@
-# 13 · Backoffice (futuro)
+# 13 · Backoffice
 
-Spec del backoffice privado. **No se implementa en v3 inicial**, pero el schema y las RLS de M4 ya lo soportan.
+Spec del backoffice privado. El schema y las RLS (M4) ya lo soportan, y la **Fase 1 (cimientos de auth) está implementada**.
+
+## Estado de implementación
+
+| Fase | Contenido | Estado |
+|---|---|---|
+| **F1 · Auth** | Cliente SSR (`@supabase/ssr`), middleware que protege `/admin/**`, login Google, callback/signout, dashboard shell. | ✅ implementado |
+| **F2 · CRUD** | Forms + endpoints por entidad (profile, companies/roles, education, stack, technologies, projects). | ⏳ pendiente |
+| **F3 · Media** | Uploader a Storage. | ⏳ pendiente |
+| **F4 · Publish** | Botón → Cloudflare deploy hook. | ⏳ pendiente |
+
+Archivos F1: `src/lib/auth/{supabaseServer,session}.ts`, `src/middleware.ts`, `src/pages/admin/{login,index}.astro`, `src/pages/api/auth/{signin,callback,signout}.ts`.
+
+**Decisión de auth**: las mutaciones usarán el **JWT del usuario autenticado** (cookie SSR, anon key) y la RLS `is_admin()` las autoriza. **No se usa el service-role key** en el worker (más seguro). Por eso no hay secreto de Supabase en el hot path de admin.
+
+### Setup externo requerido (manual del ingeniero) `[PENDIENTE]`
+
+Antes de poder iniciar sesión:
+1. **Google Cloud Console**: crear credenciales OAuth 2.0 (Web). Authorized redirect URI → `https://<ref>.supabase.co/auth/v1/callback`.
+2. **Supabase dashboard** (proyecto linked): Authentication → Providers → Google → habilitar + pegar Client ID/Secret.
+3. **Supabase dashboard** → Authentication → URL Configuration → añadir a *Redirect URLs*: `https://sebasgrios.es/api/auth/callback` y `http://localhost:4321/api/auth/callback`.
+4. **Bootstrap del primer admin** (ver más abajo).
+5. (Local) exportar `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID` y `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET` si se usa `supabase start`.
 
 ## Goal
 

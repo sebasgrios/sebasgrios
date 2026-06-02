@@ -35,10 +35,14 @@ Estos **sí** son secretos y solo se usarán cuando exista `/admin` (SSR, no pre
 
 | Variable | Dónde | Uso |
 |---|---|---|
-| `SUPABASE_SERVICE_ROLE_KEY` | Cloudflare Pages (Secret) + `.env.local` | Mutaciones server-side del backoffice. |
-| `SESSION_SECRET` | Cloudflare Pages (Secret) + `.env.local` | Cookies de sesión admin (32+ bytes aleatorios). |
+| `SUPABASE_SERVICE_ROLE_KEY` | Cloudflare Pages (Secret) + `.env.local` | Reservado. El backoffice **no** lo usa (mutaciones vía JWT del admin + RLS). |
+| `SESSION_SECRET` | Cloudflare Pages (Secret) + `.env.local` | Reservado para cookies admin propias (32+ bytes aleatorios). |
 
 Declarados (opcionales) en `src/env.d.ts`. En el dashboard pueden coexistir las `PUBLIC_*` antiguas sin efecto (el código no las lee); pueden borrarse.
+
+### Google OAuth (backoffice)
+
+El provider Google **no** se configura por variables de Cloudflare ni en el repo: vive en el **dashboard de Supabase** (Authentication → Providers → Google) del proyecto linked, y las *Redirect URLs* incluyen `https://sebasgrios.es/api/auth/callback`. Para `supabase start` local, `supabase/config.toml` lee `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID` y `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET` del entorno. Pasos completos en [13-backoffice](./13-backoffice.md).
 
 ## Cloudflare Pages config
 

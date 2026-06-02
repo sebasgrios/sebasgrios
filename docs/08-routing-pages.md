@@ -93,14 +93,16 @@ Endpoint `/og/[locale].png.ts` genera con Satori y devuelve `image/png`:
 | `/` `/en/` | 200 | indexables. |
 | ruta inexistente | 404 | `404.astro` bilingüe (detecta locale por prefijo). `noindex`. |
 | `/dev/design` | 404 en prod / 200 en dev | showcase interno. `noindex`. |
+| `/admin/login` | 200 | login Google (SSR, `noindex`). |
 | `/admin/**` sin sesión | 302 → `/admin/login` | Server middleware. |
-| `/admin/**` con sesión sin rol | 401 | `401.astro` con CTA `Volver al portfolio`. |
+| `/admin/**` con sesión sin rol admin | 302 → `/401` | `401.astro` con CTA `Volver al portfolio`. |
+| `/api/auth/{signin,callback,signout}` | 302 | flujo OAuth (PKCE) con `@supabase/ssr`. |
 
 ## Middleware
 
 `/src/middleware.ts`:
-- Para `/admin/**`, valida cookie Supabase. Si no, redirige a login.
-- Para todas las páginas, fija `Astro.locals.locale` para que `getLocale` no tenga que parsear URL en cada helper.
+- Para todas las páginas, fija `Astro.locals.locale`.
+- Para `/admin/**` (excepto `/admin/login`): crea el cliente SSR (`createSupabaseServerClient`), valida el usuario con `supabase.auth.getUser()`. Sin sesión → `redirect('/admin/login')`. Con sesión, comprueba `is_admin()` (RPC con RLS); si no es admin → `redirect('/401')`. Expone `Astro.locals.user` e `Astro.locals.isAdmin`.
 
 ## Headers de seguridad
 
