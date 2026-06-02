@@ -22,7 +22,7 @@
 
 Configuración en `vitest.config.ts`. Carpetas `**/*.test.ts` colocadas junto al código.
 
-### Qué se testea (M1–M7)
+### Qué se testea
 
 | Módulo | Test |
 |---|---|
@@ -31,8 +31,10 @@ Configuración en `vitest.config.ts`. Carpetas `**/*.test.ts` colocadas junto al
 | `lib/domain/stats.ts` | `computeYearsOfExperience` (frontera de año), `countUniqueSectors`, `countProjects`. |
 | `lib/data/mappers.ts` | row snake_case → camelCase para cada entidad. |
 | `lib/i18n/getLocale.ts` | `getLocaleFromPath` (prefijo `/en/`, fallback). |
+| `lib/admin/forms.ts` | parseo de `FormData` (localized, bool, listas indexadas). |
+| `lib/admin/schemas.ts` | validación Zod de cada entidad (profile, technology, stack, education, company, role, project): locales requeridos, fechas, URLs vacías→null, enums, uuids, coerción de orden. |
 
-Suite actual: **29 tests** en 5 ficheros (`*.test.ts` colocados junto al código).
+Suite actual: **57 tests** en 7 ficheros (`*.test.ts` colocados junto al código).
 
 ### Patrón de test
 

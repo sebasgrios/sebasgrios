@@ -22,9 +22,12 @@ Reconstruir el portfolio personal del ingeniero (Sebastián González Ríos) en 
 - Tests unitarios con Vitest. Playwright instalado pero suite mínima hasta backoffice.
 - Documentación completa en `/docs` + `AGENTS.md`.
 
+## Backoffice (implementado tras M7)
+
+El backoffice (`/admin`, CRUD, Google OAuth, RLS, Storage, publish) está **implementado end-to-end** (ver [13-backoffice](./13-backoffice.md)). Queda como setup manual del ingeniero: provider Google en Supabase, primer admin en `user_roles`, y el secreto `CF_DEPLOY_HOOK_URL` en Cloudflare.
+
 ## Out-of-scope v3 (se hace después)
 
-- Implementación del backoffice (`/admin`, CRUD, OAuth). Solo se deja la base de schema, RLS y página `401`.
 - Blog / artículos.
 - Formulario de contacto (se mantiene `mailto:` + enlaces sociales).
 - Newsletter / RSS.

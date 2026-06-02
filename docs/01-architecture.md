@@ -20,7 +20,7 @@
                      │              Supabase                   │
                      │  · Postgres (data)                      │
                      │  · Storage (images/logos)               │
-                     │  · Auth (Google OAuth, futuro)          │
+                     │  · Auth (Google OAuth, admin)           │
                      │  · RLS habilitado en todas las tablas   │
                      └────────────────────────────────────────┘
 ```
@@ -29,7 +29,7 @@
 
 - **Astro 5** con `output: 'server'` y `prerender: true` por defecto en páginas públicas.
 - **Adapter Cloudflare** (`@astrojs/cloudflare`). Workers Runtime, no Node. Esto restringe librerías a las que funcionan en `workerd`.
-- **Prerender**: las páginas públicas (`/`, `/en/`) se generan en build leyendo Supabase. Cuando los datos cambien (vía webhook desde el backoffice futuro), se dispara un redeploy.
+- **Prerender**: las páginas públicas (`/`, `/en/`) se generan en build leyendo Supabase. Cuando los datos cambien, el botón **Publicar** (`/admin/publish`) dispara el deploy hook de Cloudflare y se reconstruye.
 - **SSR puntual**: `/admin/**` y endpoints de mutación.
 - **Imágenes**: servidas desde Supabase Storage con transformación CDN (`?width=…&format=webp`). El componente `<Image>` de Astro envuelve la URL remota.
 
@@ -56,9 +56,8 @@
 
 ### Server (`/src/pages/api`, `/src/pages/og`)
 
-- Endpoints de mutación (backoffice, futuro).
+- Endpoints de mutación del backoffice: `POST /api/<entity>` (despacha create/update/delete por `_action`), `POST /api/media` (multipart), `POST /api/publish` (deploy hook), `POST /api/auth/*` (OAuth). Todos validan `is_admin` (middleware) + RLS.
 - Generación de OG images con `satori` (JSX→SVG) + `@resvg/resvg-wasm` (SVG→PNG), compatible con Cloudflare Workers. Prerender en build.
-- Webhook receiver para invalidación de cache (futuro).
 
 ### Configuración (`/src/config`)
 
@@ -81,7 +80,7 @@ build ─▶ profileRepo.get()        ─┐
 - Una única función `loadHomeData(locale)` en `/src/lib/data/loaders.ts` orquesta todas las llamadas en paralelo y devuelve un `HomeViewModel`.
 - Cada sección Astro recibe **solo su slice** del view model como prop.
 
-## Flujo de datos del backoffice (futuro, ver [13-backoffice](./13-backoffice.md))
+## Flujo de datos del backoffice (ver [13-backoffice](./13-backoffice.md))
 
 ```
 Admin (browser) ──▶ /admin/* (SSR Astro)

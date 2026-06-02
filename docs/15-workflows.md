@@ -131,13 +131,11 @@ Claude lo orquesta usando la **Supabase CLI local del ingeniero**:
 4. Reemplazar URLs en `/supabase/seed.sql`.
 5. `supabase db reset` para resembrar.
 
-## Añadir un nuevo rol/experiencia (sin backoffice aún)
+## Añadir/editar contenido (rol, proyecto, etc.)
 
-1. Editar `/supabase/seed.sql` añadiendo `insert into roles` + pivots.
-2. `supabase db reset`.
-3. `npm run build` y commit.
+Vía el **backoffice**: entra en `/admin`, abre la categoría (p. ej. Empresas y roles), edita en el acordeón y guarda. Luego pulsa **Publicar** (`/admin/publish`) para reconstruir el sitio prerenderizado.
 
-(Con backoffice, esto será un form en `/admin/roles/new`.)
+Para sembrar contenido inicial sin backoffice (bootstrap), aún se puede editar `/supabase/seed.sql` + `supabase db reset`.
 
 ## Cambiar el accent del portfolio
 

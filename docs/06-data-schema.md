@@ -183,7 +183,7 @@ create table project_technologies (
 );
 ```
 
-## Roles (backoffice futuro)
+## Roles (autorización admin)
 
 ```sql
 create table user_roles (

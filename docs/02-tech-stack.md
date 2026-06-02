@@ -24,7 +24,7 @@ Versiones objetivo (las pinearemos en `package.json`). Cualquier upgrade mayor r
 | Paquete | Versión | Notas |
 |---|---|---|
 | `@supabase/supabase-js` | `^2.x` | Cliente oficial. Server-only. |
-| `@supabase/ssr` | `^0.5.x` | Helpers de SSR cookie-based para el backoffice futuro. |
+| `@supabase/ssr` | `^0.5.x` | Cliente SSR cookie-based del backoffice (auth admin, mutaciones, Storage). |
 | Supabase CLI | `>=1.200` | Migraciones, tipos. Instalada vía Homebrew, no en `devDependencies`. |
 
 ## Tooling
@@ -73,7 +73,7 @@ Endpoint en `src/pages/og/[locale].png.ts` con `prerender = true` → genera `/o
 |---|---|
 | Astro 4 → 5 | View transitions + server islands + adapter Cloudflare estable. |
 | Tailwind 3 → 4 | Configuración por CSS, mejor DX, `@theme` y `@utility`. |
-| Datos `.ts` estáticos → Supabase | Backoffice futuro, i18n con jsonb, edición sin redeploys manuales. |
+| Datos `.ts` estáticos → Supabase | Backoffice, i18n con jsonb, edición sin tocar código. |
 | Sin lint → Biome | Garantizar consistencia entre sesiones (agentes, humano). |
 | Adapter Vercel/none → Cloudflare | El sitio ya vive en Cloudflare y los proyectos personales también. |
 
