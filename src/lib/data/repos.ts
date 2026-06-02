@@ -53,6 +53,16 @@ export async function fetchProfile(): Promise<Profile> {
   return mapProfile(assertOk(res, 'profile'));
 }
 
+export async function fetchTechnologiesAdmin(): Promise<(Technology & { sortOrder: number })[]> {
+  const client = getServerClient();
+  const res = await client
+    .from('technologies')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  const rows = assertOk(res, 'technologies');
+  return rows.map((row) => ({ ...mapTechnology(row), sortOrder: row.sort_order }));
+}
+
 export async function fetchTechnologyDictionary(): Promise<Map<string, Technology>> {
   const client = getServerClient();
   const res = await client.from('technologies').select('*');

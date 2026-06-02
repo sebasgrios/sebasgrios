@@ -32,3 +32,19 @@ export const profileInputSchema = z.object({
 });
 
 export type ProfileInput = z.infer<typeof profileInputSchema>;
+
+const emptyToNull = (value: unknown) =>
+  typeof value === 'string' && value.trim() === '' ? null : value;
+
+export const technologyInputSchema = z.object({
+  key: z
+    .string()
+    .trim()
+    .min(1)
+    .regex(/^[a-z0-9.+-]+$/, 'minúsculas, números, puntos o guiones'),
+  label: z.string().trim().min(1),
+  iconKey: z.preprocess(emptyToNull, z.string().trim().nullable()),
+  sortOrder: z.coerce.number().int().min(0),
+});
+
+export type TechnologyInput = z.infer<typeof technologyInputSchema>;

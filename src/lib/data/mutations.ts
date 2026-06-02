@@ -1,5 +1,36 @@
-import type { ProfileInput } from '@/lib/admin/schemas';
+import type { ProfileInput, TechnologyInput } from '@/lib/admin/schemas';
 import type { SupabaseServerClient } from '@/lib/auth/supabaseServer';
+
+function technologyRow(input: TechnologyInput) {
+  return {
+    key: input.key,
+    label: input.label,
+    icon_key: input.iconKey,
+    sort_order: input.sortOrder,
+  };
+}
+
+export async function createTechnology(
+  client: SupabaseServerClient,
+  input: TechnologyInput
+): Promise<void> {
+  const { error } = await client.from('technologies').insert(technologyRow(input));
+  if (error) throw new Error(`technology create failed: ${error.message}`);
+}
+
+export async function updateTechnology(
+  client: SupabaseServerClient,
+  id: string,
+  input: TechnologyInput
+): Promise<void> {
+  const { error } = await client.from('technologies').update(technologyRow(input)).eq('id', id);
+  if (error) throw new Error(`technology update failed: ${error.message}`);
+}
+
+export async function deleteTechnology(client: SupabaseServerClient, id: string): Promise<void> {
+  const { error } = await client.from('technologies').delete().eq('id', id);
+  if (error) throw new Error(`technology delete failed: ${error.message}`);
+}
 
 export async function updateProfile(
   client: SupabaseServerClient,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { profileInputSchema } from './schemas';
+import { profileInputSchema, technologyInputSchema } from './schemas';
 
 const valid = {
   fullName: 'Sebastián González Ríos',
@@ -49,5 +49,30 @@ describe('profileInputSchema', () => {
 
   it('rejects a non-url photo', () => {
     expect(profileInputSchema.safeParse({ ...valid, photoUrl: 'not-a-url' }).success).toBe(false);
+  });
+});
+
+describe('technologyInputSchema', () => {
+  const tech = { key: 'typescript', label: 'TypeScript', iconKey: '', sortOrder: '3' };
+
+  it('accepts a valid technology, coerces order and empty icon to null', () => {
+    const result = technologyInputSchema.safeParse(tech);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.sortOrder).toBe(3);
+      expect(result.data.iconKey).toBeNull();
+    }
+  });
+
+  it('rejects a key with uppercase or spaces', () => {
+    expect(technologyInputSchema.safeParse({ ...tech, key: 'Type Script' }).success).toBe(false);
+  });
+
+  it('rejects an empty label', () => {
+    expect(technologyInputSchema.safeParse({ ...tech, label: '  ' }).success).toBe(false);
+  });
+
+  it('rejects a non-integer order', () => {
+    expect(technologyInputSchema.safeParse({ ...tech, sortOrder: 'abc' }).success).toBe(false);
   });
 });

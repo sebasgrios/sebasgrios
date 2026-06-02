@@ -74,6 +74,12 @@ const flash = takeFlash(Astro.cookies);
         true
       );
     }
+
+    for (const form of document.querySelectorAll<HTMLFormElement>('form[data-confirm]')) {
+      form.addEventListener('submit', (event) => {
+        if (!window.confirm(form.dataset.confirm ?? '¿Seguro?')) event.preventDefault();
+      });
+    }
   }
 
   initAdmin();
