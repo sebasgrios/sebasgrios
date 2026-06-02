@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { profileInputSchema, technologyInputSchema } from './schemas';
+import { profileInputSchema, stackGroupInputSchema, technologyInputSchema } from './schemas';
 
 const valid = {
   fullName: 'Sebastián González Ríos',
@@ -74,5 +74,34 @@ describe('technologyInputSchema', () => {
 
   it('rejects a non-integer order', () => {
     expect(technologyInputSchema.safeParse({ ...tech, sortOrder: 'abc' }).success).toBe(false);
+  });
+});
+
+describe('stackGroupInputSchema', () => {
+  const group = {
+    label: { es: 'Frontend', en: 'Frontend' },
+    iconKey: 'code',
+    sortOrder: '2',
+    technologyIds: ['11111111-1111-1111-1111-111111111111'],
+  };
+
+  it('accepts a valid group', () => {
+    const result = stackGroupInputSchema.safeParse(group);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.technologyIds).toHaveLength(1);
+  });
+
+  it('rejects an unknown icon key', () => {
+    expect(stackGroupInputSchema.safeParse({ ...group, iconKey: 'rocket' }).success).toBe(false);
+  });
+
+  it('rejects a non-uuid technology id', () => {
+    expect(stackGroupInputSchema.safeParse({ ...group, technologyIds: ['nope'] }).success).toBe(
+      false
+    );
+  });
+
+  it('accepts an empty technology selection', () => {
+    expect(stackGroupInputSchema.safeParse({ ...group, technologyIds: [] }).success).toBe(true);
   });
 });

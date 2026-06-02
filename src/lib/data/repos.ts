@@ -1,3 +1,4 @@
+import type { Localized } from '@/config/i18n';
 import { getServerClient } from '@/lib/data/client';
 import {
   mapCompany,
@@ -61,6 +62,42 @@ export async function fetchTechnologiesAdmin(): Promise<(Technology & { sortOrde
     .order('sort_order', { ascending: true });
   const rows = assertOk(res, 'technologies');
   return rows.map((row) => ({ ...mapTechnology(row), sortOrder: row.sort_order }));
+}
+
+export interface StackGroupAdmin {
+  id: string;
+  label: Localized<string>;
+  iconKey: string;
+  sortOrder: number;
+  technologyIds: string[];
+}
+
+export async function fetchStackGroupsAdmin(): Promise<StackGroupAdmin[]> {
+  const client = getServerClient();
+  const [groupsRes, pivotRes] = await Promise.all([
+    client.from('stack_groups').select('*').order('sort_order', { ascending: false }),
+    client.from('stack_group_technologies').select('*').order('sort_order', { ascending: true }),
+  ]);
+  const groups = assertOk(groupsRes, 'stack_groups');
+  const pivots = assertOk(pivotRes, 'stack_group_technologies');
+
+  const techByGroup = new Map<string, string[]>();
+  for (const pivot of pivots) {
+    const list = techByGroup.get(pivot.stack_group_id) ?? [];
+    list.push(pivot.technology_id);
+    techByGroup.set(pivot.stack_group_id, list);
+  }
+
+  return groups.map((row) => {
+    const group = mapStackGroup(row, []);
+    return {
+      id: group.id,
+      label: group.label,
+      iconKey: group.iconKey,
+      sortOrder: row.sort_order,
+      technologyIds: techByGroup.get(row.id) ?? [],
+    };
+  });
 }
 
 export async function fetchTechnologyDictionary(): Promise<Map<string, Technology>> {

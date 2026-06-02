@@ -1,4 +1,4 @@
-import type { ProfileInput, TechnologyInput } from '@/lib/admin/schemas';
+import type { ProfileInput, StackGroupInput, TechnologyInput } from '@/lib/admin/schemas';
 import type { SupabaseServerClient } from '@/lib/auth/supabaseServer';
 
 function technologyRow(input: TechnologyInput) {
@@ -30,6 +30,58 @@ export async function updateTechnology(
 export async function deleteTechnology(client: SupabaseServerClient, id: string): Promise<void> {
   const { error } = await client.from('technologies').delete().eq('id', id);
   if (error) throw new Error(`technology delete failed: ${error.message}`);
+}
+
+async function syncStackGroupTechnologies(
+  client: SupabaseServerClient,
+  groupId: string,
+  technologyIds: string[]
+): Promise<void> {
+  const { error: deleteError } = await client
+    .from('stack_group_technologies')
+    .delete()
+    .eq('stack_group_id', groupId);
+  if (deleteError) throw new Error(`stack technologies clear failed: ${deleteError.message}`);
+
+  if (technologyIds.length === 0) return;
+  const rows = technologyIds.map((technology_id, index) => ({
+    stack_group_id: groupId,
+    technology_id,
+    sort_order: index,
+  }));
+  const { error: insertError } = await client.from('stack_group_technologies').insert(rows);
+  if (insertError) throw new Error(`stack technologies set failed: ${insertError.message}`);
+}
+
+export async function createStackGroup(
+  client: SupabaseServerClient,
+  input: StackGroupInput
+): Promise<void> {
+  const { data, error } = await client
+    .from('stack_groups')
+    .insert({ label: input.label, icon_key: input.iconKey, sort_order: input.sortOrder })
+    .select('id')
+    .single();
+  if (error || !data) throw new Error(`stack group create failed: ${error?.message ?? 'no row'}`);
+  await syncStackGroupTechnologies(client, data.id, input.technologyIds);
+}
+
+export async function updateStackGroup(
+  client: SupabaseServerClient,
+  id: string,
+  input: StackGroupInput
+): Promise<void> {
+  const { error } = await client
+    .from('stack_groups')
+    .update({ label: input.label, icon_key: input.iconKey, sort_order: input.sortOrder })
+    .eq('id', id);
+  if (error) throw new Error(`stack group update failed: ${error.message}`);
+  await syncStackGroupTechnologies(client, id, input.technologyIds);
+}
+
+export async function deleteStackGroup(client: SupabaseServerClient, id: string): Promise<void> {
+  const { error } = await client.from('stack_groups').delete().eq('id', id);
+  if (error) throw new Error(`stack group delete failed: ${error.message}`);
 }
 
 export async function updateProfile(

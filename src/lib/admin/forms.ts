@@ -25,3 +25,7 @@ export function readLocalizedList(
   }
   return out;
 }
+
+export function readStringList(form: FormData, key: string): string[] {
+  return form.getAll(key).filter((value): value is string => typeof value === 'string');
+}

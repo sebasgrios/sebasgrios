@@ -1,0 +1,26 @@
+---
+interface Props {
+  label: string;
+  name: string;
+  value?: string;
+  options: { value: string; label: string }[];
+  required?: boolean;
+}
+
+const { label, name, value = '', options, required = false } = Astro.props;
+const control =
+  'w-full rounded-xl border border-border bg-[color-mix(in_oklab,var(--bg-2)_70%,transparent)] px-3.5 py-2.5 text-text text-[0.95rem] outline-none transition-[border-color] duration-200 focus-visible:border-accent';
+---
+
+<label class="block">
+  <span class="block text-[0.8rem] font-medium text-text-soft mb-1.5">{label}</span>
+  <select name={name} required={required} class={control}>
+    {
+      options.map((option) => (
+        <option value={option.value} selected={option.value === value}>
+          {option.label}
+        </option>
+      ))
+    }
+  </select>
+</label>

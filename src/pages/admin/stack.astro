@@ -1,0 +1,74 @@
+---
+import AdminAccordion from '@/components/admin/AdminAccordion.astro';
+import AdminField from '@/components/admin/AdminField.astro';
+import AdminLocalized from '@/components/admin/AdminLocalized.astro';
+import AdminSelect from '@/components/admin/AdminSelect.astro';
+import AdminTechPicker from '@/components/admin/AdminTechPicker.astro';
+import Button from '@/components/Button.astro';
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { STACK_ICON_KEYS } from '@/lib/admin/schemas';
+import { fetchStackGroupsAdmin, fetchTechnologiesAdmin } from '@/lib/data/repos';
+
+export const prerender = false;
+
+const [groups, technologies] = await Promise.all([
+  fetchStackGroupsAdmin(),
+  fetchTechnologiesAdmin(),
+]);
+const iconOptions = STACK_ICON_KEYS.map((key) => ({ value: key, label: key }));
+const nextSort = groups.reduce((max, group) => Math.max(max, group.sortOrder), -1) + 1;
+---
+
+<AdminLayout title="Stack">
+  <div class="flex flex-col gap-3">
+    <AdminAccordion title="Nuevo grupo" id="new">
+      <form method="post" action="/api/stack" class="flex flex-col gap-4">
+        <input type="hidden" name="_action" value="create" />
+        <AdminLocalized label="Etiqueta" name="label" />
+        <div class="grid gap-3 sm:grid-cols-2">
+          <AdminSelect label="Icono" name="iconKey" options={iconOptions} value="layers" required />
+          <AdminField label="Orden" name="sortOrder" type="number" value={String(nextSort)} />
+        </div>
+        <AdminTechPicker technologies={technologies} selected={[]} />
+        <div class="flex justify-end">
+          <Button type="submit">Añadir</Button>
+        </div>
+      </form>
+    </AdminAccordion>
+
+    {
+      groups.map((group) => (
+        <AdminAccordion title={group.label.es || group.label.en} id={group.id}>
+          <form method="post" action="/api/stack" class="flex flex-col gap-4">
+            <input type="hidden" name="_action" value="update" />
+            <input type="hidden" name="id" value={group.id} />
+            <AdminLocalized label="Etiqueta" name="label" es={group.label.es} en={group.label.en} />
+            <div class="grid gap-3 sm:grid-cols-2">
+              <AdminSelect label="Icono" name="iconKey" options={iconOptions} value={group.iconKey} required />
+              <AdminField label="Orden" name="sortOrder" type="number" value={String(group.sortOrder)} />
+            </div>
+            <AdminTechPicker technologies={technologies} selected={group.technologyIds} />
+            <div class="flex justify-end">
+              <Button type="submit">Guardar</Button>
+            </div>
+          </form>
+          <form
+            method="post"
+            action="/api/stack"
+            class="flex justify-end"
+            data-confirm={`¿Eliminar el grupo "${group.label.es || group.label.en}"?`}
+          >
+            <input type="hidden" name="_action" value="delete" />
+            <input type="hidden" name="id" value={group.id} />
+            <button
+              type="submit"
+              class="text-[oklch(0.62_0.22_25)] text-[0.85rem] font-medium hover:underline cursor-pointer"
+            >
+              Eliminar
+            </button>
+          </form>
+        </AdminAccordion>
+      ))
+    }
+  </div>
+</AdminLayout>

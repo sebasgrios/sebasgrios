@@ -48,3 +48,14 @@ export const technologyInputSchema = z.object({
 });
 
 export type TechnologyInput = z.infer<typeof technologyInputSchema>;
+
+export const STACK_ICON_KEYS = ['code', 'mobile', 'git', 'spark', 'chart', 'layers'] as const;
+
+export const stackGroupInputSchema = z.object({
+  label: requiredLocalized,
+  iconKey: z.enum(STACK_ICON_KEYS),
+  sortOrder: z.coerce.number().int().min(0),
+  technologyIds: z.array(z.string().uuid()),
+});
+
+export type StackGroupInput = z.infer<typeof stackGroupInputSchema>;
