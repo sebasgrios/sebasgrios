@@ -277,13 +277,14 @@
 }
 
 @utility btn-ghost {
-  background: var(--glass-bg);
+  background: color-mix(in oklab, var(--text) 5%, transparent);
   color: var(--text);
-  border-color: var(--glass-border);
+  border-color: var(--border);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   &:hover {
     transform: translateY(-3px);
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
     border-color: var(--accent);
     color: var(--accent);
   }

@@ -1,4 +1,5 @@
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 function initReveal() {
   const targets = document.querySelectorAll('.reveal:not(.in)');
@@ -21,7 +22,7 @@ function initReveal() {
 }
 
 function initGlassSpecular() {
-  if (REDUCED_MOTION) return;
+  if (REDUCED_MOTION || !FINE_POINTER) return;
   document.addEventListener('mousemove', (e) => {
     const target = (e.target as Element | null)?.closest<HTMLElement>('.glass.interactive');
     if (!target) return;
@@ -32,7 +33,7 @@ function initGlassSpecular() {
 }
 
 function initParallax() {
-  if (REDUCED_MOTION) return;
+  if (REDUCED_MOTION || !FINE_POINTER) return;
   const targets = document.querySelectorAll<HTMLElement>('[data-parallax]');
   if (targets.length === 0) return;
   let raf = 0;
