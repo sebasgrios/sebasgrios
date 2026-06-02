@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { isLocale } from '@/config/i18n';
 import { fetchProfile } from '@/lib/data/repos';
 import { pickLocale } from '@/lib/domain/i18n';
@@ -7,6 +9,7 @@ import type { APIRoute } from 'astro';
 import satori from 'satori';
 
 let wasmInitialized = false;
+let fontData: Buffer | null = null;
 
 async function ensureWasm() {
   if (wasmInitialized) return;
@@ -14,12 +17,10 @@ async function ensureWasm() {
   wasmInitialized = true;
 }
 
-async function loadFont(): Promise<ArrayBuffer> {
-  const res = await fetch(
-    'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50ojIw2boKoduKmMEVuLyfMZg.ttf'
-  );
-  if (!res.ok) throw new Error(`failed to load OG font: ${res.status}`);
-  return await res.arrayBuffer();
+async function loadFont(): Promise<Buffer> {
+  if (fontData) return fontData;
+  fontData = await readFile(join(process.cwd(), 'src/assets/og/inter-latin-500.ttf'));
+  return fontData;
 }
 
 export const prerender = true;
@@ -31,9 +32,9 @@ export const GET: APIRoute = async ({ params }) => {
   const locale = params.locale;
   const profile = await fetchProfile();
   const role = pickLocale(profile.role, locale);
-  const subline = locale === 'es' ? 'Portfolio' : 'Portfolio';
+  const subline = 'Portfolio';
 
-  const fontData = await loadFont();
+  const font = await loadFont();
   await ensureWasm();
 
   const svg = await satori(
@@ -120,7 +121,7 @@ export const GET: APIRoute = async ({ params }) => {
     {
       width: 1200,
       height: 630,
-      fonts: [{ name: 'Inter', data: fontData, weight: 500, style: 'normal' }],
+      fonts: [{ name: 'Inter', data: font, weight: 500, style: 'normal' }],
     }
   );
 

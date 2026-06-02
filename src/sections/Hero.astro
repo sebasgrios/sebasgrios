@@ -28,7 +28,7 @@ const floatBadges = pickLocaleArray(profile.heroBadges, locale);
 const nameParts = profile.fullName.split(' ');
 const firstName = nameParts[0] ?? profile.fullName;
 const lastName = nameParts.slice(1).join(' ');
-const sectorsLabel = `${stats.sectorsCount === 1 ? '1' : stats.sectorsCount} ${copy.hero.statSectors}`;
+const sectorsLabel = `${stats.sectorsCount} ${copy.hero.statSectors}`;
 ---
 
 <header
