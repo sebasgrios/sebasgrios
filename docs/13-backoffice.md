@@ -1,19 +1,23 @@
 # 13 · Backoffice
 
-Spec del backoffice privado. El schema y las RLS (M4) ya lo soportan, y la **Fase 1 (cimientos de auth) está implementada**.
+Spec del backoffice privado. El schema y las RLS (M4) lo soportan, y el backoffice está **implementado end-to-end** (F1–F4).
 
 ## Estado de implementación
 
 | Fase | Contenido | Estado |
 |---|---|---|
-| **F1 · Auth** | Cliente SSR (`@supabase/ssr`), middleware que protege `/admin/**` y `/api/**` (salvo `/api/auth/`), login Google, callback/signout, dashboard shell. | ✅ implementado |
-| **F2 · CRUD** | Forms + endpoints por entidad, validación Zod, mutación vía cliente autenticado + RLS. **Profile** hecho como patrón de referencia; faltan companies/roles, education, stack, technologies, projects. | 🟡 en curso |
-| **F3 · Media** | Uploader a Storage. | ⏳ pendiente |
-| **F4 · Publish** | Botón → Cloudflare deploy hook. | ⏳ pendiente |
+| **F1 · Auth** | Cliente SSR (`@supabase/ssr`), middleware que protege `/admin/**` y `/api/**` (salvo `/api/auth/`), login Google, callback/signout, dashboard. | ✅ |
+| **F2 · CRUD** | Profile, technologies, stack groups, education, companies/roles (anidado), projects. Forms con acordeones, validación Zod, mutación vía cliente autenticado + RLS, pivots M:N de tecnologías. | ✅ |
+| **F3 · Media** | Gestor de Storage (`/admin/media`): listar/subir/borrar por bucket (avatars, hero, companies, projects). | ✅ |
+| **F4 · Publish** | `/admin/publish` → `POST /api/publish` dispara el Cloudflare deploy hook. | ✅ |
 
-Archivos F1: `src/lib/auth/{supabaseServer,session}.ts`, `src/middleware.ts`, `src/pages/admin/{login,index}.astro`, `src/pages/api/auth/{signin,callback,signout}.ts`.
+Patrón por entidad: schema en `src/lib/admin/schemas.ts`, lectura admin en `src/lib/data/repos.ts` (`fetch*Admin`), mutaciones en `src/lib/data/mutations.ts`, componente `*Fields.astro` reutilizado por crear/editar, endpoint `src/pages/api/<entity>.ts` (despacha por `_action` create/update/delete), página `src/pages/admin/<entity>.astro` (lista de acordeones). Componentes compartidos: `AdminField`, `AdminLocalized`, `AdminLocalizedList`, `AdminSelect`, `AdminTechPicker`, `AdminAccordion`, `Toast`.
 
-**Decisión de auth**: las mutaciones usarán el **JWT del usuario autenticado** (cookie SSR, anon key) y la RLS `is_admin()` las autoriza. **No se usa el service-role key** en el worker (más seguro). Por eso no hay secreto de Supabase en el hot path de admin.
+**UX**: cada sección editable es un **acordeón** contraído por defecto; al guardar, **toast liquid-glass** (verde ok / rojo error) vía flash cookie (`src/lib/admin/flash.ts`); borrado con `confirm()` nativo (`data-confirm`).
+
+**Decisión de auth**: las mutaciones usan el **JWT del usuario autenticado** (cookie SSR, anon key) y la RLS `is_admin()` las autoriza. **No se usa el service-role key** en el worker.
+
+**Sincronización de pivots M:N**: al guardar una entidad con tecnologías, se borran sus filas pivot y se reinsertan las seleccionadas (con `sort_order` por orden). No es transaccional (sin RPC); aceptable para un único editor.
 
 ### Setup externo requerido (manual del ingeniero) `[PENDIENTE]`
 

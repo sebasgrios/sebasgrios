@@ -37,6 +37,7 @@ Estos **sí** son secretos y solo se usarán cuando exista `/admin` (SSR, no pre
 |---|---|---|
 | `SUPABASE_SERVICE_ROLE_KEY` | Cloudflare Pages (Secret) + `.env.local` | Reservado. El backoffice **no** lo usa (mutaciones vía JWT del admin + RLS). |
 | `SESSION_SECRET` | Cloudflare Pages (Secret) + `.env.local` | Reservado para cookies admin propias (32+ bytes aleatorios). |
+| `CF_DEPLOY_HOOK_URL` | Cloudflare Pages (Secret) | URL del deploy hook del proyecto; la dispara `POST /api/publish` desde `/admin/publish`. Leída vía `Astro.locals.runtime.env`. |
 
 Declarados (opcionales) en `src/env.d.ts`. En el dashboard pueden coexistir las `PUBLIC_*` antiguas sin efecto (el código no las lee); pueden borrarse.
 

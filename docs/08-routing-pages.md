@@ -9,22 +9,25 @@ src/pages/
 │   └── index.astro              # home en (prerender)
 ├── 404.astro                    # not found, bilingual
 ├── 401.astro                    # acceso denegado backoffice (visual mismo glass)
-├── admin/                       # (futuro, ver 13-backoffice)
+├── admin/                       # SSR, protegido (ver 13-backoffice)
 │   ├── index.astro              # dashboard
-│   ├── login.astro
-│   ├── profile/
-│   ├── companies/
-│   ├── roles/
-│   ├── education/
-│   ├── projects/
-│   ├── stack/
-│   └── technologies/
+│   ├── login.astro              # login Google
+│   ├── profile.astro
+│   ├── companies.astro          # empresas + roles anidados
+│   ├── education.astro
+│   ├── stack.astro
+│   ├── technologies.astro
+│   ├── projects.astro
+│   ├── media.astro              # gestor de Storage
+│   └── publish.astro            # deploy hook
 ├── og/
-│   ├── [locale].png.ts          # OG image dinámica por locale
-└── api/
-    ├── auth/                    # (futuro)
-    └── webhooks/
-        └── revalidate.ts        # endpoint disparable desde Supabase function
+│   └── [locale].png.ts          # OG image dinámica por locale
+└── api/                         # SSR endpoints (POST), protegidos salvo auth/
+    ├── auth/{signin,callback,signout}.ts
+    ├── profile.ts · technologies.ts · stack.ts · education.ts
+    ├── companies.ts · roles.ts · projects.ts
+    ├── media.ts                 # multipart upload/delete
+    └── publish.ts               # dispara CF deploy hook
 ```
 
 ## Prerender vs SSR
