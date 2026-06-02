@@ -1,6 +1,6 @@
 ---
 import Glass from '@/components/Glass.astro';
-import Tag from '@/components/Tag.astro';
+import TechIcon from '@/components/TechIcon.astro';
 import Building from '@/components/icons/Building.astro';
 import Home from '@/components/icons/Home.astro';
 import Laptop from '@/components/icons/Laptop.astro';
@@ -64,9 +64,9 @@ const dateRange = formatDateRange(role.startDate, role.endDate, locale);
   {bullets.length > 0 && <ul class="role-bullet-list">{bullets.map((b) => <li>{b}</li>)}</ul>}
   {
     role.technologies.length > 0 && (
-      <div class="flex flex-wrap gap-2 mt-[18px]">
+      <div class="flex flex-wrap gap-2.5 mt-[18px]">
         {role.technologies.map((t) => (
-          <Tag>{t.label}</Tag>
+          <TechIcon slug={t.key} label={t.label} />
         ))}
       </div>
     )

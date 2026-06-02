@@ -2,7 +2,7 @@
 import Button from '@/components/Button.astro';
 import Glass from '@/components/Glass.astro';
 import SectionHead from '@/components/SectionHead.astro';
-import Tag from '@/components/Tag.astro';
+import TechIcon from '@/components/TechIcon.astro';
 import GitHub from '@/components/icons/GitHub.astro';
 import Play from '@/components/icons/Play.astro';
 import { COPY } from '@/config/copy';
@@ -85,9 +85,9 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
               </h3>
               <p class="text-text-soft text-[0.96rem] text-pretty">{description}</p>
               {project.technologies.length > 0 && (
-                <div class="flex flex-wrap gap-2">
+                <div class="flex flex-wrap gap-2.5">
                   {project.technologies.map((t) => (
-                    <Tag>{t.label}</Tag>
+                    <TechIcon slug={t.key} label={t.label} />
                   ))}
                 </div>
               )}
