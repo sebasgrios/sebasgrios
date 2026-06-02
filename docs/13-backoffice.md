@@ -6,8 +6,8 @@ Spec del backoffice privado. El schema y las RLS (M4) ya lo soportan, y la **Fas
 
 | Fase | Contenido | Estado |
 |---|---|---|
-| **F1 · Auth** | Cliente SSR (`@supabase/ssr`), middleware que protege `/admin/**`, login Google, callback/signout, dashboard shell. | ✅ implementado |
-| **F2 · CRUD** | Forms + endpoints por entidad (profile, companies/roles, education, stack, technologies, projects). | ⏳ pendiente |
+| **F1 · Auth** | Cliente SSR (`@supabase/ssr`), middleware que protege `/admin/**` y `/api/**` (salvo `/api/auth/`), login Google, callback/signout, dashboard shell. | ✅ implementado |
+| **F2 · CRUD** | Forms + endpoints por entidad, validación Zod, mutación vía cliente autenticado + RLS. **Profile** hecho como patrón de referencia; faltan companies/roles, education, stack, technologies, projects. | 🟡 en curso |
 | **F3 · Media** | Uploader a Storage. | ⏳ pendiente |
 | **F4 · Publish** | Botón → Cloudflare deploy hook. | ⏳ pendiente |
 
