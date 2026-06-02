@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
+Disallow: /dev/
 
 Sitemap: https://sebasgrios.es/sitemap-index.xml
