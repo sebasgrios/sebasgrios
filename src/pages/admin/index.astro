@@ -8,15 +8,17 @@ export const prerender = false;
 const { user } = Astro.locals;
 
 const sections = [
-  { label: 'Perfil', hint: 'Datos del hero, contacto y SEO', href: '/admin/profile' },
-  { label: 'Empresas y roles', hint: 'Experiencia y posiciones', href: null },
-  { label: 'Formación', hint: 'Ciclos y estudios', href: null },
-  { label: 'Stack', hint: 'Grupos de tecnologías', href: null },
-  { label: 'Tecnologías', hint: 'Taxonomía reutilizable', href: null },
-  { label: 'Proyectos', hint: 'Trabajo propio', href: null },
-  { label: 'Medios', hint: 'Imágenes en Storage', href: null },
-  { label: 'Publicar', hint: 'Disparar redeploy', href: null },
+  { label: 'Perfil', hint: 'Datos del hero, contacto y SEO.', href: '/admin/profile' },
+  { label: 'Empresas y roles', hint: 'Experiencia y posiciones.', href: null },
+  { label: 'Formación', hint: 'Ciclos y estudios.', href: null },
+  { label: 'Stack', hint: 'Grupos de tecnologías.', href: null },
+  { label: 'Tecnologías', hint: 'Taxonomía reutilizable.', href: null },
+  { label: 'Proyectos', hint: 'Trabajo propio.', href: null },
+  { label: 'Medios', hint: 'Imágenes en Storage.', href: null },
+  { label: 'Publicar', hint: 'Disparar redeploy.', href: null },
 ];
+
+const revealDelays = ['', '[transition-delay:0.05s]', '[transition-delay:0.1s]', '[transition-delay:0.15s]'];
 ---
 
 <BaseLayout title="Panel · Backoffice" description="Backoffice." locale="es" noindex>
@@ -40,29 +42,72 @@ const sections = [
       </div>
     </div>
 
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-4">
+    <div class="flex flex-col gap-3 max-w-[720px]">
       {
-        sections.map((section) => {
-          const card = (
-            <Glass interactive={Boolean(section.href)} class="p-6 h-full">
-              <div class="flex items-center justify-between gap-2">
-                <span class="font-display font-bold text-[1.05rem]">{section.label}</span>
-                <span class="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-text-faint border border-hairline rounded-full px-2 py-0.5">
-                  {section.href ? 'editar' : 'pendiente'}
+        sections.map((section, index) => {
+          const panelId = `acc-${index}`;
+          const delay = revealDelays[index % revealDelays.length];
+          return (
+            <Glass interactive class={`reveal ${delay} admin-card`}>
+              <button
+                type="button"
+                class="acc-trigger group peer w-full flex items-center justify-between gap-3 text-left px-5 py-4 cursor-pointer"
+                aria-expanded="false"
+                aria-controls={panelId}
+              >
+                <span class="flex items-center gap-3 min-w-0">
+                  <span class="font-display font-bold text-[1.05rem]">{section.label}</span>
+                  <span class="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-text-faint border border-hairline rounded-full px-2 py-0.5 shrink-0">
+                    {section.href ? 'editar' : 'pendiente'}
+                  </span>
                 </span>
+                <svg
+                  class="acc-chevron shrink-0 w-[18px] h-[18px] text-text-soft transition-transform duration-300 ease-out group-aria-[expanded=true]:rotate-180"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <div
+                id={panelId}
+                class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out peer-aria-[expanded=true]:grid-rows-[1fr]"
+              >
+                <div class="overflow-hidden">
+                  <div class="px-5 pb-5 pt-1 flex items-center justify-between gap-3 flex-wrap">
+                    <p class="text-text-soft text-[0.9rem]">{section.hint}</p>
+                    {section.href ? (
+                      <Button href={section.href} variant="ghost">
+                        Editar
+                      </Button>
+                    ) : (
+                      <span class="text-text-faint text-[0.82rem]">Próximamente</span>
+                    )}
+                  </div>
+                </div>
               </div>
-              <p class="text-text-faint text-[0.85rem] mt-1.5">{section.hint}</p>
             </Glass>
-          );
-          return section.href ? (
-            <a href={section.href} class="no-underline">
-              {card}
-            </a>
-          ) : (
-            card
           );
         })
       }
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  function bindAccordions() {
+    for (const trigger of document.querySelectorAll<HTMLButtonElement>('.acc-trigger')) {
+      trigger.addEventListener('click', () => {
+        const open = trigger.getAttribute('aria-expanded') === 'true';
+        trigger.setAttribute('aria-expanded', String(!open));
+      });
+    }
+  }
+
+  bindAccordions();
+</script>
