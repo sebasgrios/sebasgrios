@@ -30,3 +30,31 @@ const { title } = Astro.props;
     <slot />
   </div>
 </BaseLayout>
+
+<script>
+  function initAdmin() {
+    for (const trigger of document.querySelectorAll<HTMLButtonElement>('.acc-trigger')) {
+      trigger.addEventListener('click', () => {
+        const open = trigger.getAttribute('aria-expanded') === 'true';
+        trigger.setAttribute('aria-expanded', String(!open));
+      });
+    }
+    for (const field of document.querySelectorAll<HTMLElement>(
+      'form :is(input, textarea, select)'
+    )) {
+      field.addEventListener(
+        'invalid',
+        () => {
+          const panel = field.closest<HTMLElement>('[data-acc-panel]');
+          if (!panel) return;
+          document
+            .querySelector(`[aria-controls="${panel.id}"]`)
+            ?.setAttribute('aria-expanded', 'true');
+        },
+        true
+      );
+    }
+  }
+
+  initAdmin();
+</script>

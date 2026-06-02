@@ -1,8 +1,8 @@
 ---
+import AdminAccordion from '@/components/admin/AdminAccordion.astro';
 import AdminField from '@/components/admin/AdminField.astro';
 import AdminLocalized from '@/components/admin/AdminLocalized.astro';
 import Button from '@/components/Button.astro';
-import Glass from '@/components/Glass.astro';
 import AdminLayout from '@/layouts/AdminLayout.astro';
 import { fetchProfile } from '@/lib/data/repos';
 
@@ -12,52 +12,26 @@ const profile = await fetchProfile();
 const status = Astro.url.searchParams.get('status');
 const badgeRows = [0, 1, 2, 3].map((index) => profile.heroBadges[index] ?? { es: '', en: '' });
 
-const cardClass = 'p-6 flex flex-col gap-4';
-const sectionTitle = 'font-display text-[1.1rem] font-bold tracking-[-0.01em]';
+const ok = 'mb-6 rounded-xl border border-[oklch(0.72_0.18_150/0.4)] bg-[oklch(0.72_0.18_150/0.1)] px-4 py-3 text-[0.9rem]';
+const bad = 'mb-6 rounded-xl border border-[oklch(0.62_0.2_25/0.4)] bg-[oklch(0.62_0.2_25/0.1)] px-4 py-3 text-[0.9rem]';
 ---
 
 <AdminLayout title="Perfil">
-  {
-    status === 'ok' && (
-      <p class="mb-6 rounded-xl border border-[oklch(0.72_0.18_150/0.4)] bg-[oklch(0.72_0.18_150/0.1)] px-4 py-3 text-[0.9rem]">
-        Cambios guardados.
-      </p>
-    )
-  }
-  {
-    status === 'invalid' && (
-      <p class="mb-6 rounded-xl border border-[oklch(0.62_0.2_25/0.4)] bg-[oklch(0.62_0.2_25/0.1)] px-4 py-3 text-[0.9rem]">
-        Revisa los campos: faltan datos o algún formato no es válido.
-      </p>
-    )
-  }
-  {
-    status === 'error' && (
-      <p class="mb-6 rounded-xl border border-[oklch(0.62_0.2_25/0.4)] bg-[oklch(0.62_0.2_25/0.1)] px-4 py-3 text-[0.9rem]">
-        No se pudo guardar. Inténtalo de nuevo.
-      </p>
-    )
-  }
+  {status === 'ok' && <p class={ok}>Cambios guardados.</p>}
+  {status === 'invalid' && <p class={bad}>Revisa los campos: faltan datos o algún formato no es válido.</p>}
+  {status === 'error' && <p class={bad}>No se pudo guardar. Inténtalo de nuevo.</p>}
 
-  <form method="post" action="/api/profile" class="flex flex-col gap-6">
-    <Glass class={cardClass}>
-      <h2 class={sectionTitle}>Identidad</h2>
+  <form method="post" action="/api/profile" class="flex flex-col gap-3">
+    <AdminAccordion title="Identidad" id="identity">
       <div class="grid gap-3 sm:grid-cols-2">
         <AdminField label="Nombre completo" name="fullName" value={profile.fullName} required />
         <AdminField label="Nombre corto (nav)" name="shortName" value={profile.shortName} required />
       </div>
       <AdminLocalized label="Rol" name="role" es={profile.role.es} en={profile.role.en} />
-    </Glass>
+    </AdminAccordion>
 
-    <Glass class={cardClass}>
-      <h2 class={sectionTitle}>Hero</h2>
-      <AdminLocalized
-        label="Lead"
-        name="lead"
-        es={profile.lead.es}
-        en={profile.lead.en}
-        multiline
-      />
+    <AdminAccordion title="Hero" id="hero">
+      <AdminLocalized label="Lead" name="lead" es={profile.lead.es} en={profile.lead.en} multiline />
       <AdminLocalized
         label="Etiqueta de estado"
         name="statusLabel"
@@ -94,10 +68,9 @@ const sectionTitle = 'font-display text-[1.1rem] font-bold tracking-[-0.01em]';
           ))
         }
       </div>
-    </Glass>
+    </AdminAccordion>
 
-    <Glass class={cardClass}>
-      <h2 class={sectionTitle}>Imágenes y enlaces</h2>
+    <AdminAccordion title="Imágenes y enlaces" id="links">
       <div class="grid gap-3 sm:grid-cols-2">
         <AdminField label="URL avatar" name="avatarUrl" type="url" value={profile.avatarUrl} />
         <AdminField label="URL foto hero" name="photoUrl" type="url" value={profile.photoUrl} />
@@ -105,10 +78,9 @@ const sectionTitle = 'font-display text-[1.1rem] font-bold tracking-[-0.01em]';
         <AdminField label="LinkedIn" name="linkedinUrl" type="url" value={profile.linkedinUrl} />
         <AdminField label="GitHub" name="githubUrl" type="url" value={profile.githubUrl} />
       </div>
-    </Glass>
+    </AdminAccordion>
 
-    <Glass class={cardClass}>
-      <h2 class={sectionTitle}>Contacto</h2>
+    <AdminAccordion title="Contacto" id="contact">
       <AdminLocalized
         label="Título"
         name="contactTitle"
@@ -122,10 +94,9 @@ const sectionTitle = 'font-display text-[1.1rem] font-bold tracking-[-0.01em]';
         en={profile.contactLead.en}
         multiline
       />
-    </Glass>
+    </AdminAccordion>
 
-    <Glass class={cardClass}>
-      <h2 class={sectionTitle}>SEO</h2>
+    <AdminAccordion title="SEO" id="seo">
       <AdminLocalized
         label="Meta title"
         name="metaTitle"
@@ -139,9 +110,9 @@ const sectionTitle = 'font-display text-[1.1rem] font-bold tracking-[-0.01em]';
         en={profile.metaDescription.en}
         multiline
       />
-    </Glass>
+    </AdminAccordion>
 
-    <div class="flex justify-end">
+    <div class="flex justify-end mt-3">
       <Button type="submit">Guardar cambios</Button>
     </div>
   </form>
