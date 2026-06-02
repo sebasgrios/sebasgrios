@@ -24,7 +24,7 @@ test.describe('public portfolio', () => {
     await page.locator('.locale-switch').click();
     await expect(page).toHaveURL(/\/en\//);
     await page.locator('.locale-switch').click();
-    await expect(page).toHaveURL(/^[^/]*\/$|^[^/]*$/);
+    await expect(page).toHaveURL(/^https?:\/\/[^/]+\/$/);
   });
 
   test('exposes hreflang alternates in head', async ({ page }) => {
@@ -39,7 +39,9 @@ test.describe('public portfolio', () => {
     await page.goto('/');
     const jsonLd = await page.locator('script[type="application/ld+json"]').first().textContent();
     const parsed = JSON.parse(jsonLd ?? '{}');
-    expect(parsed['@type']).toBe('Person');
-    expect(parsed.name).toContain('Sebastián');
+    const nodes: Array<{ '@type'?: string; name?: string }> = parsed['@graph'] ?? [parsed];
+    const person = nodes.find((node) => node['@type'] === 'Person');
+    expect(person?.name).toContain('Sebastián');
+    expect(nodes.some((node) => node['@type'] === 'WebSite')).toBe(true);
   });
 });
