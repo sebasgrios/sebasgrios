@@ -1,8 +1,13 @@
 ---
+import { getTechIcon } from '@/lib/icons/techIconRegistry';
+
 interface Props {
   class?: string;
+  slug?: string;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', slug } = Astro.props;
+const color = slug ? getTechIcon(slug)?.color : undefined;
+const style = color ? `--tech-color:${color}` : undefined;
 ---
 
-<span class={`tag-pill ${className}`.trim()}><slot /></span>
+<span class={`tag-pill ${className}`.trim()} style={style}><slot /></span>

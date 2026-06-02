@@ -417,6 +417,7 @@
 }
 
 @utility tag-pill {
+  --tech-glow: var(--tech-color, var(--accent));
   font-family: var(--font-mono);
   font-size: 0.74rem;
   font-weight: 500;
@@ -425,12 +426,17 @@
   color: var(--text-soft);
   border: 1px solid var(--hairline);
   background: oklch(0.7 0.02 285 / 0.05);
-  transition: color 0.25s, border-color 0.25s, background 0.25s, transform 0.25s;
+  transition: color 0.25s, border-color 0.25s, background 0.25s, transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
   display: inline-block;
-  &:hover {
-    color: var(--accent);
-    border-color: var(--accent);
+  cursor: default;
+  &:hover,
+  &:focus-visible {
     transform: translateY(-2px);
+    color: var(--tech-glow);
+    border-color: var(--tech-glow);
+    background: color-mix(in oklab, var(--tech-glow) 12%, transparent);
+    box-shadow: 0 8px 18px -10px color-mix(in oklab, var(--tech-glow) 55%, transparent);
   }
 }
 

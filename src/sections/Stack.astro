@@ -50,7 +50,7 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
               <h3 class="font-display text-[1.05rem] font-bold tracking-[-0.01em]">{label}</h3>
             </div>
             <div class="flex flex-wrap gap-2">
-              {group.technologies.map((t) => <Tag>{t.label}</Tag>)}
+              {group.technologies.map((t) => <Tag slug={t.key}>{t.label}</Tag>)}
             </div>
           </Glass>
         );
