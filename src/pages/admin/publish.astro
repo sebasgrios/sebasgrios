@@ -1,0 +1,24 @@
+---
+import Button from '@/components/Button.astro';
+import Glass from '@/components/Glass.astro';
+import AdminLayout from '@/layouts/AdminLayout.astro';
+
+export const prerender = false;
+---
+
+<AdminLayout title="Publicar">
+  <Glass class="p-6 flex flex-col gap-5 max-w-[560px]">
+    <p class="text-text-soft text-[0.95rem] leading-relaxed">
+      El portfolio público está prerenderizado: tras editar contenido, pulsa
+      <strong>Publicar</strong> para lanzar un redeploy en Cloudflare y que los cambios salgan en
+      vivo.
+    </p>
+    <form method="post" action="/api/publish" data-confirm="¿Lanzar un redeploy del sitio?">
+      <Button type="submit">Publicar ahora</Button>
+    </form>
+    <p class="text-text-faint text-[0.8rem]">
+      Requiere el secreto <code class="font-mono">CF_DEPLOY_HOOK_URL</code> configurado en Cloudflare
+      Pages (Deploy hook del proyecto).
+    </p>
+  </Glass>
+</AdminLayout>

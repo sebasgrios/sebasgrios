@@ -8,6 +8,7 @@ declare module '*.wasm' {
 interface ImportMetaEnv {
   readonly SUPABASE_SERVICE_ROLE_KEY?: string;
   readonly SESSION_SECRET?: string;
+  readonly CF_DEPLOY_HOOK_URL?: string;
 }
 
 interface ImportMeta {
@@ -27,4 +28,5 @@ declare namespace App {
 interface Env {
   SUPABASE_SERVICE_ROLE_KEY?: string;
   SESSION_SECRET?: string;
+  CF_DEPLOY_HOOK_URL?: string;
 }
