@@ -53,10 +53,72 @@ function initParallax() {
   });
 }
 
+let spyHandler: (() => void) | null = null;
+
+function initScrollSpy() {
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('nav a[href*="#"]'));
+  const linksByHash = new Map<string, HTMLAnchorElement[]>();
+  for (const link of links) {
+    const href = link.getAttribute('href');
+    if (!href) continue;
+    const hash = new URL(href, location.href).hash;
+    if (!hash || hash === '#top') continue;
+    const list = linksByHash.get(hash) ?? [];
+    list.push(link);
+    linksByHash.set(hash, list);
+  }
+
+  const sections = [...linksByHash.keys()]
+    .map((hash) => document.getElementById(hash.slice(1)))
+    .filter((el): el is HTMLElement => el !== null);
+  if (sections.length === 0) return;
+
+  let current: string | null = '';
+  const setActive = (activeHash: string | null) => {
+    if (activeHash === current) return;
+    current = activeHash;
+    for (const [hash, list] of linksByHash) {
+      for (const link of list) {
+        if (hash === activeHash) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      }
+    }
+  };
+
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    const line = window.innerHeight * 0.3;
+    const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 2;
+    let active: HTMLElement | null = atBottom ? (sections[sections.length - 1] ?? null) : null;
+    if (!atBottom) {
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= line) active = section;
+        else break;
+      }
+    }
+    setActive(active ? `#${active.id}` : null);
+  };
+  const onScroll = () => {
+    if (raf) return;
+    raf = requestAnimationFrame(update);
+  };
+
+  if (spyHandler) {
+    window.removeEventListener('scroll', spyHandler);
+    window.removeEventListener('resize', spyHandler);
+  }
+  spyHandler = onScroll;
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
+}
+
 function init() {
   initReveal();
   initGlassSpecular();
   initParallax();
+  initScrollSpy();
 }
 
 init();

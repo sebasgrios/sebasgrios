@@ -63,7 +63,7 @@ const homeHref = locale === 'es' ? '/' : '/en/';
         links.map((link) => (
           <a
             href={link.href}
-            class="text-text-soft no-underline text-[0.9rem] font-medium px-3.5 py-2 rounded-full transition-[color,background] duration-[250ms] hover:text-text hover:bg-accent-soft"
+            class="text-text-soft no-underline text-[0.9rem] font-medium px-3.5 py-2 rounded-full transition-[color,background] duration-[250ms] hover:text-text hover:bg-accent-soft aria-[current=true]:text-text aria-[current=true]:bg-accent-soft"
           >
             {link.label}
           </a>
@@ -97,7 +97,7 @@ const homeHref = locale === 'es' ? '/' : '/en/';
     {
       links.map((link) => (
         <a
-          class="text-text no-underline font-medium px-4 py-3 rounded-xl hover:bg-accent-soft hover:text-accent"
+          class="text-text no-underline font-medium px-4 py-3 rounded-xl hover:bg-accent-soft hover:text-accent aria-[current=true]:bg-accent-soft aria-[current=true]:text-accent"
           href={link.href}
         >
           {link.label}
