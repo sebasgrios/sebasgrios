@@ -349,6 +349,7 @@
 
 @utility tech-icon {
   --tech-icon-size: 36px;
+  --tech-glow: var(--tech-color, var(--accent));
   position: relative;
   display: inline-grid;
   place-items: center;
@@ -368,10 +369,10 @@
   &:hover,
   &:focus-visible {
     transform: translateY(-3px) scale(1.08);
-    color: var(--accent);
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    box-shadow: 0 10px 22px -10px oklch(0.6 0.2 var(--accent-h) / 0.55);
+    color: var(--tech-glow);
+    border-color: var(--tech-glow);
+    background: color-mix(in oklab, var(--tech-glow) 14%, transparent);
+    box-shadow: 0 10px 22px -10px color-mix(in oklab, var(--tech-glow) 60%, transparent);
   }
   &::after {
     content: attr(data-tooltip);

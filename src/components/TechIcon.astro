@@ -10,6 +10,9 @@ interface Props {
 const { slug, label, size = 36 } = Astro.props;
 const icon = getTechIcon(slug);
 const isStroke = icon?.kind === 'stroke';
+const styleParts = [`--tech-icon-size:${size}px`];
+if (icon?.color) styleParts.push(`--tech-color:${icon.color}`);
+const inlineStyle = styleParts.join(';');
 ---
 
 {
@@ -17,7 +20,7 @@ const isStroke = icon?.kind === 'stroke';
     <span
       class="tech-icon"
       data-tooltip={label}
-      style={`--tech-icon-size:${size}px`}
+      style={inlineStyle}
       tabindex="0"
       role="img"
       aria-label={label}

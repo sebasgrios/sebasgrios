@@ -24,15 +24,18 @@ interface IconDef {
   inner: string;
   viewBox?: string;
   kind?: 'fill' | 'stroke';
+  color?: string;
 }
 
-const brand = (def: { path: string }): IconDef => ({
+const brand = (def: { path: string; hex: string }, colorOverride?: string): IconDef => ({
   inner: `<path d="${def.path}"/>`,
+  color: `#${colorOverride ?? def.hex}`,
 });
 
-const stroke = (inner: string): IconDef => ({
+const stroke = (inner: string, color?: string): IconDef => ({
   inner,
   kind: 'stroke',
+  color,
 });
 
 export const TECH_ICONS: Record<string, IconDef> = {
@@ -41,21 +44,21 @@ export const TECH_ICONS: Record<string, IconDef> = {
   react: brand(siReact),
   react16: brand(siReact),
   reactnative: brand(siReact),
-  nextjs: brand(siNextdotjs),
+  nextjs: brand(siNextdotjs, 'A1A1AA'),
   astro: brand(siAstro),
   redux: brand(siRedux),
   tailwindcss: brand(siTailwindcss),
   html: brand(siHtml5),
   css: brand(siCss),
   nodejs: brand(siNodedotjs),
-  githubcopilot: brand(siGithubcopilot),
+  githubcopilot: brand(siGithubcopilot, 'A1A1AA'),
   jenkins: brand(siJenkins),
   bitbucket: brand(siBitbucket),
   git: brand(siGit),
   cloudflare: brand(siCloudflare),
   mysql: brand(siMysql),
   wordpress: brand(siWordpress),
-  java: brand(siOpenjdk),
+  java: brand(siOpenjdk, 'F89820'),
   php: brand(siPhp),
 
   rest: stroke(
