@@ -1,6 +1,7 @@
 ---
 import Button from '@/components/Button.astro';
 import Toast from '@/components/admin/Toast.astro';
+import { takeFlash } from '@/lib/admin/flash';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 interface Props {
@@ -8,10 +9,11 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const flash = takeFlash(Astro.cookies);
 ---
 
 <BaseLayout title={`${title} · Backoffice`} description="Backoffice." locale="es" noindex>
-  <Toast status={Astro.url.searchParams.get('status')} />
+  <Toast status={flash} />
   <div class="wrap py-[clamp(40px,8vh,90px)]">
     <header class="flex items-center justify-between gap-4 flex-wrap mb-8">
       <div class="flex items-center gap-3.5">
@@ -37,12 +39,6 @@ const { title } = Astro.props;
   function initToast() {
     const toast = document.getElementById('admin-toast');
     if (!toast) return;
-
-    const url = new URL(location.href);
-    if (url.searchParams.has('status')) {
-      url.searchParams.delete('status');
-      history.replaceState(null, '', url.pathname + url.search + url.hash);
-    }
 
     let timer = 0;
     const dismiss = () => {

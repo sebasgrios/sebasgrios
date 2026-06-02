@@ -1,3 +1,4 @@
+import { setFlash } from '@/lib/admin/flash';
 import { readBool, readLocalized, readLocalizedList, readString } from '@/lib/admin/forms';
 import { profileInputSchema } from '@/lib/admin/schemas';
 import { createSupabaseServerClient } from '@/lib/auth/supabaseServer';
@@ -30,14 +31,19 @@ export const POST: APIRoute = async (context) => {
     metaDescription: readLocalized(form, 'metaDescription'),
   });
 
-  if (!parsed.success) return context.redirect('/admin/profile?status=invalid');
+  if (!parsed.success) {
+    setFlash(context.cookies, 'invalid');
+    return context.redirect('/admin/profile');
+  }
 
   try {
     const supabase = createSupabaseServerClient(context);
     await updateProfile(supabase, parsed.data);
   } catch {
-    return context.redirect('/admin/profile?status=error');
+    setFlash(context.cookies, 'error');
+    return context.redirect('/admin/profile');
   }
 
-  return context.redirect('/admin/profile?status=ok');
+  setFlash(context.cookies, 'ok');
+  return context.redirect('/admin/profile');
 };

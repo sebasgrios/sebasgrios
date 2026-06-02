@@ -23,7 +23,6 @@ const toast = status && status in MESSAGES ? MESSAGES[status as keyof typeof MES
       role="status"
       aria-live="polite"
     >
-      <span class="admin-toast-dot" aria-hidden="true" />
       <span>{toast.message}</span>
     </div>
   )
@@ -39,7 +38,7 @@ const toast = status && status in MESSAGES ? MESSAGES[status as keyof typeof MES
     align-items: center;
     gap: 10px;
     max-width: calc(100% - 32px);
-    padding: 12px 20px;
+    padding: 12px 22px;
     border-radius: 9999px;
     font-size: 0.9rem;
     font-weight: 500;
@@ -51,15 +50,13 @@ const toast = status && status in MESSAGES ? MESSAGES[status as keyof typeof MES
     transform: translate(-50%, 0);
     opacity: 1;
   }
-  .admin-toast-dot {
-    width: 9px;
-    height: 9px;
-    flex-shrink: 0;
-    border-radius: 9999px;
-    background: oklch(0.72 0.2 150);
+  .admin-toast[data-type="success"] {
+    background: color-mix(in oklab, oklch(0.72 0.2 150) 22%, var(--glass-bg));
+    border-color: oklch(0.72 0.2 150 / 0.55);
   }
-  .admin-toast[data-type="error"] .admin-toast-dot {
-    background: oklch(0.62 0.2 25);
+  .admin-toast[data-type="error"] {
+    background: color-mix(in oklab, oklch(0.62 0.22 25) 22%, var(--glass-bg));
+    border-color: oklch(0.62 0.22 25 / 0.55);
   }
   @media (prefers-reduced-motion: reduce) {
     .admin-toast {
