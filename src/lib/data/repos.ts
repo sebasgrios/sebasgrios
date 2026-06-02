@@ -100,6 +100,50 @@ export async function fetchStackGroupsAdmin(): Promise<StackGroupAdmin[]> {
   });
 }
 
+export interface EducationAdmin {
+  id: string;
+  title: Localized<string>;
+  school: string;
+  startDate: string;
+  endDate: string | null;
+  description: Localized<string>;
+  bullets: Localized<string>[];
+  sortOrder: number;
+  technologyIds: string[];
+}
+
+export async function fetchEducationAdmin(): Promise<EducationAdmin[]> {
+  const client = getServerClient();
+  const [rowsRes, pivotRes] = await Promise.all([
+    client.from('education').select('*').order('sort_order', { ascending: false }),
+    client.from('education_technologies').select('*').order('sort_order', { ascending: true }),
+  ]);
+  const rows = assertOk(rowsRes, 'education');
+  const pivots = assertOk(pivotRes, 'education_technologies');
+
+  const techByEducation = new Map<string, string[]>();
+  for (const pivot of pivots) {
+    const list = techByEducation.get(pivot.education_id) ?? [];
+    list.push(pivot.technology_id);
+    techByEducation.set(pivot.education_id, list);
+  }
+
+  return rows.map((row) => {
+    const education = mapEducation(row, []);
+    return {
+      id: education.id,
+      title: education.title,
+      school: education.school,
+      startDate: education.startDate,
+      endDate: education.endDate,
+      description: education.description,
+      bullets: education.bullets,
+      sortOrder: row.sort_order,
+      technologyIds: techByEducation.get(row.id) ?? [],
+    };
+  });
+}
+
 export async function fetchTechnologyDictionary(): Promise<Map<string, Technology>> {
   const client = getServerClient();
   const res = await client.from('technologies').select('*');

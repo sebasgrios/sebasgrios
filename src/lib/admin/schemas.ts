@@ -36,6 +36,8 @@ export type ProfileInput = z.infer<typeof profileInputSchema>;
 const emptyToNull = (value: unknown) =>
   typeof value === 'string' && value.trim() === '' ? null : value;
 
+const dateString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD');
+
 export const technologyInputSchema = z.object({
   key: z
     .string()
@@ -59,3 +61,16 @@ export const stackGroupInputSchema = z.object({
 });
 
 export type StackGroupInput = z.infer<typeof stackGroupInputSchema>;
+
+export const educationInputSchema = z.object({
+  title: requiredLocalized,
+  school: z.string().trim().min(1),
+  startDate: dateString,
+  endDate: z.preprocess(emptyToNull, dateString.nullable()),
+  description: requiredLocalized,
+  bullets: z.array(requiredLocalized).max(12),
+  sortOrder: z.coerce.number().int().min(0),
+  technologyIds: z.array(z.string().uuid()),
+});
+
+export type EducationInput = z.infer<typeof educationInputSchema>;

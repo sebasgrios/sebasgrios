@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { profileInputSchema, stackGroupInputSchema, technologyInputSchema } from './schemas';
+import {
+  educationInputSchema,
+  profileInputSchema,
+  stackGroupInputSchema,
+  technologyInputSchema,
+} from './schemas';
 
 const valid = {
   fullName: 'Sebastián González Ríos',
@@ -103,5 +108,40 @@ describe('stackGroupInputSchema', () => {
 
   it('accepts an empty technology selection', () => {
     expect(stackGroupInputSchema.safeParse({ ...group, technologyIds: [] }).success).toBe(true);
+  });
+});
+
+describe('educationInputSchema', () => {
+  const edu = {
+    title: { es: 'DAW', en: 'DAW' },
+    school: 'IES Campanillas',
+    startDate: '2019-09-01',
+    endDate: '',
+    description: { es: 'desc', en: 'desc' },
+    bullets: [{ es: 'a', en: 'a' }],
+    sortOrder: '1',
+    technologyIds: [],
+  };
+
+  it('accepts a valid entry and coerces empty endDate to null', () => {
+    const result = educationInputSchema.safeParse(edu);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.endDate).toBeNull();
+  });
+
+  it('accepts a real endDate', () => {
+    const result = educationInputSchema.safeParse({ ...edu, endDate: '2021-06-30' });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.endDate).toBe('2021-06-30');
+  });
+
+  it('rejects a malformed startDate', () => {
+    expect(educationInputSchema.safeParse({ ...edu, startDate: '2019' }).success).toBe(false);
+  });
+
+  it('rejects a bullet missing a translation', () => {
+    expect(educationInputSchema.safeParse({ ...edu, bullets: [{ es: 'a', en: '' }] }).success).toBe(
+      false
+    );
   });
 });

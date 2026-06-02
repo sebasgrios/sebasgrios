@@ -1,4 +1,9 @@
-import type { ProfileInput, StackGroupInput, TechnologyInput } from '@/lib/admin/schemas';
+import type {
+  EducationInput,
+  ProfileInput,
+  StackGroupInput,
+  TechnologyInput,
+} from '@/lib/admin/schemas';
 import type { SupabaseServerClient } from '@/lib/auth/supabaseServer';
 
 function technologyRow(input: TechnologyInput) {
@@ -82,6 +87,67 @@ export async function updateStackGroup(
 export async function deleteStackGroup(client: SupabaseServerClient, id: string): Promise<void> {
   const { error } = await client.from('stack_groups').delete().eq('id', id);
   if (error) throw new Error(`stack group delete failed: ${error.message}`);
+}
+
+function educationRow(input: EducationInput) {
+  return {
+    title: input.title,
+    school: input.school,
+    start_date: input.startDate,
+    end_date: input.endDate,
+    description: input.description,
+    bullets: input.bullets,
+    sort_order: input.sortOrder,
+  };
+}
+
+async function syncEducationTechnologies(
+  client: SupabaseServerClient,
+  educationId: string,
+  technologyIds: string[]
+): Promise<void> {
+  const { error: deleteError } = await client
+    .from('education_technologies')
+    .delete()
+    .eq('education_id', educationId);
+  if (deleteError) throw new Error(`education technologies clear failed: ${deleteError.message}`);
+
+  if (technologyIds.length === 0) return;
+  const rows = technologyIds.map((technology_id, index) => ({
+    education_id: educationId,
+    technology_id,
+    sort_order: index,
+  }));
+  const { error: insertError } = await client.from('education_technologies').insert(rows);
+  if (insertError) throw new Error(`education technologies set failed: ${insertError.message}`);
+}
+
+export async function createEducation(
+  client: SupabaseServerClient,
+  input: EducationInput
+): Promise<void> {
+  const { data, error } = await client
+    .from('education')
+    .insert(educationRow(input))
+    .select('id')
+    .single();
+  if (error || !data) throw new Error(`education create failed: ${error?.message ?? 'no row'}`);
+  await syncEducationTechnologies(client, data.id, input.technologyIds);
+}
+
+export async function updateEducation(
+  client: SupabaseServerClient,
+  id: string,
+  input: EducationInput
+): Promise<void> {
+  const { error } = await client.from('education').update(educationRow(input)).eq('id', id);
+  if (error) throw new Error(`education update failed: ${error.message}`);
+  await syncEducationTechnologies(client, id, input.technologyIds);
+}
+
+export async function deleteEducation(client: SupabaseServerClient, id: string): Promise<void> {
+  const { error } = await client.from('education').delete().eq('id', id);
+  if (error) throw new Error(`education delete failed: ${error.message}`);
 }
 
 export async function updateProfile(
