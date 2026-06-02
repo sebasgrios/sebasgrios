@@ -1,0 +1,59 @@
+---
+import Button from '@/components/Button.astro';
+import Glass from '@/components/Glass.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+export const prerender = false;
+
+const { user } = Astro.locals;
+
+const sections = [
+  { label: 'Perfil', hint: 'Datos del hero, contacto y SEO' },
+  { label: 'Empresas y roles', hint: 'Experiencia y posiciones' },
+  { label: 'Formación', hint: 'Ciclos y estudios' },
+  { label: 'Stack', hint: 'Grupos de tecnologías' },
+  { label: 'Tecnologías', hint: 'Taxonomía reutilizable' },
+  { label: 'Proyectos', hint: 'Trabajo propio' },
+  { label: 'Medios', hint: 'Imágenes en Storage' },
+  { label: 'Publicar', hint: 'Disparar redeploy' },
+];
+---
+
+<BaseLayout title="Panel · Backoffice" description="Backoffice." locale="es" noindex>
+  <section class="wrap py-[clamp(72px,11vh,130px)]">
+    <div class="flex items-center justify-between gap-4 flex-wrap mb-10">
+      <div>
+        <p class="font-mono text-[0.72rem] uppercase tracking-[0.22em] text-text-faint">
+          Backoffice
+        </p>
+        <h1
+          class="font-display text-[clamp(1.8rem,4vw,2.6rem)] font-black tracking-[-0.02em] mt-1"
+        >
+          Panel
+        </h1>
+      </div>
+      <div class="flex items-center gap-3">
+        {user?.email && <span class="text-text-soft text-[0.9rem]">{user.email}</span>}
+        <form method="post" action="/api/auth/signout">
+          <Button variant="ghost" type="submit">Salir</Button>
+        </form>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-4">
+      {
+        sections.map((section) => (
+          <Glass class="p-6 h-full">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-display font-bold text-[1.05rem]">{section.label}</span>
+              <span class="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-text-faint border border-hairline rounded-full px-2 py-0.5">
+                pendiente
+              </span>
+            </div>
+            <p class="text-text-faint text-[0.85rem] mt-1.5">{section.hint}</p>
+          </Glass>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
