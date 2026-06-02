@@ -74,3 +74,30 @@ export const educationInputSchema = z.object({
 });
 
 export type EducationInput = z.infer<typeof educationInputSchema>;
+
+export const companyInputSchema = z.object({
+  name: z.string().trim().min(1),
+  logoUrl: urlOrNull,
+  metaLine: requiredLocalized,
+  sortOrder: z.coerce.number().int().min(0),
+});
+
+export type CompanyInput = z.infer<typeof companyInputSchema>;
+
+export const MODE_KEYS = ['remote', 'onsite', 'hybrid'] as const;
+
+export const roleInputSchema = z.object({
+  companyId: z.string().uuid(),
+  title: requiredLocalized,
+  sector: requiredLocalized,
+  mode: requiredLocalized,
+  modeKey: z.enum(MODE_KEYS),
+  startDate: dateString,
+  endDate: z.preprocess(emptyToNull, dateString.nullable()),
+  description: requiredLocalized,
+  bullets: z.array(requiredLocalized).max(12),
+  sortOrder: z.coerce.number().int().min(0),
+  technologyIds: z.array(z.string().uuid()),
+});
+
+export type RoleInput = z.infer<typeof roleInputSchema>;

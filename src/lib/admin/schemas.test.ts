@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  companyInputSchema,
   educationInputSchema,
   profileInputSchema,
+  roleInputSchema,
   stackGroupInputSchema,
   technologyInputSchema,
 } from './schemas';
@@ -143,5 +145,52 @@ describe('educationInputSchema', () => {
     expect(educationInputSchema.safeParse({ ...edu, bullets: [{ es: 'a', en: '' }] }).success).toBe(
       false
     );
+  });
+});
+
+describe('companyInputSchema', () => {
+  const company = {
+    name: 'NTT DATA',
+    logoUrl: '',
+    metaLine: { es: 'Remoto', en: 'Remote' },
+    sortOrder: '0',
+  };
+
+  it('accepts a valid company and empty logo becomes null', () => {
+    const result = companyInputSchema.safeParse(company);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.logoUrl).toBeNull();
+  });
+
+  it('rejects an empty name', () => {
+    expect(companyInputSchema.safeParse({ ...company, name: '' }).success).toBe(false);
+  });
+});
+
+describe('roleInputSchema', () => {
+  const role = {
+    companyId: '11111111-1111-1111-1111-111111111111',
+    title: { es: 'Ingeniero', en: 'Engineer' },
+    sector: { es: 'Banca', en: 'Banking' },
+    mode: { es: 'Remoto', en: 'Remote' },
+    modeKey: 'remote',
+    startDate: '2022-01-01',
+    endDate: '',
+    description: { es: 'desc', en: 'desc' },
+    bullets: [],
+    sortOrder: '0',
+    technologyIds: [],
+  };
+
+  it('accepts a valid role', () => {
+    expect(roleInputSchema.safeParse(role).success).toBe(true);
+  });
+
+  it('rejects an unknown modeKey', () => {
+    expect(roleInputSchema.safeParse({ ...role, modeKey: 'space' }).success).toBe(false);
+  });
+
+  it('rejects a non-uuid companyId', () => {
+    expect(roleInputSchema.safeParse({ ...role, companyId: 'x' }).success).toBe(false);
   });
 });

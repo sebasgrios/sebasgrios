@@ -1,0 +1,110 @@
+---
+import AdminAccordion from '@/components/admin/AdminAccordion.astro';
+import CompanyFields from '@/components/admin/CompanyFields.astro';
+import RoleFields from '@/components/admin/RoleFields.astro';
+import Button from '@/components/Button.astro';
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { fetchCompaniesAdmin, fetchTechnologiesAdmin } from '@/lib/data/repos';
+
+export const prerender = false;
+
+const [companies, technologies] = await Promise.all([
+  fetchCompaniesAdmin(),
+  fetchTechnologiesAdmin(),
+]);
+const nextCompanySort = companies.reduce((max, c) => Math.max(max, c.sortOrder), -1) + 1;
+const danger =
+  'text-[oklch(0.62_0.22_25)] text-[0.85rem] font-medium hover:underline cursor-pointer';
+---
+
+<AdminLayout title="Empresas y roles">
+  <div class="flex flex-col gap-3">
+    <AdminAccordion title="Nueva empresa" id="new-company">
+      <form method="post" action="/api/companies" class="flex flex-col gap-4">
+        <input type="hidden" name="_action" value="create" />
+        <CompanyFields company={null} nextSort={nextCompanySort} />
+        <div class="flex justify-end">
+          <Button type="submit">Añadir empresa</Button>
+        </div>
+      </form>
+    </AdminAccordion>
+
+    {
+      companies.map((company) => {
+        const nextRoleSort = company.roles.reduce((max, r) => Math.max(max, r.sortOrder), -1) + 1;
+        return (
+          <AdminAccordion title={`${company.name} · ${company.roles.length} rol(es)`} id={company.id}>
+            <form method="post" action="/api/companies" class="flex flex-col gap-4">
+              <input type="hidden" name="_action" value="update" />
+              <input type="hidden" name="id" value={company.id} />
+              <CompanyFields company={company} nextSort={nextCompanySort} />
+              <div class="flex justify-end">
+                <Button type="submit">Guardar empresa</Button>
+              </div>
+            </form>
+
+            <div class="flex flex-col gap-2.5 border-t border-hairline pt-4">
+              <span class="text-[0.8rem] font-semibold text-text-soft">Roles</span>
+              {company.roles.map((role) => (
+                <AdminAccordion title={role.title.es || role.title.en} id={role.id}>
+                  <form method="post" action="/api/roles" class="flex flex-col gap-4">
+                    <input type="hidden" name="_action" value="update" />
+                    <input type="hidden" name="id" value={role.id} />
+                    <RoleFields
+                      role={role}
+                      companyId={company.id}
+                      technologies={technologies}
+                      nextSort={nextRoleSort}
+                    />
+                    <div class="flex justify-end">
+                      <Button type="submit">Guardar rol</Button>
+                    </div>
+                  </form>
+                  <form
+                    method="post"
+                    action="/api/roles"
+                    class="flex justify-end"
+                    data-confirm={`¿Eliminar el rol "${role.title.es || role.title.en}"?`}
+                  >
+                    <input type="hidden" name="_action" value="delete" />
+                    <input type="hidden" name="id" value={role.id} />
+                    <button type="submit" class={danger}>
+                      Eliminar rol
+                    </button>
+                  </form>
+                </AdminAccordion>
+              ))}
+              <AdminAccordion title="Nuevo rol" id={`new-role-${company.id}`}>
+                <form method="post" action="/api/roles" class="flex flex-col gap-4">
+                  <input type="hidden" name="_action" value="create" />
+                  <RoleFields
+                    role={null}
+                    companyId={company.id}
+                    technologies={technologies}
+                    nextSort={nextRoleSort}
+                  />
+                  <div class="flex justify-end">
+                    <Button type="submit">Añadir rol</Button>
+                  </div>
+                </form>
+              </AdminAccordion>
+            </div>
+
+            <form
+              method="post"
+              action="/api/companies"
+              class="flex justify-end border-t border-hairline pt-4"
+              data-confirm={`¿Eliminar "${company.name}" y todos sus roles?`}
+            >
+              <input type="hidden" name="_action" value="delete" />
+              <input type="hidden" name="id" value={company.id} />
+              <button type="submit" class={danger}>
+                Eliminar empresa
+              </button>
+            </form>
+          </AdminAccordion>
+        );
+      })
+    }
+  </div>
+</AdminLayout>

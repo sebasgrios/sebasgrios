@@ -144,6 +144,82 @@ export async function fetchEducationAdmin(): Promise<EducationAdmin[]> {
   });
 }
 
+export interface RoleAdmin {
+  id: string;
+  companyId: string;
+  title: Localized<string>;
+  sector: Localized<string>;
+  mode: Localized<string>;
+  modeKey: string;
+  startDate: string;
+  endDate: string | null;
+  description: Localized<string>;
+  bullets: Localized<string>[];
+  sortOrder: number;
+  technologyIds: string[];
+}
+
+export interface CompanyAdmin {
+  id: string;
+  name: string;
+  logoUrl: string | null;
+  metaLine: Localized<string>;
+  sortOrder: number;
+  roles: RoleAdmin[];
+}
+
+export async function fetchCompaniesAdmin(): Promise<CompanyAdmin[]> {
+  const client = getServerClient();
+  const [companiesRes, rolesRes, pivotRes] = await Promise.all([
+    client.from('companies').select('*').order('sort_order', { ascending: false }),
+    client.from('roles').select('*').order('sort_order', { ascending: false }),
+    client.from('role_technologies').select('*').order('sort_order', { ascending: true }),
+  ]);
+  const companies = assertOk(companiesRes, 'companies');
+  const roles = assertOk(rolesRes, 'roles');
+  const pivots = assertOk(pivotRes, 'role_technologies');
+
+  const techByRole = new Map<string, string[]>();
+  for (const pivot of pivots) {
+    const list = techByRole.get(pivot.role_id) ?? [];
+    list.push(pivot.technology_id);
+    techByRole.set(pivot.role_id, list);
+  }
+
+  const rolesByCompany = new Map<string, RoleAdmin[]>();
+  for (const row of roles) {
+    const role = mapRole(row, []);
+    const list = rolesByCompany.get(role.companyId) ?? [];
+    list.push({
+      id: role.id,
+      companyId: role.companyId,
+      title: role.title,
+      sector: role.sector,
+      mode: role.mode,
+      modeKey: role.modeKey,
+      startDate: role.startDate,
+      endDate: role.endDate,
+      description: role.description,
+      bullets: role.bullets,
+      sortOrder: row.sort_order,
+      technologyIds: techByRole.get(row.id) ?? [],
+    });
+    rolesByCompany.set(role.companyId, list);
+  }
+
+  return companies.map((row) => {
+    const company = mapCompany(row, []);
+    return {
+      id: company.id,
+      name: company.name,
+      logoUrl: company.logoUrl,
+      metaLine: company.metaLine,
+      sortOrder: row.sort_order,
+      roles: rolesByCompany.get(row.id) ?? [],
+    };
+  });
+}
+
 export async function fetchTechnologyDictionary(): Promise<Map<string, Technology>> {
   const client = getServerClient();
   const res = await client.from('technologies').select('*');

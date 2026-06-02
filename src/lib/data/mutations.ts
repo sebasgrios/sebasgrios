@@ -1,6 +1,8 @@
 import type {
+  CompanyInput,
   EducationInput,
   ProfileInput,
+  RoleInput,
   StackGroupInput,
   TechnologyInput,
 } from '@/lib/admin/schemas';
@@ -148,6 +150,94 @@ export async function updateEducation(
 export async function deleteEducation(client: SupabaseServerClient, id: string): Promise<void> {
   const { error } = await client.from('education').delete().eq('id', id);
   if (error) throw new Error(`education delete failed: ${error.message}`);
+}
+
+function companyRow(input: CompanyInput) {
+  return {
+    name: input.name,
+    logo_url: input.logoUrl,
+    meta_line: input.metaLine,
+    sort_order: input.sortOrder,
+  };
+}
+
+export async function createCompany(
+  client: SupabaseServerClient,
+  input: CompanyInput
+): Promise<void> {
+  const { error } = await client.from('companies').insert(companyRow(input));
+  if (error) throw new Error(`company create failed: ${error.message}`);
+}
+
+export async function updateCompany(
+  client: SupabaseServerClient,
+  id: string,
+  input: CompanyInput
+): Promise<void> {
+  const { error } = await client.from('companies').update(companyRow(input)).eq('id', id);
+  if (error) throw new Error(`company update failed: ${error.message}`);
+}
+
+export async function deleteCompany(client: SupabaseServerClient, id: string): Promise<void> {
+  const { error } = await client.from('companies').delete().eq('id', id);
+  if (error) throw new Error(`company delete failed: ${error.message}`);
+}
+
+function roleRow(input: RoleInput) {
+  return {
+    company_id: input.companyId,
+    title: input.title,
+    sector: input.sector,
+    mode: input.mode,
+    mode_key: input.modeKey,
+    start_date: input.startDate,
+    end_date: input.endDate,
+    description: input.description,
+    bullets: input.bullets,
+    sort_order: input.sortOrder,
+  };
+}
+
+async function syncRoleTechnologies(
+  client: SupabaseServerClient,
+  roleId: string,
+  technologyIds: string[]
+): Promise<void> {
+  const { error: deleteError } = await client
+    .from('role_technologies')
+    .delete()
+    .eq('role_id', roleId);
+  if (deleteError) throw new Error(`role technologies clear failed: ${deleteError.message}`);
+
+  if (technologyIds.length === 0) return;
+  const rows = technologyIds.map((technology_id, index) => ({
+    role_id: roleId,
+    technology_id,
+    sort_order: index,
+  }));
+  const { error: insertError } = await client.from('role_technologies').insert(rows);
+  if (insertError) throw new Error(`role technologies set failed: ${insertError.message}`);
+}
+
+export async function createRole(client: SupabaseServerClient, input: RoleInput): Promise<void> {
+  const { data, error } = await client.from('roles').insert(roleRow(input)).select('id').single();
+  if (error || !data) throw new Error(`role create failed: ${error?.message ?? 'no row'}`);
+  await syncRoleTechnologies(client, data.id, input.technologyIds);
+}
+
+export async function updateRole(
+  client: SupabaseServerClient,
+  id: string,
+  input: RoleInput
+): Promise<void> {
+  const { error } = await client.from('roles').update(roleRow(input)).eq('id', id);
+  if (error) throw new Error(`role update failed: ${error.message}`);
+  await syncRoleTechnologies(client, id, input.technologyIds);
+}
+
+export async function deleteRole(client: SupabaseServerClient, id: string): Promise<void> {
+  const { error } = await client.from('roles').delete().eq('id', id);
+  if (error) throw new Error(`role delete failed: ${error.message}`);
 }
 
 export async function updateProfile(

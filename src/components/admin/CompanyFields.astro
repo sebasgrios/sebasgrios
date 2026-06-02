@@ -1,0 +1,25 @@
+---
+import AdminField from '@/components/admin/AdminField.astro';
+import AdminLocalized from '@/components/admin/AdminLocalized.astro';
+import type { CompanyAdmin } from '@/lib/data/repos';
+
+interface Props {
+  company: CompanyAdmin | null;
+  nextSort: number;
+}
+
+const { company, nextSort } = Astro.props;
+const c = company;
+---
+
+<div class="grid gap-3 sm:grid-cols-2">
+  <AdminField label="Nombre" name="name" value={c?.name} required />
+  <AdminField label="URL logo" name="logoUrl" type="url" value={c?.logoUrl} />
+  <AdminField
+    label="Orden"
+    name="sortOrder"
+    type="number"
+    value={String(c?.sortOrder ?? nextSort)}
+  />
+</div>
+<AdminLocalized label="Meta line" name="metaLine" es={c?.metaLine.es} en={c?.metaLine.en} />
