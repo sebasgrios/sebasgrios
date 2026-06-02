@@ -1,5 +1,6 @@
 ---
 import Button from '@/components/Button.astro';
+import Toast from '@/components/admin/Toast.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 interface Props {
@@ -10,6 +11,7 @@ const { title } = Astro.props;
 ---
 
 <BaseLayout title={`${title} · Backoffice`} description="Backoffice." locale="es" noindex>
+  <Toast status={Astro.url.searchParams.get('status')} />
   <div class="wrap py-[clamp(40px,8vh,90px)]">
     <header class="flex items-center justify-between gap-4 flex-wrap mb-8">
       <div class="flex items-center gap-3.5">
@@ -32,6 +34,28 @@ const { title } = Astro.props;
 </BaseLayout>
 
 <script>
+  function initToast() {
+    const toast = document.getElementById('admin-toast');
+    if (!toast) return;
+
+    const url = new URL(location.href);
+    if (url.searchParams.has('status')) {
+      url.searchParams.delete('status');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+
+    let timer = 0;
+    const dismiss = () => {
+      window.clearTimeout(timer);
+      toast.setAttribute('data-show', 'false');
+      toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    };
+
+    requestAnimationFrame(() => toast.setAttribute('data-show', 'true'));
+    timer = window.setTimeout(dismiss, 3500);
+    toast.addEventListener('click', dismiss);
+  }
+
   function initAdmin() {
     for (const trigger of document.querySelectorAll<HTMLButtonElement>('.acc-trigger')) {
       trigger.addEventListener('click', () => {
@@ -57,4 +81,5 @@ const { title } = Astro.props;
   }
 
   initAdmin();
+  initToast();
 </script>

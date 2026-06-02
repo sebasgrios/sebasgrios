@@ -9,18 +9,10 @@ import { fetchProfile } from '@/lib/data/repos';
 export const prerender = false;
 
 const profile = await fetchProfile();
-const status = Astro.url.searchParams.get('status');
 const badgeRows = [0, 1, 2, 3].map((index) => profile.heroBadges[index] ?? { es: '', en: '' });
-
-const ok = 'mb-6 rounded-xl border border-[oklch(0.72_0.18_150/0.4)] bg-[oklch(0.72_0.18_150/0.1)] px-4 py-3 text-[0.9rem]';
-const bad = 'mb-6 rounded-xl border border-[oklch(0.62_0.2_25/0.4)] bg-[oklch(0.62_0.2_25/0.1)] px-4 py-3 text-[0.9rem]';
 ---
 
 <AdminLayout title="Perfil">
-  {status === 'ok' && <p class={ok}>Cambios guardados.</p>}
-  {status === 'invalid' && <p class={bad}>Revisa los campos: faltan datos o algún formato no es válido.</p>}
-  {status === 'error' && <p class={bad}>No se pudo guardar. Inténtalo de nuevo.</p>}
-
   <form method="post" action="/api/profile" class="flex flex-col gap-3">
     <AdminAccordion title="Identidad" id="identity">
       <div class="grid gap-3 sm:grid-cols-2">
