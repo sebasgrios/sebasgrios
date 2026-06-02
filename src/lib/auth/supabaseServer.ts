@@ -1,7 +1,10 @@
 import { SUPABASE } from '@/config/supabase';
 import type { Database } from '@/lib/data/database.types';
 import { type CookieMethodsServer, createServerClient } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { AstroCookies } from 'astro';
+
+export type SupabaseServerClient = SupabaseClient<Database>;
 
 interface RequestContext {
   request: Request;
@@ -22,7 +25,10 @@ function parseCookieHeader(header: string | null): { name: string; value: string
     });
 }
 
-export function createSupabaseServerClient({ request, cookies }: RequestContext) {
+export function createSupabaseServerClient({
+  request,
+  cookies,
+}: RequestContext): SupabaseServerClient {
   const cookieMethods: CookieMethodsServer = {
     getAll() {
       return parseCookieHeader(request.headers.get('cookie'));
@@ -34,7 +40,9 @@ export function createSupabaseServerClient({ request, cookies }: RequestContext)
     },
   };
 
-  return createServerClient<Database>(SUPABASE.url, SUPABASE.anonKey, { cookies: cookieMethods });
+  // @supabase/ssr types the 3rd schema generic more narrowly than SupabaseClient<Database>;
+  // the runtime client is identical, so bridge the generic mismatch.
+  return createServerClient<Database>(SUPABASE.url, SUPABASE.anonKey, {
+    cookies: cookieMethods,
+  }) as unknown as SupabaseServerClient;
 }
-
-export type SupabaseServerClient = ReturnType<typeof createSupabaseServerClient>;

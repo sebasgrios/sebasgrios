@@ -1,0 +1,148 @@
+---
+import AdminField from '@/components/admin/AdminField.astro';
+import AdminLocalized from '@/components/admin/AdminLocalized.astro';
+import Button from '@/components/Button.astro';
+import Glass from '@/components/Glass.astro';
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { fetchProfile } from '@/lib/data/repos';
+
+export const prerender = false;
+
+const profile = await fetchProfile();
+const status = Astro.url.searchParams.get('status');
+const badgeRows = [0, 1, 2, 3].map((index) => profile.heroBadges[index] ?? { es: '', en: '' });
+
+const cardClass = 'p-6 flex flex-col gap-4';
+const sectionTitle = 'font-display text-[1.1rem] font-bold tracking-[-0.01em]';
+---
+
+<AdminLayout title="Perfil">
+  {
+    status === 'ok' && (
+      <p class="mb-6 rounded-xl border border-[oklch(0.72_0.18_150/0.4)] bg-[oklch(0.72_0.18_150/0.1)] px-4 py-3 text-[0.9rem]">
+        Cambios guardados.
+      </p>
+    )
+  }
+  {
+    status === 'invalid' && (
+      <p class="mb-6 rounded-xl border border-[oklch(0.62_0.2_25/0.4)] bg-[oklch(0.62_0.2_25/0.1)] px-4 py-3 text-[0.9rem]">
+        Revisa los campos: faltan datos o algún formato no es válido.
+      </p>
+    )
+  }
+  {
+    status === 'error' && (
+      <p class="mb-6 rounded-xl border border-[oklch(0.62_0.2_25/0.4)] bg-[oklch(0.62_0.2_25/0.1)] px-4 py-3 text-[0.9rem]">
+        No se pudo guardar. Inténtalo de nuevo.
+      </p>
+    )
+  }
+
+  <form method="post" action="/api/profile" class="flex flex-col gap-6">
+    <Glass class={cardClass}>
+      <h2 class={sectionTitle}>Identidad</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <AdminField label="Nombre completo" name="fullName" value={profile.fullName} required />
+        <AdminField label="Nombre corto (nav)" name="shortName" value={profile.shortName} required />
+      </div>
+      <AdminLocalized label="Rol" name="role" es={profile.role.es} en={profile.role.en} />
+    </Glass>
+
+    <Glass class={cardClass}>
+      <h2 class={sectionTitle}>Hero</h2>
+      <AdminLocalized
+        label="Lead"
+        name="lead"
+        es={profile.lead.es}
+        en={profile.lead.en}
+        multiline
+      />
+      <AdminLocalized
+        label="Etiqueta de estado"
+        name="statusLabel"
+        es={profile.statusLabel.es}
+        en={profile.statusLabel.en}
+      />
+      <label class="flex items-center gap-2.5 text-[0.9rem]">
+        <input
+          type="checkbox"
+          name="isOpenToWork"
+          checked={profile.isOpenToWork}
+          class="size-4 rounded accent-[var(--accent)]"
+        />
+        Abierto a propuestas (punto verde animado)
+      </label>
+      <AdminField
+        label="Inicio de experiencia"
+        name="experienceStartDate"
+        type="date"
+        value={profile.experienceStartDate}
+        required
+      />
+      <div class="flex flex-col gap-3">
+        <span class="text-[0.8rem] font-medium text-text-soft">Badges flotantes (opcionales)</span>
+        {
+          badgeRows.map((badge, index) => (
+            <AdminLocalized
+              label={`Badge ${index + 1}`}
+              name={`heroBadges.${index}`}
+              es={badge.es}
+              en={badge.en}
+              required={false}
+            />
+          ))
+        }
+      </div>
+    </Glass>
+
+    <Glass class={cardClass}>
+      <h2 class={sectionTitle}>Imágenes y enlaces</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <AdminField label="URL avatar" name="avatarUrl" type="url" value={profile.avatarUrl} />
+        <AdminField label="URL foto hero" name="photoUrl" type="url" value={profile.photoUrl} />
+        <AdminField label="Email" name="email" type="email" value={profile.email} required />
+        <AdminField label="LinkedIn" name="linkedinUrl" type="url" value={profile.linkedinUrl} />
+        <AdminField label="GitHub" name="githubUrl" type="url" value={profile.githubUrl} />
+      </div>
+    </Glass>
+
+    <Glass class={cardClass}>
+      <h2 class={sectionTitle}>Contacto</h2>
+      <AdminLocalized
+        label="Título"
+        name="contactTitle"
+        es={profile.contactTitle.es}
+        en={profile.contactTitle.en}
+      />
+      <AdminLocalized
+        label="Lead"
+        name="contactLead"
+        es={profile.contactLead.es}
+        en={profile.contactLead.en}
+        multiline
+      />
+    </Glass>
+
+    <Glass class={cardClass}>
+      <h2 class={sectionTitle}>SEO</h2>
+      <AdminLocalized
+        label="Meta title"
+        name="metaTitle"
+        es={profile.metaTitle.es}
+        en={profile.metaTitle.en}
+      />
+      <AdminLocalized
+        label="Meta description"
+        name="metaDescription"
+        es={profile.metaDescription.es}
+        en={profile.metaDescription.en}
+        multiline
+      />
+    </Glass>
+
+    <div class="flex justify-end">
+      <Button type="submit">Guardar cambios</Button>
+    </div>
+  </form>
+</AdminLayout>

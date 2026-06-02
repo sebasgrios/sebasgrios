@@ -1,0 +1,32 @@
+---
+import Button from '@/components/Button.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<BaseLayout title={`${title} · Backoffice`} description="Backoffice." locale="es" noindex>
+  <div class="wrap py-[clamp(40px,8vh,90px)]">
+    <header class="flex items-center justify-between gap-4 flex-wrap mb-8">
+      <div class="flex items-center gap-3.5">
+        <a
+          href="/admin"
+          class="text-text-soft no-underline hover:text-accent text-[0.9rem] transition-colors"
+        >
+          ← Panel
+        </a>
+        <h1 class="font-display text-[clamp(1.5rem,3vw,2rem)] font-black tracking-[-0.02em]">
+          {title}
+        </h1>
+      </div>
+      <form method="post" action="/api/auth/signout">
+        <Button variant="ghost" type="submit">Salir</Button>
+      </form>
+    </header>
+    <slot />
+  </div>
+</BaseLayout>
