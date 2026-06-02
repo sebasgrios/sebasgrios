@@ -1,4 +1,5 @@
 ---
+import Button from '@/components/Button.astro';
 import Glass from '@/components/Glass.astro';
 import SectionHead from '@/components/SectionHead.astro';
 import Tag from '@/components/Tag.astro';
@@ -92,24 +93,19 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
               )}
               <div class="flex flex-wrap gap-2.5 mt-auto pt-2">
                 {project.liveUrl && (
-                  <a
-                    class="inline-flex items-center gap-1.5 text-[0.85rem] font-semibold no-underline text-text px-4 py-2.5 rounded-full border border-border transition-all duration-300 hover:bg-accent hover:text-on-accent hover:border-accent hover:-translate-y-0.5"
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    <Play size={15} /> {liveLabel}
-                  </a>
+                  <Button href={project.liveUrl} target="_blank" rel="noopener">
+                    <Play /> {liveLabel}
+                  </Button>
                 )}
                 {project.codeUrl && (
-                  <a
-                    class="inline-flex items-center gap-1.5 text-[0.85rem] font-semibold no-underline text-text px-4 py-2.5 rounded-full border border-border transition-all duration-300 hover:text-accent hover:border-accent hover:-translate-y-0.5"
+                  <Button
                     href={project.codeUrl}
+                    variant="ghost"
                     target="_blank"
                     rel="noopener"
                   >
-                    <GitHub size={15} /> {codeLabel}
-                  </a>
+                    <GitHub /> {codeLabel}
+                  </Button>
                 )}
               </div>
             </div>

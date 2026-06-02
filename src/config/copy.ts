@@ -28,7 +28,7 @@ interface ChromeCopy {
     education: SectionCopy;
     stack: SectionCopy;
     projects: SectionCopy;
-    contact: SectionCopy;
+    contact: SectionCopy & { cta: string };
   };
   errors: {
     notFoundTitle: string;
@@ -82,6 +82,7 @@ export const COPY: Record<Locale, ChromeCopy> = {
         eyebrow: 'Contacto',
         title: '¿Construimos algo juntos?',
         sub: 'Estoy abierto a nuevas propuestas y colaboraciones. Si tienes un proyecto en mente, hablemos.',
+        cta: 'Envíame un correo',
       },
     },
     errors: {
@@ -134,6 +135,7 @@ export const COPY: Record<Locale, ChromeCopy> = {
         eyebrow: 'Contact',
         title: 'Shall we build something?',
         sub: "I'm open to new proposals and collaborations. If you have a project in mind, let's talk.",
+        cta: 'Send me an email',
       },
     },
     errors: {

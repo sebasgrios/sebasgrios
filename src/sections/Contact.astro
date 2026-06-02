@@ -43,7 +43,7 @@ const tailTitle = titleWords.at(-1) ?? '';
     <p class="text-text-soft text-[1.1rem] mt-[18px] mx-auto max-w-[50ch]">{lead}</p>
     <div class="flex flex-wrap gap-3 justify-center mt-[34px]">
       <Button href={`mailto:${profile.email}`}>
-        <Mail /> {profile.email}
+        <Mail /> {copy.cta}
       </Button>
       {
         profile.linkedinUrl && (
