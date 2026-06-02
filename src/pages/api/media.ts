@@ -35,7 +35,13 @@ export const POST: APIRoute = async (context) => {
       await removeFromBucket(client, bucket, path);
     } else {
       const file = form.get('file');
-      if (!(file instanceof File) || file.size === 0) {
+      const maxBytes = 5 * 1024 * 1024;
+      if (
+        !(file instanceof File) ||
+        file.size === 0 ||
+        file.size > maxBytes ||
+        !file.type.startsWith('image/')
+      ) {
         setFlash(context.cookies, 'invalid');
         return context.redirect(REDIRECT);
       }

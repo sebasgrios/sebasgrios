@@ -1,6 +1,7 @@
 ---
 import AdminAccordion from '@/components/admin/AdminAccordion.astro';
 import AdminField from '@/components/admin/AdminField.astro';
+import DeleteForm from '@/components/admin/DeleteForm.astro';
 import Button from '@/components/Button.astro';
 import AdminLayout from '@/layouts/AdminLayout.astro';
 import { fetchTechnologiesAdmin } from '@/lib/data/repos';
@@ -44,21 +45,11 @@ const nextSort = technologies.reduce((max, tech) => Math.max(max, tech.sortOrder
               <Button type="submit">Guardar</Button>
             </div>
           </form>
-          <form
-            method="post"
+          <DeleteForm
             action="/api/technologies"
-            class="flex justify-end"
-            data-confirm={`¿Eliminar "${tech.label}"? Se quitará de todos los roles, formación y proyectos.`}
-          >
-            <input type="hidden" name="_action" value="delete" />
-            <input type="hidden" name="id" value={tech.id} />
-            <button
-              type="submit"
-              class="text-[oklch(0.62_0.22_25)] text-[0.85rem] font-medium hover:underline cursor-pointer"
-            >
-              Eliminar
-            </button>
-          </form>
+            confirm={`¿Eliminar "${tech.label}"? Se quitará de todos los roles, formación y proyectos.`}
+            fields={{ id: tech.id }}
+          />
         </AdminAccordion>
       ))
     }

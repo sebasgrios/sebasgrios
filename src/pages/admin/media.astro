@@ -30,7 +30,8 @@ const fileInput =
           >
             <input type="hidden" name="bucket" value={bucket} />
             <input type="hidden" name="_action" value="upload" />
-            <input type="file" name="file" required class={fileInput} />
+            <input type="file" name="file" accept="image/*" required class={fileInput} />
+            <span class="text-text-faint text-[0.75rem]">Solo imágenes · máx 5 MB</span>
             <AdminField label="Nombre (opcional)" name="filename" placeholder="usa el del archivo" />
             <div class="flex justify-end">
               <Button type="submit">Subir</Button>

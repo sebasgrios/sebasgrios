@@ -1,5 +1,6 @@
 ---
 import AdminAccordion from '@/components/admin/AdminAccordion.astro';
+import DeleteForm from '@/components/admin/DeleteForm.astro';
 import ProjectFields from '@/components/admin/ProjectFields.astro';
 import Button from '@/components/Button.astro';
 import AdminLayout from '@/layouts/AdminLayout.astro';
@@ -12,8 +13,6 @@ const [projects, technologies] = await Promise.all([
   fetchTechnologiesAdmin(),
 ]);
 const nextSort = projects.reduce((max, project) => Math.max(max, project.sortOrder), -1) + 1;
-const danger =
-  'text-[oklch(0.62_0.22_25)] text-[0.85rem] font-medium hover:underline cursor-pointer';
 ---
 
 <AdminLayout title="Proyectos">
@@ -39,18 +38,11 @@ const danger =
               <Button type="submit">Guardar</Button>
             </div>
           </form>
-          <form
-            method="post"
+          <DeleteForm
             action="/api/projects"
-            class="flex justify-end"
-            data-confirm={`¿Eliminar "${project.name}"?`}
-          >
-            <input type="hidden" name="_action" value="delete" />
-            <input type="hidden" name="id" value={project.id} />
-            <button type="submit" class={danger}>
-              Eliminar
-            </button>
-          </form>
+            confirm={`¿Eliminar "${project.name}"?`}
+            fields={{ id: project.id }}
+          />
         </AdminAccordion>
       ))
     }

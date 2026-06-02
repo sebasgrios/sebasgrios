@@ -4,6 +4,7 @@ import AdminField from '@/components/admin/AdminField.astro';
 import AdminLocalized from '@/components/admin/AdminLocalized.astro';
 import AdminSelect from '@/components/admin/AdminSelect.astro';
 import AdminTechPicker from '@/components/admin/AdminTechPicker.astro';
+import DeleteForm from '@/components/admin/DeleteForm.astro';
 import Button from '@/components/Button.astro';
 import AdminLayout from '@/layouts/AdminLayout.astro';
 import { STACK_ICON_KEYS } from '@/lib/admin/schemas';
@@ -52,21 +53,11 @@ const nextSort = groups.reduce((max, group) => Math.max(max, group.sortOrder), -
               <Button type="submit">Guardar</Button>
             </div>
           </form>
-          <form
-            method="post"
+          <DeleteForm
             action="/api/stack"
-            class="flex justify-end"
-            data-confirm={`¿Eliminar el grupo "${group.label.es || group.label.en}"?`}
-          >
-            <input type="hidden" name="_action" value="delete" />
-            <input type="hidden" name="id" value={group.id} />
-            <button
-              type="submit"
-              class="text-[oklch(0.62_0.22_25)] text-[0.85rem] font-medium hover:underline cursor-pointer"
-            >
-              Eliminar
-            </button>
-          </form>
+            confirm={`¿Eliminar el grupo "${group.label.es || group.label.en}"?`}
+            fields={{ id: group.id }}
+          />
         </AdminAccordion>
       ))
     }
