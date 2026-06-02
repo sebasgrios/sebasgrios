@@ -101,3 +101,15 @@ export const roleInputSchema = z.object({
 });
 
 export type RoleInput = z.infer<typeof roleInputSchema>;
+
+export const projectInputSchema = z.object({
+  name: z.string().trim().min(1),
+  description: requiredLocalized,
+  imageUrl: urlOrNull,
+  liveUrl: urlOrNull,
+  codeUrl: urlOrNull,
+  sortOrder: z.coerce.number().int().min(0),
+  technologyIds: z.array(z.string().uuid()),
+});
+
+export type ProjectInput = z.infer<typeof projectInputSchema>;

@@ -1,0 +1,58 @@
+---
+import AdminAccordion from '@/components/admin/AdminAccordion.astro';
+import ProjectFields from '@/components/admin/ProjectFields.astro';
+import Button from '@/components/Button.astro';
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { fetchProjectsAdmin, fetchTechnologiesAdmin } from '@/lib/data/repos';
+
+export const prerender = false;
+
+const [projects, technologies] = await Promise.all([
+  fetchProjectsAdmin(),
+  fetchTechnologiesAdmin(),
+]);
+const nextSort = projects.reduce((max, project) => Math.max(max, project.sortOrder), -1) + 1;
+const danger =
+  'text-[oklch(0.62_0.22_25)] text-[0.85rem] font-medium hover:underline cursor-pointer';
+---
+
+<AdminLayout title="Proyectos">
+  <div class="flex flex-col gap-3">
+    <AdminAccordion title="Nuevo proyecto" id="new">
+      <form method="post" action="/api/projects" class="flex flex-col gap-4">
+        <input type="hidden" name="_action" value="create" />
+        <ProjectFields project={null} technologies={technologies} nextSort={nextSort} />
+        <div class="flex justify-end">
+          <Button type="submit">Añadir</Button>
+        </div>
+      </form>
+    </AdminAccordion>
+
+    {
+      projects.map((project) => (
+        <AdminAccordion title={project.name} id={project.id}>
+          <form method="post" action="/api/projects" class="flex flex-col gap-4">
+            <input type="hidden" name="_action" value="update" />
+            <input type="hidden" name="id" value={project.id} />
+            <ProjectFields project={project} technologies={technologies} nextSort={nextSort} />
+            <div class="flex justify-end">
+              <Button type="submit">Guardar</Button>
+            </div>
+          </form>
+          <form
+            method="post"
+            action="/api/projects"
+            class="flex justify-end"
+            data-confirm={`¿Eliminar "${project.name}"?`}
+          >
+            <input type="hidden" name="_action" value="delete" />
+            <input type="hidden" name="id" value={project.id} />
+            <button type="submit" class={danger}>
+              Eliminar
+            </button>
+          </form>
+        </AdminAccordion>
+      ))
+    }
+  </div>
+</AdminLayout>

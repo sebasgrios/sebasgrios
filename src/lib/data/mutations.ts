@@ -2,6 +2,7 @@ import type {
   CompanyInput,
   EducationInput,
   ProfileInput,
+  ProjectInput,
   RoleInput,
   StackGroupInput,
   TechnologyInput,
@@ -238,6 +239,66 @@ export async function updateRole(
 export async function deleteRole(client: SupabaseServerClient, id: string): Promise<void> {
   const { error } = await client.from('roles').delete().eq('id', id);
   if (error) throw new Error(`role delete failed: ${error.message}`);
+}
+
+function projectRow(input: ProjectInput) {
+  return {
+    name: input.name,
+    description: input.description,
+    image_url: input.imageUrl,
+    live_url: input.liveUrl,
+    code_url: input.codeUrl,
+    sort_order: input.sortOrder,
+  };
+}
+
+async function syncProjectTechnologies(
+  client: SupabaseServerClient,
+  projectId: string,
+  technologyIds: string[]
+): Promise<void> {
+  const { error: deleteError } = await client
+    .from('project_technologies')
+    .delete()
+    .eq('project_id', projectId);
+  if (deleteError) throw new Error(`project technologies clear failed: ${deleteError.message}`);
+
+  if (technologyIds.length === 0) return;
+  const rows = technologyIds.map((technology_id, index) => ({
+    project_id: projectId,
+    technology_id,
+    sort_order: index,
+  }));
+  const { error: insertError } = await client.from('project_technologies').insert(rows);
+  if (insertError) throw new Error(`project technologies set failed: ${insertError.message}`);
+}
+
+export async function createProject(
+  client: SupabaseServerClient,
+  input: ProjectInput
+): Promise<void> {
+  const { data, error } = await client
+    .from('projects')
+    .insert(projectRow(input))
+    .select('id')
+    .single();
+  if (error || !data) throw new Error(`project create failed: ${error?.message ?? 'no row'}`);
+  await syncProjectTechnologies(client, data.id, input.technologyIds);
+}
+
+export async function updateProject(
+  client: SupabaseServerClient,
+  id: string,
+  input: ProjectInput
+): Promise<void> {
+  const { error } = await client.from('projects').update(projectRow(input)).eq('id', id);
+  if (error) throw new Error(`project update failed: ${error.message}`);
+  await syncProjectTechnologies(client, id, input.technologyIds);
+}
+
+export async function deleteProject(client: SupabaseServerClient, id: string): Promise<void> {
+  const { error } = await client.from('projects').delete().eq('id', id);
+  if (error) throw new Error(`project delete failed: ${error.message}`);
 }
 
 export async function updateProfile(

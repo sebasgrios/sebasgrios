@@ -220,6 +220,48 @@ export async function fetchCompaniesAdmin(): Promise<CompanyAdmin[]> {
   });
 }
 
+export interface ProjectAdmin {
+  id: string;
+  name: string;
+  description: Localized<string>;
+  imageUrl: string | null;
+  liveUrl: string | null;
+  codeUrl: string | null;
+  sortOrder: number;
+  technologyIds: string[];
+}
+
+export async function fetchProjectsAdmin(): Promise<ProjectAdmin[]> {
+  const client = getServerClient();
+  const [rowsRes, pivotRes] = await Promise.all([
+    client.from('projects').select('*').order('sort_order', { ascending: false }),
+    client.from('project_technologies').select('*').order('sort_order', { ascending: true }),
+  ]);
+  const rows = assertOk(rowsRes, 'projects');
+  const pivots = assertOk(pivotRes, 'project_technologies');
+
+  const techByProject = new Map<string, string[]>();
+  for (const pivot of pivots) {
+    const list = techByProject.get(pivot.project_id) ?? [];
+    list.push(pivot.technology_id);
+    techByProject.set(pivot.project_id, list);
+  }
+
+  return rows.map((row) => {
+    const project = mapProject(row, []);
+    return {
+      id: project.id,
+      name: project.name,
+      description: project.description,
+      imageUrl: project.imageUrl,
+      liveUrl: project.liveUrl,
+      codeUrl: project.codeUrl,
+      sortOrder: row.sort_order,
+      technologyIds: techByProject.get(row.id) ?? [],
+    };
+  });
+}
+
 export async function fetchTechnologyDictionary(): Promise<Map<string, Technology>> {
   const client = getServerClient();
   const res = await client.from('technologies').select('*');

@@ -1,0 +1,39 @@
+---
+import AdminField from '@/components/admin/AdminField.astro';
+import AdminLocalized from '@/components/admin/AdminLocalized.astro';
+import AdminTechPicker from '@/components/admin/AdminTechPicker.astro';
+import type { ProjectAdmin } from '@/lib/data/repos';
+import type { Technology } from '@/lib/domain/types';
+
+interface Props {
+  project: ProjectAdmin | null;
+  technologies: Technology[];
+  nextSort: number;
+}
+
+const { project, technologies, nextSort } = Astro.props;
+const p = project;
+---
+
+<div class="grid gap-3 sm:grid-cols-2">
+  <AdminField label="Nombre" name="name" value={p?.name} required />
+  <AdminField
+    label="Orden"
+    name="sortOrder"
+    type="number"
+    value={String(p?.sortOrder ?? nextSort)}
+  />
+</div>
+<AdminLocalized
+  label="Descripción"
+  name="description"
+  es={p?.description.es}
+  en={p?.description.en}
+  multiline
+/>
+<div class="grid gap-3 sm:grid-cols-2">
+  <AdminField label="URL imagen" name="imageUrl" type="url" value={p?.imageUrl} />
+  <AdminField label="URL live" name="liveUrl" type="url" value={p?.liveUrl} />
+  <AdminField label="URL código" name="codeUrl" type="url" value={p?.codeUrl} />
+</div>
+<AdminTechPicker technologies={technologies} selected={p?.technologyIds ?? []} />

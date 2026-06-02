@@ -3,6 +3,7 @@ import {
   companyInputSchema,
   educationInputSchema,
   profileInputSchema,
+  projectInputSchema,
   roleInputSchema,
   stackGroupInputSchema,
   technologyInputSchema,
@@ -192,5 +193,31 @@ describe('roleInputSchema', () => {
 
   it('rejects a non-uuid companyId', () => {
     expect(roleInputSchema.safeParse({ ...role, companyId: 'x' }).success).toBe(false);
+  });
+});
+
+describe('projectInputSchema', () => {
+  const project = {
+    name: 'BastianGR',
+    description: { es: 'desc', en: 'desc' },
+    imageUrl: 'https://example.com/i.webp',
+    liveUrl: '',
+    codeUrl: '',
+    sortOrder: '0',
+    technologyIds: ['11111111-1111-1111-1111-111111111111'],
+  };
+
+  it('accepts a valid project and empty urls become null', () => {
+    const result = projectInputSchema.safeParse(project);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.liveUrl).toBeNull();
+      expect(result.data.codeUrl).toBeNull();
+      expect(result.data.imageUrl).toBe('https://example.com/i.webp');
+    }
+  });
+
+  it('rejects an empty name', () => {
+    expect(projectInputSchema.safeParse({ ...project, name: '' }).success).toBe(false);
   });
 });
