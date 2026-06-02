@@ -19,7 +19,7 @@ const copy = COPY[locale].sections.projects;
 const liveLabel = 'Live';
 const codeLabel = 'Code';
 
-const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]'];
+const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[transition-delay:0.24s]'];
 ---
 
 <section id="projects" aria-labelledby="projects-title" class="wrap">
@@ -30,16 +30,20 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]'];
     sub={copy.sub}
     id="projects-title"
   />
-  <div class="grid grid-cols-2 gap-5 max-[940px]:grid-cols-1">
+  <div class="flex flex-col gap-5">
     {
       projects.map((project, index) => {
         const description = pickLocale(project.description, locale);
-        const delayClass = delays[(index % 2) + 1];
+        const delayClass = delays[index % delays.length];
         return (
-          <Glass as="article" interactive class={`reveal ${delayClass} flex flex-col p-0 group`}>
+          <Glass
+            as="article"
+            interactive
+            class={`reveal ${delayClass} flex flex-col md:flex-row p-0 group overflow-hidden`}
+          >
             {project.liveUrl ? (
               <a
-                class="relative aspect-[16/10] overflow-hidden border-b border-glass-border block"
+                class="relative block overflow-hidden border-b border-glass-border md:border-b-0 md:border-r aspect-[16/10] md:aspect-auto md:w-[42%] md:shrink-0 md:self-stretch"
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener"
@@ -52,7 +56,7 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]'];
                     loading="lazy"
                     width="800"
                     height="500"
-                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] md:absolute md:inset-0"
                   />
                 )}
                 <div
@@ -61,7 +65,7 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]'];
                 />
               </a>
             ) : (
-              <div class="relative aspect-[16/10] overflow-hidden border-b border-glass-border block">
+              <div class="relative block overflow-hidden border-b border-glass-border md:border-b-0 md:border-r aspect-[16/10] md:aspect-auto md:w-[42%] md:shrink-0 md:self-stretch">
                 {project.imageUrl && (
                   <img
                     src={project.imageUrl}
@@ -69,18 +73,16 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]'];
                     loading="lazy"
                     width="800"
                     height="500"
-                    class="w-full h-full object-cover"
+                    class="w-full h-full object-cover md:absolute md:inset-0"
                   />
                 )}
               </div>
             )}
-            <div class="p-6 pt-[22px] flex flex-col gap-3 flex-1">
-              <div class="flex items-center justify-between gap-2.5">
-                <h3 class="font-display text-[1.35rem] font-bold tracking-[-0.02em] flex-1 min-w-0">
-                  {project.name}
-                </h3>
-              </div>
-              <p class="text-text-soft text-[0.96rem]">{description}</p>
+            <div class="p-6 pt-[22px] md:p-7 flex flex-col gap-3 flex-1 min-w-0">
+              <h3 class="font-display text-[1.35rem] md:text-[1.5rem] font-bold tracking-[-0.02em] min-w-0">
+                {project.name}
+              </h3>
+              <p class="text-text-soft text-[0.96rem] text-pretty">{description}</p>
               {project.technologies.length > 0 && (
                 <div class="flex flex-wrap gap-2">
                   {project.technologies.map((t) => (
@@ -88,7 +90,7 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]'];
                   ))}
                 </div>
               )}
-              <div class="flex gap-2.5 mt-auto pt-1.5">
+              <div class="flex flex-wrap gap-2.5 mt-auto pt-2">
                 {project.liveUrl && (
                   <a
                     class="inline-flex items-center gap-1.5 text-[0.85rem] font-semibold no-underline text-text px-4 py-2.5 rounded-full border border-border transition-all duration-300 hover:bg-accent hover:text-on-accent hover:border-accent hover:-translate-y-0.5"
