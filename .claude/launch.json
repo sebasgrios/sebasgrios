@@ -6,6 +6,13 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["dev"],
       "port": 4321
+    },
+    {
+      "name": "preview-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev", "--port", "4399"],
+      "port": 4399,
+      "autoPort": false
     }
   ]
 }
