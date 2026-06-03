@@ -1,0 +1,33 @@
+---
+import type { Technology } from '@/lib/domain/types';
+
+interface Props {
+  technologies: Technology[];
+  selected: string[];
+  name?: string;
+  label?: string;
+}
+
+const { technologies, selected, name = 'technologyIds', label = 'Tecnologías' } = Astro.props;
+const selectedSet = new Set(selected);
+---
+
+<fieldset class="border border-hairline rounded-2xl p-4">
+  <legend class="px-2 text-[0.8rem] font-semibold">{label}</legend>
+  <div class="grid gap-2 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+    {
+      technologies.map((tech) => (
+        <label class="flex items-center gap-2 text-[0.85rem] min-w-0">
+          <input
+            type="checkbox"
+            name={name}
+            value={tech.id}
+            checked={selectedSet.has(tech.id)}
+            class="size-4 shrink-0 rounded accent-[var(--accent)]"
+          />
+          <span class="truncate">{tech.label}</span>
+        </label>
+      ))
+    }
+  </div>
+</fieldset>

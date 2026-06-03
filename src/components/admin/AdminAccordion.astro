@@ -1,0 +1,46 @@
+---
+import Glass from '@/components/Glass.astro';
+
+interface Props {
+  title: string;
+  id: string;
+  open?: boolean;
+}
+
+const { title, id, open = false } = Astro.props;
+const panelId = `acc-panel-${id}`;
+---
+
+<Glass class="admin-accordion">
+  <button
+    type="button"
+    class="acc-trigger group peer w-full flex items-center justify-between gap-3 text-left px-5 py-4 cursor-pointer"
+    aria-expanded={open ? 'true' : 'false'}
+    aria-controls={panelId}
+  >
+    <span class="font-display text-[1.05rem] font-bold tracking-[-0.01em]">{title}</span>
+    <svg
+      class="shrink-0 w-[18px] h-[18px] text-text-soft transition-transform duration-300 ease-out group-aria-[expanded=true]:rotate-180"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </button>
+  <div
+    id={panelId}
+    data-acc-panel
+    class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out peer-aria-[expanded=true]:grid-rows-[1fr]"
+  >
+    <div class="overflow-hidden">
+      <div class="px-5 pb-5 pt-1 flex flex-col gap-4">
+        <slot />
+      </div>
+    </div>
+  </div>
+</Glass>

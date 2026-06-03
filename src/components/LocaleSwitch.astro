@@ -1,0 +1,24 @@
+---
+import type { Locale } from '@/config/i18n';
+
+interface Props {
+  current: Locale;
+}
+
+const { current } = Astro.props;
+const path = Astro.url.pathname;
+const cleanPath = path.replace(/^\/en/, '') || '/';
+const targetHref = current === 'es' ? `/en${cleanPath}` : cleanPath;
+const targetLabel = current === 'es' ? 'EN' : 'ES';
+const ariaLabel = current === 'es' ? 'Switch to English' : 'Cambiar a español';
+---
+
+<a
+  class="locale-switch font-mono text-[0.78rem] font-semibold leading-none px-3 py-2 rounded-full text-text-soft no-underline transition-[color,background] duration-[250ms] hover:text-accent hover:bg-accent-soft"
+  href={targetHref}
+  aria-label={ariaLabel}
+  title={ariaLabel}
+  hreflang={current === 'es' ? 'en' : 'es'}
+>
+  {targetLabel}
+</a>

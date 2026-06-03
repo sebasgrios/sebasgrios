@@ -1,0 +1,57 @@
+---
+import AdminAccordion from '@/components/admin/AdminAccordion.astro';
+import AdminField from '@/components/admin/AdminField.astro';
+import DeleteForm from '@/components/admin/DeleteForm.astro';
+import Button from '@/components/Button.astro';
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { fetchTechnologiesAdmin } from '@/lib/data/repos';
+
+export const prerender = false;
+
+const technologies = await fetchTechnologiesAdmin();
+const nextSort = technologies.reduce((max, tech) => Math.max(max, tech.sortOrder), -1) + 1;
+---
+
+<AdminLayout title="Tecnologías">
+  <div class="flex flex-col gap-3">
+    <AdminAccordion title="Nueva tecnología" id="new">
+      <form method="post" action="/api/technologies" class="flex flex-col gap-4">
+        <input type="hidden" name="_action" value="create" />
+        <div class="grid gap-3 sm:grid-cols-2">
+          <AdminField label="Key (slug)" name="key" placeholder="typescript" required />
+          <AdminField label="Etiqueta" name="label" placeholder="TypeScript" required />
+          <AdminField label="Icon key (opcional)" name="iconKey" />
+          <AdminField label="Orden" name="sortOrder" type="number" value={String(nextSort)} />
+        </div>
+        <div class="flex justify-end">
+          <Button type="submit">Añadir</Button>
+        </div>
+      </form>
+    </AdminAccordion>
+
+    {
+      technologies.map((tech) => (
+        <AdminAccordion title={tech.label} id={tech.id}>
+          <form method="post" action="/api/technologies" class="flex flex-col gap-4">
+            <input type="hidden" name="_action" value="update" />
+            <input type="hidden" name="id" value={tech.id} />
+            <div class="grid gap-3 sm:grid-cols-2">
+              <AdminField label="Key (slug)" name="key" value={tech.key} required />
+              <AdminField label="Etiqueta" name="label" value={tech.label} required />
+              <AdminField label="Icon key (opcional)" name="iconKey" value={tech.iconKey} />
+              <AdminField label="Orden" name="sortOrder" type="number" value={String(tech.sortOrder)} />
+            </div>
+            <div class="flex justify-end">
+              <Button type="submit">Guardar</Button>
+            </div>
+          </form>
+          <DeleteForm
+            action="/api/technologies"
+            confirm={`¿Eliminar "${tech.label}"? Se quitará de todos los roles, formación y proyectos.`}
+            fields={{ id: tech.id }}
+          />
+        </AdminAccordion>
+      ))
+    }
+  </div>
+</AdminLayout>

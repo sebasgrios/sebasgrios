@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { COPY } from '@/config/copy';
+import { getLocaleFromPath } from '@/lib/i18n/getLocale';
+
+export const prerender = false;
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const copy = COPY[locale];
+const homeHref = locale === 'es' ? '/' : '/en/';
+---
+
+<BaseLayout
+  title={`404 · ${copy.errors.notFoundTitle}`}
+  description={copy.errors.notFoundLead}
+  locale={locale}
+  noindex
+>
+  <section class="wrap py-[clamp(80px,14vh,160px)] text-center">
+    <p
+      class="font-mono text-sm uppercase tracking-[0.22em] text-text-faint"
+    >
+      404
+    </p>
+    <h1 class="text-5xl mt-3 tracking-[-0.02em] font-display font-black">
+      {copy.errors.notFoundTitle}
+    </h1>
+    <p class="mt-4 mx-auto max-w-prose text-text-soft">
+      {copy.errors.notFoundLead}
+    </p>
+    <a href={homeHref} class="mt-8 inline-block underline text-accent">
+      {copy.errors.backToPortfolio}
+    </a>
+  </section>
+</BaseLayout>

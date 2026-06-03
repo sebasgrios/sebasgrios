@@ -1,0 +1,242 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/Button.astro';
+import Glass from '@/components/Glass.astro';
+import IconButton from '@/components/IconButton.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import Tag from '@/components/Tag.astro';
+import ThemeToggle from '@/components/ThemeToggle.astro';
+import Arrow from '@/components/icons/Arrow.astro';
+import ArrowUp from '@/components/icons/ArrowUp.astro';
+import Building from '@/components/icons/Building.astro';
+import Chart from '@/components/icons/Chart.astro';
+import Code from '@/components/icons/Code.astro';
+import Git from '@/components/icons/Git.astro';
+import GitHub from '@/components/icons/GitHub.astro';
+import Home from '@/components/icons/Home.astro';
+import Laptop from '@/components/icons/Laptop.astro';
+import Layers from '@/components/icons/Layers.astro';
+import LinkedIn from '@/components/icons/LinkedIn.astro';
+import Mail from '@/components/icons/Mail.astro';
+import Mobile from '@/components/icons/Mobile.astro';
+import Moon from '@/components/icons/Moon.astro';
+import Pin from '@/components/icons/Pin.astro';
+import Play from '@/components/icons/Play.astro';
+import Spark from '@/components/icons/Spark.astro';
+import Sun from '@/components/icons/Sun.astro';
+
+export const prerender = false;
+
+if (import.meta.env.PROD) {
+  return new Response(null, { status: 404 });
+}
+
+const icons = [
+  { name: 'sun', component: Sun },
+  { name: 'moon', component: Moon },
+  { name: 'arrow', component: Arrow },
+  { name: 'arrowUp', component: ArrowUp },
+  { name: 'github', component: GitHub },
+  { name: 'linkedin', component: LinkedIn },
+  { name: 'mail', component: Mail },
+  { name: 'code', component: Code },
+  { name: 'mobile', component: Mobile },
+  { name: 'git', component: Git },
+  { name: 'spark', component: Spark },
+  { name: 'chart', component: Chart },
+  { name: 'layers', component: Layers },
+  { name: 'pin', component: Pin },
+  { name: 'play', component: Play },
+  { name: 'home', component: Home },
+  { name: 'building', component: Building },
+  { name: 'laptop', component: Laptop },
+];
+
+const modeIconMap = [
+  { mode: 'remoto', icon: Home, key: 'home' },
+  { mode: 'presencial', icon: Building, key: 'building' },
+  { mode: 'híbrido', icon: Laptop, key: 'laptop' },
+];
+
+const sectionClass = 'wrap py-[clamp(48px,7vw,96px)]';
+const card =
+  'p-[clamp(20px,3vw,30px)] flex flex-col gap-2.5 [&_p]:text-text-soft';
+---
+
+<BaseLayout
+  title="Design system · dev"
+  description="Internal showcase of the v3 design system primitives."
+  locale="es"
+  noindex
+>
+  <header class="py-6 border-b border-hairline bg-bg">
+    <div class="wrap flex items-center justify-between gap-4">
+      <div>
+        <p
+          class="font-mono text-[0.72rem] font-medium uppercase tracking-[0.22em] text-text-faint"
+        >
+          M3 · Design system
+        </p>
+        <h1
+          class="font-display text-[1.6rem] font-bold tracking-[-0.02em] mt-1"
+        >
+          Liquid Glass · primitives
+        </h1>
+      </div>
+      <ThemeToggle locale="es" />
+    </div>
+  </header>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="01"
+      eyebrow="Typography"
+      title="Typography"
+      sub="Display, body and mono families with the actual tokens."
+    />
+    <div class="grid grid-cols-1 gap-4">
+      <Glass class={card}>
+        <h1 class="font-display font-black tracking-[-0.02em] leading-[1.05] text-5xl">
+          Display H1 — Satoshi 900
+        </h1>
+        <h2
+          class="font-display font-black tracking-[-0.02em] leading-[1.05] text-3xl"
+        >
+          Display H2 — Satoshi 700
+        </h2>
+        <p class="text-text-soft max-w-[56ch] text-pretty">
+          Lead in General Sans 400. The quick brown fox jumps over the lazy dog 0123456789.
+        </p>
+        <p class="font-mono">Mono in JetBrains Mono — 0123456789 · ss01</p>
+      </Glass>
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="02"
+      eyebrow="Glass"
+      title="Glass primitive"
+      sub="Static and interactive (hover to see the cursor specular)."
+    />
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
+      <Glass class={card}>
+        <strong>Static glass</strong>
+        <p>No hover effect. Used for chrome where interactivity is not desired.</p>
+      </Glass>
+      <Glass interactive class={card}>
+        <strong>Interactive glass</strong>
+        <p>Move the cursor inside this card to see the radial specular highlight.</p>
+      </Glass>
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="03"
+      eyebrow="Buttons"
+      title="Buttons & icon buttons"
+      sub="Primary, ghost, and circular icon button."
+    />
+    <div class="flex gap-3 flex-wrap items-center">
+      <Button href="#"> Primary <Arrow /></Button>
+      <Button variant="ghost" href="#"> <GitHub /> Ghost</Button>
+      <IconButton ariaLabel="GitHub" href="https://github.com" target="_blank" rel="noopener">
+        <GitHub />
+      </IconButton>
+      <IconButton ariaLabel="Mail">
+        <Mail />
+      </IconButton>
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="04"
+      eyebrow="Tags"
+      title="Tags"
+      sub="JetBrains Mono pills used across role cards and projects."
+    />
+    <div class="flex flex-wrap gap-2">
+      <Tag>TypeScript</Tag>
+      <Tag>Astro</Tag>
+      <Tag>React</Tag>
+      <Tag>TailwindCSS</Tag>
+      <Tag>Cloudflare</Tag>
+      <Tag>Supabase</Tag>
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="05"
+      eyebrow="Icons"
+      title="Icon catalog"
+      sub="18 icons used across the portfolio. All zero JS."
+    />
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
+      {
+        icons.map(({ name, component: Icon }) => (
+          <Glass class="p-[18px] flex flex-col items-center gap-2 text-text">
+            <Icon size={28} />
+            <span class="font-mono text-[0.7rem] text-text-faint">{name}</span>
+          </Glass>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="06"
+      eyebrow="Mode mapping"
+      title="Role mode → icon"
+      sub="Mapping of the role.mode value (used in Experience cards) to its icon."
+    />
+    <div class="flex gap-3 flex-wrap items-center">
+      {
+        modeIconMap.map(({ mode, icon: Icon, key }) => (
+          <Glass class="px-[18px] py-3.5 inline-flex items-center gap-3 text-accent">
+            <Icon size={20} />
+            <div class="flex flex-col text-text">
+              <strong class="capitalize">{mode}</strong>
+              <span class="font-mono text-[0.7rem] text-text-faint">{key}</span>
+            </div>
+          </Glass>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="07"
+      eyebrow="Reveal"
+      title="Reveal on scroll"
+      sub="Items below appear with a fade + slide once they enter the viewport."
+    />
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
+      <Glass class={`reveal ${card}`}><strong>Reveal 1</strong></Glass>
+      <Glass class={`reveal [transition-delay:0.08s] ${card}`}><strong>Reveal 2 (d1)</strong></Glass>
+      <Glass class={`reveal [transition-delay:0.16s] ${card}`}><strong>Reveal 3 (d2)</strong></Glass>
+      <Glass class={`reveal [transition-delay:0.24s] ${card}`}><strong>Reveal 4 (d3)</strong></Glass>
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <SectionHead
+      num="08"
+      eyebrow="Parallax"
+      title="Parallax with cursor"
+      sub="The card below shifts ±14px following the cursor (disabled if prefers-reduced-motion)."
+    />
+    <div class="max-w-[480px]">
+      <div data-parallax>
+        <Glass interactive class={card}>
+          <strong>data-parallax</strong>
+          <p>Move the cursor anywhere on the page to see this card drift.</p>
+        </Glass>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

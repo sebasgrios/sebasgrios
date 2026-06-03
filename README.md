@@ -1,6 +1,6 @@
 # Hi 👋, I'm [Sebas](https://sebasgrios.es)
 
-### Software developer | AI-Assisted developer
+### AI-Driven Engineer
 
 I build reliable digital products with a focus on efficiency, data integrity, privacy, and user experience.
 

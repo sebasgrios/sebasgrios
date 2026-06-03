@@ -1,0 +1,64 @@
+---
+import Button from '@/components/Button.astro';
+import Glass from '@/components/Glass.astro';
+import GitHub from '@/components/icons/GitHub.astro';
+import LinkedIn from '@/components/icons/LinkedIn.astro';
+import Mail from '@/components/icons/Mail.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import { pickLocale } from '@/lib/domain/i18n';
+import type { Profile } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  profile: Profile;
+}
+
+const { locale, profile } = Astro.props;
+const copy = COPY[locale].sections.contact;
+const title = pickLocale(profile.contactTitle, locale);
+const lead = pickLocale(profile.contactLead, locale);
+const titleWords = title.split(' ');
+const headTitle = titleWords.slice(0, -1).join(' ');
+const tailTitle = titleWords.at(-1) ?? '';
+---
+
+<section id="contact" aria-labelledby="contact-title" class="wrap text-center">
+  <Glass
+    class="reveal p-[clamp(40px,7vw,80px)_clamp(24px,5vw,64px)] text-center max-w-[820px] mx-auto"
+  >
+    <div
+      class="font-mono text-[0.72rem] font-medium uppercase tracking-[0.22em] text-text-faint inline-flex items-center gap-1 justify-center"
+    >
+      <span class="text-accent">05</span>&nbsp;/&nbsp;{copy.eyebrow}
+    </div>
+    <h2
+      id="contact-title"
+      class="font-display text-[clamp(2.2rem,6vw,4rem)] font-black tracking-[-0.02em] leading-[1.05] mt-4"
+    >
+      {headTitle}<br /><span
+        class="bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.72_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
+      >{tailTitle}</span>
+    </h2>
+    <p class="text-text-soft text-[1.1rem] mt-[18px] mx-auto max-w-[50ch]">{lead}</p>
+    <div class="flex flex-wrap gap-3 justify-center mt-[34px]">
+      <Button href={`mailto:${profile.email}`}>
+        <Mail /> {copy.cta}
+      </Button>
+      {
+        profile.linkedinUrl && (
+          <Button href={profile.linkedinUrl} variant="ghost" target="_blank" rel="noopener">
+            <LinkedIn /> LinkedIn
+          </Button>
+        )
+      }
+      {
+        profile.githubUrl && (
+          <Button href={profile.githubUrl} variant="ghost" target="_blank" rel="noopener">
+            <GitHub /> GitHub
+          </Button>
+        )
+      }
+    </div>
+  </Glass>
+</section>

@@ -1,0 +1,39 @@
+---
+import AdminField from '@/components/admin/AdminField.astro';
+import AdminLocalized from '@/components/admin/AdminLocalized.astro';
+import AdminLocalizedList from '@/components/admin/AdminLocalizedList.astro';
+import AdminTechPicker from '@/components/admin/AdminTechPicker.astro';
+import type { EducationAdmin } from '@/lib/data/repos';
+import type { Technology } from '@/lib/domain/types';
+
+interface Props {
+  education: EducationAdmin | null;
+  technologies: Technology[];
+  nextSort: number;
+}
+
+const { education, technologies, nextSort } = Astro.props;
+const e = education;
+---
+
+<AdminLocalized label="Título" name="title" es={e?.title.es} en={e?.title.en} />
+<div class="grid gap-3 sm:grid-cols-2">
+  <AdminField label="Centro" name="school" value={e?.school} required />
+  <AdminField
+    label="Orden"
+    name="sortOrder"
+    type="number"
+    value={String(e?.sortOrder ?? nextSort)}
+  />
+  <AdminField label="Inicio" name="startDate" type="date" value={e?.startDate} required />
+  <AdminField label="Fin (vacío = en curso)" name="endDate" type="date" value={e?.endDate} />
+</div>
+<AdminLocalized
+  label="Descripción"
+  name="description"
+  es={e?.description.es}
+  en={e?.description.en}
+  multiline
+/>
+<AdminLocalizedList label="Bullets" name="bullets" items={e?.bullets ?? []} />
+<AdminTechPicker technologies={technologies} selected={e?.technologyIds ?? []} />

@@ -1,0 +1,21 @@
+---
+interface Props {
+  action: string;
+  confirm: string;
+  label?: string;
+  fields: Record<string, string>;
+}
+
+const { action, confirm, label = 'Eliminar', fields } = Astro.props;
+---
+
+<form method="post" action={action} class="flex justify-end" data-confirm={confirm}>
+  <input type="hidden" name="_action" value="delete" />
+  {Object.entries(fields).map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+  <button
+    type="submit"
+    class="text-[oklch(0.62_0.22_25)] text-[0.85rem] font-medium hover:underline cursor-pointer"
+  >
+    {label}
+  </button>
+</form>
