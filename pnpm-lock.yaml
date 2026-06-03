@@ -60,6 +60,9 @@ importers:
       '@playwright/test':
         specifier: ^1.49.1
         version: 1.60.0
+      sharp:
+        specifier: ^0.34.5
+        version: 0.34.5
       simple-icons:
         specifier: ^16.22.0
         version: 16.22.0

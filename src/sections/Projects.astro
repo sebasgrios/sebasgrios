@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Button from '@/components/Button.astro';
 import Glass from '@/components/Glass.astro';
 import SectionHead from '@/components/SectionHead.astro';
@@ -51,12 +52,16 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
                 aria-label={`${project.name} live site`}
               >
                 {project.imageUrl && (
-                  <img
+                  <Image
                     src={project.imageUrl}
                     alt={`${project.name} screenshot`}
                     loading="lazy"
-                    width="800"
-                    height="500"
+                    width={800}
+                    height={500}
+                    widths={[400, 800]}
+                    sizes="(max-width: 720px) 100vw, 40vw"
+                    format="webp"
+                    quality={70}
                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] min-[720px]:absolute min-[720px]:inset-0"
                   />
                 )}
@@ -68,12 +73,16 @@ const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[tr
             ) : (
               <div class="relative block overflow-hidden border-b border-glass-border min-[720px]:border-b-0 min-[720px]:border-r aspect-[16/10] min-[720px]:aspect-auto min-[720px]:w-[42%] min-[720px]:shrink-0 min-[720px]:self-stretch">
                 {project.imageUrl && (
-                  <img
+                  <Image
                     src={project.imageUrl}
                     alt={`${project.name} screenshot`}
                     loading="lazy"
-                    width="800"
-                    height="500"
+                    width={800}
+                    height={500}
+                    widths={[400, 800]}
+                    sizes="(max-width: 720px) 100vw, 40vw"
+                    format="webp"
+                    quality={70}
                     class="w-full h-full object-cover min-[720px]:absolute min-[720px]:inset-0"
                   />
                 )}
