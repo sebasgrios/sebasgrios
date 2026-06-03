@@ -29,29 +29,29 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/cloudflare": "^12.2.1",
-    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/cloudflare": "^12.6.13",
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@resvg/resvg-wasm": "^2.6.2",
-    "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.46.2",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.0.0",
-    "astro": "^5.1.1",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^5.18.2",
     "satori": "^0.26.0",
-    "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.2",
-    "zod": "^3.24.1"
+    "tailwindcss": "^4.3.0",
+    "typescript": "^5.9.3",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@playwright/test": "^1.49.1",
+    "@playwright/test": "^1.60.0",
     "sharp": "^0.34.5",
     "simple-icons": "^16.22.0",
-    "vitest": "^2.1.8",
-    "wrangler": "^3.99.0"
+    "vitest": "^2.1.9",
+    "wrangler": "^3.114.17"
   },
   "packageManager": "pnpm@11.1.3"
 }

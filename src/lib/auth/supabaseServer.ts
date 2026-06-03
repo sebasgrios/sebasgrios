@@ -40,9 +40,5 @@ export function createSupabaseServerClient({
     },
   };
 
-  // @supabase/ssr types the 3rd schema generic more narrowly than SupabaseClient<Database>;
-  // the runtime client is identical, so bridge the generic mismatch.
-  return createServerClient<Database>(SUPABASE.url, SUPABASE.anonKey, {
-    cookies: cookieMethods,
-  }) as unknown as SupabaseServerClient;
+  return createServerClient<Database>(SUPABASE.url, SUPABASE.anonKey, { cookies: cookieMethods });
 }
