@@ -12,20 +12,17 @@ Estás en la **rama `v3`**, una reescritura completa que:
 - Implementa un nuevo diseño "Liquid Glass" con i18n es/en.
 - Deja preparada la base para un **backoffice** privado (`/admin`, Google OAuth via Supabase, RLS), implementación posterior.
 
-Estado actual: **v3 implementada end-to-end** (M1–M7 cerrados). Falta M8 (PR `v3 → develop`).
+Estado actual: **v3.0.0 cerrada** (`package.json` 3.0.0). Público + backoffice implementados end-to-end y verificados (check/test/build/e2e verdes). Pendiente solo el **setup manual del ingeniero** (OAuth, secretos, deploy `v3 → develop → main`) — ver [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 Hitos cerrados:
-- **M1** docs + AGENTS.md (`d5c9600`)
-- **M2** scaffold Astro 5 + Tailwind 4 + Cloudflare + i18n skeleton (`abe2f42`)
-- **M3** design system: glass, atoms, icons, theme toggle, effects (`1c8c5ee`)
-- **M4** Supabase data layer con seed bilingüe (`6e4f33f`)
-- **M5** secciones públicas wired a Supabase (`fb667a2`)
-- **M6** hreflang alternates + filter de rutas internas en sitemap (`fe4d274`)
-- **M7** OG dinámica Satori + schema.org Person + CF Analytics hook (`6ebf6a9`)
+- **M1–M7** docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics.
+- **Backoffice** `/admin`: Google OAuth + RLS, CRUD de todas las entidades, media (Storage), publicar (deploy hook).
+- **Mejoras de cierre**: CI + Dependabot, e2e de guards, imágenes webp (`astro:assets`), headers SWR, factory CRUD, observabilidad, bump `@supabase/ssr` 0.10.
+- Changelog en [`CHANGELOG.md`](./CHANGELOG.md). Backlog/mejoras futuras en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 ## Documentación de referencia
 
-**SIEMPRE empieza por** [`docs/index.md`](./docs/index.md). Es el índice maestro de 16 documentos que cubren overview, arquitectura, schema, design system, conventions, i18n, deployment, etc.
+**SIEMPRE empieza por** [`docs/index.md`](./docs/index.md). Es el índice maestro de 17 documentos que cubren overview, arquitectura, schema, design system, conventions, i18n, deployment, backoffice, improvements, etc.
 
 Documentos críticos:
 - [`docs/00-overview.md`](./docs/00-overview.md) — alcance, hitos, definition of done.
@@ -61,7 +58,7 @@ Documentos críticos:
 
 ```
 .
-├── docs/                  # 16 documentos (índice en docs/index.md)
+├── docs/                  # 17 documentos (índice en docs/index.md)
 ├── public/
 │   ├── fonts/             # Satoshi, General Sans, JetBrains Mono (self-host)
 │   ├── _headers           # CSP/HSTS Cloudflare Pages
@@ -78,8 +75,8 @@ Documentos críticos:
 │   │   ├── en/index.astro
 │   │   ├── 401.astro
 │   │   ├── 404.astro
-│   │   ├── admin/         # (futuro)
-│   │   ├── api/           # (futuro)
+│   │   ├── admin/         # backoffice SSR (login, dashboard, CRUD, media, publish)
+│   │   ├── api/           # endpoints SSR (auth, mutaciones por entidad, media, publish)
 │   │   └── og/[locale].png.ts
 │   ├── lib/
 │   │   ├── domain/        # tipos puros, helpers (dates, i18n, stats)

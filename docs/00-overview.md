@@ -1,5 +1,7 @@
 # 00 · Overview
 
+> **Estado: v3.0.0 cerrada.** Público + backoffice implementados y verificados. Falta solo el setup manual del ingeniero (OAuth, secretos, deploy). Ver [`CHANGELOG.md`](../CHANGELOG.md) y [17-improvements](./17-improvements.md).
+
 ## Objetivo
 
 Reconstruir el portfolio personal del ingeniero (Sebastián González Ríos) en una **v3** completa que:
