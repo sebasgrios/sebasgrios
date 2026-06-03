@@ -160,39 +160,34 @@ Automatizar PRs de actualización de dependencias (Astro, Tailwind, Supabase) co
 
 ## Pasos manuales del ingeniero
 
-Lo que **no puedo hacer yo** (dashboards, secretos, BD). Cada paso con su comprobación.
+Acciones que **solo puede hacer el ingeniero** (secretos, decisiones de release, dashboards). Cada paso con su comprobación.
 
-### A · Cierre de v3 en producción (imprescindible)
+### Ya hechos (automatizados / verificados)
 
-1. **Confirmar el proyecto Supabase.** ⚠️ La app usa `nzbodijggjxhshqqpnue` (Frankfurt) pero `supabase` CLI está linkada a otro (`ulxpassoworqptnwktxi`, "website"). Verifica cuál es el real y re-linka: `supabase link --project-ref nzbodijggjxhshqqpnue`.
-   - **Check**: `supabase projects list` marca como LINKED el proyecto correcto; `src/config/supabase.ts` apunta a la misma `ref`.
-2. **Google OAuth** (ya hecho): provider en Supabase + redirect URLs (`https://sebasgrios.es/api/auth/callback`).
-   - **Check**: en `/admin/login`, "Entrar con Google" completa el login y vuelve a `/admin`.
-3. **Primer admin** (ya hecho): fila en `user_roles` con `role='admin'`.
-   - **Check**: tras loguear, `/admin` carga el panel (no redirige a `/401`).
-4. **Secreto `CF_DEPLOY_HOOK_URL`** en Cloudflare Pages (Settings → Environment variables → Production, cifrado). Crear el Deploy hook en Settings → Builds & deployments (rama de prod).
-   - **Check**: en `/admin/publish`, "Publicar ahora" → toast verde y un nuevo deployment en Cloudflare.
-5. **Desplegar v3**: PR `v3 → develop`, luego `develop → main`. La CI (paso B) debe pasar.
-   - **Check**: `sebasgrios.es` sirve la build de v3; Lighthouse mobile ≥ 95.
+- ✅ `git push origin v3` → PR #9 en el commit de cierre.
+- ✅ CI (GitHub Actions) verde: check + test + build.
+- ✅ Deploy Cloudflare del preview `v3` correcto (con `sharp` + SSR `/admin`), verificado: home webp, `/admin`→login, OG, headers SWR, CSRF + auth en `/api/*`.
+- ✅ Google OAuth + primer admin en `user_roles` (confirmados por el ingeniero).
 
-### B · CI (ya creada, falta activarla)
+### Pendiente (irreducible)
 
-6. El workflow `.github/workflows/ci.yml` corre en PRs a `develop`/`main`. En GitHub → Settings → Branches: marca el job **CI / verify** como *required status check* para `develop` y `main`.
-   - **Check**: abrir un PR muestra el check "CI" y bloquea el merge si falla.
+1. **(Opcional) Supabase CLI**: la app ya funciona con `nzbodijggjxhshqqpnue` (el deploy lo confirma). Solo si vas a usar la CLI para migraciones/tipos, re-linka: `supabase link --project-ref nzbodijggjxhshqqpnue`. Si no, **omítelo**.
+2. **Deploy hook `CF_DEPLOY_HOOK_URL`** *(necesario para el botón Publicar)*: Cloudflare Pages → Settings → Builds & deployments → crear Deploy hook (rama de prod) → guardar la URL como **Secret** en Settings → Environment variables → Production.
+   - **Check**: en `/admin/publish` → "Publicar ahora" → toast verde + deployment nuevo.
+3. **Branch protection / CI obligatoria**: GitHub → Settings → Rules → ruleset sobre `main` + `develop` → marca **Require status checks to pass** y añade el check **`verify`** (ya existe, la CI corrió). Deja marcadas *Restrict deletions, Require PR before merging (approvals 0), Block force pushes*.
+   - **Check**: un PR muestra el check `verify` y bloquea el merge si falla.
+4. **Release a producción** *(decisión tuya)*: mergea PR #9 (`v3 → develop`), luego `develop → main`.
+   - **Check**: `sebasgrios.es` sirve v3 (hero webp, backoffice operativo); Lighthouse mobile ≥ 95.
+5. **(Opcional) Tag**: tras `main`, `git tag v3.0.0 && git push origin v3.0.0`.
 
-### C · Endurecimiento (recomendado antes de editar en vivo)
+### Endurecimiento recomendado (antes de editar en vivo)
 
-7. **Rate limiting (S2)**: Cloudflare → Security → WAF → Rate limiting rules sobre `/api/*` y `/admin/login` (p. ej. 30 req/min por IP).
-   - **Check**: ráfaga de peticiones a `/api/auth/signin` devuelve `429`.
-8. **Backups (O2)**: programar `pg_dump` (cron) con la connection string como secret de GitHub Actions a un bucket.
-   - **Check**: existe un dump reciente en el destino.
-9. **Audit log (S3)**: crear la migración `admin_audit_log` (ver schema en [13-backoffice](./13-backoffice.md)) y aplicarla (`supabase db push`). *(El wiring de inserts queda como follow-up.)*
-   - **Check**: `supabase migration list` muestra la migración aplicada.
-10. **SESSION KV (O1, opcional)**: silenciar el warning del build creando un KV namespace y declarando el binding `SESSION` en `wrangler.jsonc`, o ignorarlo (no usamos `Astro.session`).
+6. **Rate limiting**: Cloudflare → Security → WAF → regla sobre `/api/*` y `/admin/login` (~30 req/min/IP). *Check*: ráfaga a `/api/auth/signin` → `429`.
+7. **Backups BD**: cron `pg_dump` con la connection string como secret a un bucket. *Check*: dump reciente.
+8. **Sentry** (observabilidad completa): proyecto + DSN como secret; se integra en los `catch` (que ya hacen `console.error`).
 
-### D · Observabilidad y futuro (P2/P3)
+### Mejoras avanzadas (las implemento yo cuando quieras)
 
-11. **Sentry (Q3/O4)**: crear proyecto, añadir DSN como secret, integrar en los `catch` de `/api/*`.
-12. **Branch DB (O3)**, **Lighthouse CI (Q4)**, **Renovate** si se prefiere a Dependabot.
-
-> Las mejoras de **código** diferidas (E1 RPC pivots, E2 factory CRUD, Q2 bump `@supabase/ssr`, S1 CSP hashes) las puedo implementar yo en una iteración aparte; se dejaron fuera del cierre por ser refactors de riesgo sobre código ya estable.
+- **S1** CSP estricta sin `'unsafe-inline'`: requiere `experimental.csp` de Astro **verificada en un deploy preview** (no se puede pre-hashear desde el build por los scripts inline + páginas SSR).
+- **E1** RPC atómico de pivots + **S3** audit log: migraciones SQL (aplicar con la CLI re-linkada).
+- **Q4** Lighthouse CI, **O3** Branch DB de preview.
