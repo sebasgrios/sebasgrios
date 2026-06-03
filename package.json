@@ -42,7 +42,7 @@
     "astro": "^5.18.2",
     "satori": "^0.26.0",
     "tailwindcss": "^4.3.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "zod": "^3.25.76"
   },
   "devDependencies": {
