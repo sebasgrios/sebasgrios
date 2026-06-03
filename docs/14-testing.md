@@ -59,10 +59,11 @@ describe('pickLocale', () => {
 
 Smoke tests en `/e2e/`:
 
-1. `public.spec.ts`: visita `/` y `/en/`, verifica que se renderizan secciones esperadas y links sociales presentes.
+1. `public.spec.ts`: visita `/` y `/en/`, secciones, locale switch, hreflang, JSON-LD.
 2. `theme.spec.ts`: click theme toggle alterna `data-theme` y persiste tras reload.
+3. `admin.spec.ts`: guards del backoffice sin sesión (`/admin`→302 login, `POST /api/*`→401, `/admin/login` renderiza, `/api/auth/signin`→302).
 
-(Pendiente: `responsive.spec.ts` con viewports 360/768/1280 → screenshots estables.)
+(Pendiente: e2e del flujo admin autenticado y `responsive.spec.ts`.)
 
 ### Futuros (cuando exista backoffice)
 
@@ -80,14 +81,7 @@ await expect(anon.from('profile').update({ full_name: 'X' })).rejects.toThrow();
 
 ## CI
 
-Sin GitHub Actions todavía. Cuando se añadan (M8+):
-
-- Job `lint`: `npm run check`.
-- Job `unit`: `npm test`.
-- Job `build`: `npm run build`.
-- Job `e2e` (opcional, lento): `npm run e2e`.
-
-Todos bloquean merge a `develop` y `main`.
+`.github/workflows/ci.yml` (GitHub Actions) corre en PRs a `develop`/`main` y push a `v3`/`develop`: `pnpm check` + `pnpm test` + `pnpm build`. El `build` solo necesita la anon key pública (hardcodeada) → sin secretos. Falta marcarlo como *required status check* en GitHub (ver [17-improvements](./17-improvements.md), paso manual B). `e2e` aún no está en CI (necesita servidor + más tiempo).
 
 ## Lo que NO se testea
 

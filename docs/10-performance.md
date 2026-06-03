@@ -28,7 +28,7 @@
 ### Imágenes
 
 - Servidas desde Supabase Storage con transformaciones (Image Transformations de Supabase) o vía `?width=...&format=webp`.
-- En Astro, `<Image src={remoteUrl} ... />` con `astro:assets` configurado para dominios remotos en `image.remotePatterns`.
+- **Implementado**: hero y proyectos usan `<Image>` de `astro:assets` (servicio `sharp` en build, `imageService: 'compile'`) → **webp** optimizado en `/_astro/` (hero `densities=[1,2]`; proyectos `widths=[400,800]` + `sizes`). Logos/avatar quedan como `<img>` (tamaño ínfimo). `sharp` es `devDependency` (solo build; runtime passthrough).
 - `loading="lazy"` por defecto excepto hero (`loading="eager" fetchpriority="high"`).
 - `srcset` con widths `[400, 800, 1200, 1600]` (proyectos), `[300, 600]` (avatar/logo), `[480, 720, 1080]` (hero).
 - `aspect-ratio` siempre declarado en CSS para evitar CLS.
@@ -55,6 +55,10 @@
 - Tailwind v4 con `@tailwindcss/vite` produce CSS optimizado.
 - CSS crítico inline en `<head>` solo si Lighthouse lo pide en M7.
 - `content-visibility: auto` en secciones: **evaluado y descartado**. Rompía la precisión de la navegación por anclas del nav (`#experience`…) porque los placeholders `contain-intrinsic-size` desajustaban el scroll al saltar entre secciones colapsadas. El beneficio en una página de 5 secciones cortas y estáticas no compensa; no se usa.
+
+### Caché (Cloudflare)
+
+`public/_headers`: `/fonts/*` immutable 1 año, `/og/*` cacheado, y `/` + `/en/` con `s-maxage=3600, stale-while-revalidate=86400` (edge cache + revalidación; el deploy hook refresca).
 
 ### HTML
 

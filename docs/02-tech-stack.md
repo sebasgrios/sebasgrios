@@ -35,6 +35,7 @@ Versiones objetivo (las pinearemos en `package.json`). Cualquier upgrade mayor r
 | `vitest` | `^2.x` | Unit tests. |
 | `@playwright/test` | `^1.4x` | E2E. Instalado pero suite mínima hasta backoffice. |
 | `@astrojs/check` | `^0.9.x` | `astro check` en CI. |
+| `sharp` | `^0.34.x` | devDependency; optimización de imágenes de `astro:assets` en build (webp). |
 
 ## Fuentes (self-host)
 

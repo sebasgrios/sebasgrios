@@ -5,14 +5,19 @@ Backlog priorizado de mejoras a nivel de **código** e **infraestructura**, surg
 **Prioridad**: `P1` alto valor / hacer pronto · `P2` medio · `P3` nice-to-have.
 **Esfuerzo**: `S` < 1h · `M` 1-4h · `L` > medio día.
 
-## Quick wins (P1, esfuerzo bajo)
+## Estado (cierre de v3)
 
-| # | Mejora | Esf. |
-|---|---|---|
-| I1 | CI en GitHub Actions (check + test + build en cada PR) | S |
-| P1 | Imágenes responsive (Supabase transforms / `astro:assets`) | M |
-| O1 | Resolver el binding `SESSION` KV del adapter (warning en cada build) | S |
-| C1 | Cache-Control SWR para el HTML prerenderizado | S |
+**Implementado y verificado** (build/check/test verdes):
+- ✅ **I1** CI (GitHub Actions: check + test + build).
+- ✅ **O5** Dependabot (npm + actions, weekly).
+- ✅ **C1** Cache-Control SWR para `/` y `/en/`.
+- ✅ **P1** Imágenes optimizadas con `astro:assets` + `sharp` (hero webp 1x/2x; proyectos webp responsive).
+- ✅ **Q1 (parcial)** e2e de los guards admin (`e2e/admin.spec.ts`).
+- ✅ Hardening de subida de medios (solo imágenes, 5 MB); componente `DeleteForm`.
+
+**Diferido por estabilidad** (toca código crítico/refactor amplio — hacer con calma, no en el cierre): **E1** RPC pivots, **E2** factory CRUD, **Q2** bump `@supabase/ssr`, **S1** CSP con hashes.
+
+**Requiere acción manual del ingeniero** (dashboard/secretos/BD): ver «[Pasos manuales](#pasos-manuales-del-ingeniero)» al final.
 
 ---
 
@@ -138,9 +143,50 @@ Automatizar PRs de actualización de dependencias (Astro, Tailwind, Supabase) co
 
 ## Orden sugerido
 
-1. **I1** (CI) + **O1** (binding SESSION) — base operativa, esfuerzo bajo.
-2. **P1** (imágenes) — mayor impacto en CWV.
+1. **I1** (CI ✅) + **O1** (binding SESSION) — base operativa, esfuerzo bajo.
+2. **P1** (imágenes ✅) — mayor impacto en CWV.
 3. **Q3** (observabilidad) + **S3** (audit log) — antes de operar en vivo desde el backoffice.
 4. **E1** (RPC pivots) + **E2** (factory CRUD) — deuda de duplicación.
 5. **S1** (CSP hashes) + **S2** (rate limit) + **O2** (backups) — endurecimiento.
 6. Resto (P3) según disponibilidad.
+
+---
+
+## Pasos manuales del ingeniero
+
+Lo que **no puedo hacer yo** (dashboards, secretos, BD). Cada paso con su comprobación.
+
+### A · Cierre de v3 en producción (imprescindible)
+
+1. **Confirmar el proyecto Supabase.** ⚠️ La app usa `nzbodijggjxhshqqpnue` (Frankfurt) pero `supabase` CLI está linkada a otro (`ulxpassoworqptnwktxi`, "website"). Verifica cuál es el real y re-linka: `supabase link --project-ref nzbodijggjxhshqqpnue`.
+   - **Check**: `supabase projects list` marca como LINKED el proyecto correcto; `src/config/supabase.ts` apunta a la misma `ref`.
+2. **Google OAuth** (ya hecho): provider en Supabase + redirect URLs (`https://sebasgrios.es/api/auth/callback`).
+   - **Check**: en `/admin/login`, "Entrar con Google" completa el login y vuelve a `/admin`.
+3. **Primer admin** (ya hecho): fila en `user_roles` con `role='admin'`.
+   - **Check**: tras loguear, `/admin` carga el panel (no redirige a `/401`).
+4. **Secreto `CF_DEPLOY_HOOK_URL`** en Cloudflare Pages (Settings → Environment variables → Production, cifrado). Crear el Deploy hook en Settings → Builds & deployments (rama de prod).
+   - **Check**: en `/admin/publish`, "Publicar ahora" → toast verde y un nuevo deployment en Cloudflare.
+5. **Desplegar v3**: PR `v3 → develop`, luego `develop → main`. La CI (paso B) debe pasar.
+   - **Check**: `sebasgrios.es` sirve la build de v3; Lighthouse mobile ≥ 95.
+
+### B · CI (ya creada, falta activarla)
+
+6. El workflow `.github/workflows/ci.yml` corre en PRs a `develop`/`main`. En GitHub → Settings → Branches: marca el job **CI / verify** como *required status check* para `develop` y `main`.
+   - **Check**: abrir un PR muestra el check "CI" y bloquea el merge si falla.
+
+### C · Endurecimiento (recomendado antes de editar en vivo)
+
+7. **Rate limiting (S2)**: Cloudflare → Security → WAF → Rate limiting rules sobre `/api/*` y `/admin/login` (p. ej. 30 req/min por IP).
+   - **Check**: ráfaga de peticiones a `/api/auth/signin` devuelve `429`.
+8. **Backups (O2)**: programar `pg_dump` (cron) con la connection string como secret de GitHub Actions a un bucket.
+   - **Check**: existe un dump reciente en el destino.
+9. **Audit log (S3)**: crear la migración `admin_audit_log` (ver schema en [13-backoffice](./13-backoffice.md)) y aplicarla (`supabase db push`). *(El wiring de inserts queda como follow-up.)*
+   - **Check**: `supabase migration list` muestra la migración aplicada.
+10. **SESSION KV (O1, opcional)**: silenciar el warning del build creando un KV namespace y declarando el binding `SESSION` en `wrangler.jsonc`, o ignorarlo (no usamos `Astro.session`).
+
+### D · Observabilidad y futuro (P2/P3)
+
+11. **Sentry (Q3/O4)**: crear proyecto, añadir DSN como secret, integrar en los `catch` de `/api/*`.
+12. **Branch DB (O3)**, **Lighthouse CI (Q4)**, **Renovate** si se prefiere a Dependabot.
+
+> Las mejoras de **código** diferidas (E1 RPC pivots, E2 factory CRUD, Q2 bump `@supabase/ssr`, S1 CSP hashes) las puedo implementar yo en una iteración aparte; se dejaron fuera del cierre por ser refactors de riesgo sobre código ya estable.
