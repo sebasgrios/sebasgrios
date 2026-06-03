@@ -16,11 +16,12 @@ Backlog priorizado de mejoras a nivel de **código** e **infraestructura**, surg
 - ✅ **E2** factory genérico de endpoints CRUD (`src/lib/admin/crud.ts`, con test) → 6 endpoints de ~55 a ~15 líneas.
 - ✅ **Q3 (parcial)** observabilidad: `console.error` en los `catch` de los endpoints (centralizado en el factory).
 - ✅ **Q2** bump `@supabase/ssr` 0.5→0.10 (elimina la deprecación y el cast `as unknown`).
+- ✅ **E1** sync de pivots **atómico** vía RPC `set_entity_technologies` (migración 0013, aplicada) → elimina las 4 funciones sync duplicadas.
+- ✅ **S3** **audit log** `admin_audit_log` (migración 0014, aplicada) + logging best-effort en todos los `/api/*`.
 - ✅ Hardening de subida de medios (solo imágenes, 5 MB); componente `DeleteForm`.
 
 **Diferido (bloqueo real, no de pereza):**
 - **S1** CSP sin `'unsafe-inline'`: Astro **inlinea 4+ scripts** en el HTML y las páginas SSR de `/admin` añaden más → no se pueden pre-hashear desde el build. Requiere la **CSP experimental de Astro** (`experimental.csp`, auto-hash) **verificada en un deploy preview** antes de quitar `'unsafe-inline'`. Forzarlo a ciegas rompería scripts en producción.
-- **E1** RPC atómico de pivots y **S3** audit log: requieren **aplicar migración** a Supabase. ⚠️ La CLI está linkada a otro proyecto (`ulxpassoworqptnwktxi`) distinto del de la app (`nzbodijggjxhshqqpnue`) → resolver el link antes de tocar la BD. El sync actual de pivots funciona (no transaccional pero correcto para un único editor).
 - **Q4** Lighthouse CI: mejor añadirlo cuando exista URL de preview estable (evitar CI flaky).
 
 **Requiere acción manual del ingeniero** (dashboard/secretos/BD): ver «[Pasos manuales](#pasos-manuales-del-ingeniero)» al final.
@@ -189,5 +190,6 @@ Acciones que **solo puede hacer el ingeniero** (secretos, decisiones de release,
 ### Mejoras avanzadas (las implemento yo cuando quieras)
 
 - **S1** CSP estricta sin `'unsafe-inline'`: requiere `experimental.csp` de Astro **verificada en un deploy preview** (no se puede pre-hashear desde el build por los scripts inline + páginas SSR).
-- **E1** RPC atómico de pivots + **S3** audit log: migraciones SQL (aplicar con la CLI re-linkada).
 - **Q4** Lighthouse CI, **O3** Branch DB de preview.
+
+> **E1** (RPC pivots) y **S3** (audit log) ya están **implementados y aplicados** a la BD (migraciones 0013/0014). Verifica al editar: guardar las tecnologías de un grupo en `/admin/stack` debe persistir; las mutaciones deben aparecer en `select * from admin_audit_log`.

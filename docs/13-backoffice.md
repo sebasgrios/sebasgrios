@@ -17,7 +17,9 @@ Patrón por entidad: schema en `src/lib/admin/schemas.ts`, lectura admin en `src
 
 **Decisión de auth**: las mutaciones usan el **JWT del usuario autenticado** (cookie SSR, anon key) y la RLS `is_admin()` las autoriza. **No se usa el service-role key** en el worker.
 
-**Sincronización de pivots M:N**: al guardar una entidad con tecnologías, se borran sus filas pivot y se reinsertan las seleccionadas (con `sort_order` por orden). No es transaccional (sin RPC); aceptable para un único editor.
+**Sincronización de pivots M:N**: al guardar una entidad con tecnologías, la RPC **`set_entity_technologies`** (migración 0013) hace `delete` + `insert` **atómico** en una transacción (`security invoker`, RLS admin). Ver [06-data-schema](./06-data-schema.md).
+
+**Auditoría**: cada mutación de `/api/*` registra una fila en **`admin_audit_log`** (migración 0014) de forma *best-effort* (`src/lib/data/audit.ts`); un fallo de log nunca rompe la acción.
 
 ### Setup externo requerido (manual del ingeniero) `[PENDIENTE]`
 

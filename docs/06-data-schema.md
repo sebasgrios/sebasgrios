@@ -293,7 +293,26 @@ supabase/migrations/
   0010_rls_policies.sql
   0011_triggers.sql
   0012_storage_buckets.sql
+  0013_set_entity_technologies.sql   # RPC: sync atómico de pivots M:N
+  0014_admin_audit_log.sql           # tabla de auditoría del backoffice
 ```
+
+## RPC `set_entity_technologies`
+
+Función `security invoker` que reemplaza la sincronización de pivots de tecnologías en una sola transacción: `delete` + `insert` (con `sort_order` por orden de la lista). Whitelist de tablas pivot (`role_/education_/stack_group_/project_technologies`). RLS aplica (admin write). La llaman los repos de mutación vía `client.rpc('set_entity_technologies', { p_table, p_fk, p_id, p_ids })`.
+
+## `admin_audit_log`
+
+```sql
+create table admin_audit_log (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) default auth.uid(),
+  entity text not null, action text not null, entity_id uuid,
+  created_at timestamptz not null default now()
+);
+```
+
+RLS: lectura + insert solo admin (`is_admin()`). Los endpoints `/api/*` insertan (best-effort) tras cada mutación. `user_id` se rellena solo con `auth.uid()`.
 
 ## Seed
 

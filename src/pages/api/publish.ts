@@ -1,4 +1,6 @@
 import { setFlash } from '@/lib/admin/flash';
+import { createSupabaseServerClient } from '@/lib/auth/supabaseServer';
+import { logAudit } from '@/lib/data/audit';
 import type { APIRoute } from 'astro';
 
 export const prerender = false;
@@ -24,6 +26,7 @@ export const POST: APIRoute = async (context) => {
     return context.redirect(REDIRECT);
   }
 
+  await logAudit(createSupabaseServerClient(context), 'publish', 'publish', null);
   setFlash(context.cookies, 'ok');
   return context.redirect(REDIRECT);
 };

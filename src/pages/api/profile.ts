@@ -2,6 +2,7 @@ import { setFlash } from '@/lib/admin/flash';
 import { readBool, readLocalized, readLocalizedList, readString } from '@/lib/admin/forms';
 import { profileInputSchema } from '@/lib/admin/schemas';
 import { createSupabaseServerClient } from '@/lib/auth/supabaseServer';
+import { logAudit } from '@/lib/data/audit';
 import { updateProfile } from '@/lib/data/mutations';
 import type { APIRoute } from 'astro';
 
@@ -39,6 +40,7 @@ export const POST: APIRoute = async (context) => {
   try {
     const supabase = createSupabaseServerClient(context);
     await updateProfile(supabase, parsed.data);
+    await logAudit(supabase, 'profile', 'update', null);
   } catch (error) {
     console.error('[admin] profile update failed:', error);
     setFlash(context.cookies, 'error');

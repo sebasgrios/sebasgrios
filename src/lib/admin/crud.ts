@@ -1,6 +1,7 @@
 import { type FlashStatus, setFlash } from '@/lib/admin/flash';
 import { readString } from '@/lib/admin/forms';
 import { type SupabaseServerClient, createSupabaseServerClient } from '@/lib/auth/supabaseServer';
+import { logAudit } from '@/lib/data/audit';
 import type { APIContext, APIRoute } from 'astro';
 import type { ZodTypeAny, z } from 'zod';
 
@@ -52,6 +53,7 @@ export function createCrudRoute<Schema extends ZodTypeAny>(config: CrudConfig<Sc
       return flash(context, config.redirect, 'error');
     }
 
+    await logAudit(client, config.entity, action || 'create', id || null);
     return flash(context, config.redirect, 'ok');
   };
 }

@@ -28,6 +28,7 @@ Reescritura completa del portfolio: diseño **Liquid Glass**, **Astro 5** + Clou
 - Tests Vitest (helpers, mappers, i18n, schemas, factory CRUD) + e2e Playwright (público, theme, guards admin).
 - CI (GitHub Actions: check + test + build), Dependabot.
 - Factory genérico de endpoints CRUD; observabilidad de errores en endpoints; `DeleteForm` reutilizable.
+- Sync de pivots M:N **atómico** vía RPC (`set_entity_technologies`); **audit log** (`admin_audit_log`) de las acciones del backoffice.
 - Documentación completa en `/docs` (17 documentos) + `AGENTS.md`.
 
 ### Pendiente de configuración manual

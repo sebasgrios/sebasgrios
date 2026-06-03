@@ -1,6 +1,7 @@
 import { setFlash } from '@/lib/admin/flash';
 import { readString } from '@/lib/admin/forms';
 import { createSupabaseServerClient } from '@/lib/auth/supabaseServer';
+import { logAudit } from '@/lib/data/audit';
 import {
   isMediaBucket,
   removeFromBucket,
@@ -54,6 +55,7 @@ export const POST: APIRoute = async (context) => {
     return context.redirect(REDIRECT);
   }
 
+  await logAudit(client, 'media', action || 'upload', null);
   setFlash(context.cookies, 'ok');
   return context.redirect(REDIRECT);
 };
