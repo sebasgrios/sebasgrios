@@ -1,0 +1,87 @@
+---
+import Button from '@/components/Button.astro';
+import Toast from '@/components/admin/Toast.astro';
+import { takeFlash } from '@/lib/admin/flash';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const flash = takeFlash(Astro.cookies);
+---
+
+<BaseLayout title={`${title} · Backoffice`} description="Backoffice." locale="es" noindex>
+  <Toast status={flash} />
+  <div class="wrap py-[clamp(40px,8vh,90px)]">
+    <header class="flex items-center justify-between gap-4 flex-wrap mb-8">
+      <div class="flex items-center gap-3.5">
+        <a
+          href="/admin"
+          class="text-text-soft no-underline hover:text-accent text-[0.9rem] transition-colors"
+        >
+          ← Panel
+        </a>
+        <h1 class="font-display text-[clamp(1.5rem,3vw,2rem)] font-black tracking-[-0.02em]">
+          {title}
+        </h1>
+      </div>
+      <form method="post" action="/api/auth/signout">
+        <Button variant="ghost" type="submit">Salir</Button>
+      </form>
+    </header>
+    <slot />
+  </div>
+</BaseLayout>
+
+<script>
+  function initToast() {
+    const toast = document.getElementById('admin-toast');
+    if (!toast) return;
+
+    let timer = 0;
+    const dismiss = () => {
+      window.clearTimeout(timer);
+      toast.setAttribute('data-show', 'false');
+      toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    };
+
+    requestAnimationFrame(() => toast.setAttribute('data-show', 'true'));
+    timer = window.setTimeout(dismiss, 3500);
+    toast.addEventListener('click', dismiss);
+  }
+
+  function initAdmin() {
+    for (const trigger of document.querySelectorAll<HTMLButtonElement>('.acc-trigger')) {
+      trigger.addEventListener('click', () => {
+        const open = trigger.getAttribute('aria-expanded') === 'true';
+        trigger.setAttribute('aria-expanded', String(!open));
+      });
+    }
+    for (const field of document.querySelectorAll<HTMLElement>(
+      'form :is(input, textarea, select)'
+    )) {
+      field.addEventListener(
+        'invalid',
+        () => {
+          const panel = field.closest<HTMLElement>('[data-acc-panel]');
+          if (!panel) return;
+          document
+            .querySelector(`[aria-controls="${panel.id}"]`)
+            ?.setAttribute('aria-expanded', 'true');
+        },
+        true
+      );
+    }
+
+    for (const form of document.querySelectorAll<HTMLFormElement>('form[data-confirm]')) {
+      form.addEventListener('submit', (event) => {
+        if (!window.confirm(form.dataset.confirm ?? '¿Seguro?')) event.preventDefault();
+      });
+    }
+  }
+
+  initAdmin();
+  initToast();
+</script>

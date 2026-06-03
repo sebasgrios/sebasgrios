@@ -1,0 +1,50 @@
+---
+interface Props {
+  label: string;
+  name: string;
+  value?: string | null;
+  type?: 'text' | 'email' | 'url' | 'date' | 'password' | 'number';
+  required?: boolean;
+  multiline?: boolean;
+  placeholder?: string;
+}
+
+const {
+  label,
+  name,
+  value = '',
+  type = 'text',
+  required = false,
+  multiline = false,
+  placeholder,
+} = Astro.props;
+
+const fieldValue = value ?? '';
+const control =
+  'w-full rounded-xl border border-border bg-[color-mix(in_oklab,var(--bg-2)_70%,transparent)] px-3.5 py-2.5 text-text text-[0.95rem] outline-none transition-[border-color] duration-200 focus-visible:border-accent';
+---
+
+<label class="block">
+  <span class="block text-[0.8rem] font-medium text-text-soft mb-1.5">{label}</span>
+  {
+    multiline ? (
+      <textarea
+        name={name}
+        required={required}
+        placeholder={placeholder}
+        rows="3"
+        class={`${control} resize-y min-h-[84px]`}
+        set:text={fieldValue}
+      />
+    ) : (
+      <input
+        type={type}
+        name={name}
+        value={fieldValue}
+        required={required}
+        placeholder={placeholder}
+        class={control}
+      />
+    )
+  }
+</label>

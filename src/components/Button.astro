@@ -1,0 +1,37 @@
+---
+type Variant = 'primary' | 'ghost';
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  target?: string;
+  rel?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  type = 'button',
+  class: className = '',
+  target,
+  rel,
+  ariaLabel,
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const classes = `btn btn-${variant} ${className}`.trim();
+---
+
+<Tag
+  class={classes}
+  href={href}
+  type={href ? undefined : type}
+  target={target}
+  rel={rel}
+  aria-label={ariaLabel}
+>
+  <slot />
+</Tag>

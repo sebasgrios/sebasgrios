@@ -1,9 +1,126 @@
 ---
-import { PROJECTS } from '@/data/projects';
-import Card from "@/components/Card.astro";
+import { Image } from 'astro:assets';
+import Button from '@/components/Button.astro';
+import Glass from '@/components/Glass.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import TechIcon from '@/components/TechIcon.astro';
+import GitHub from '@/components/icons/GitHub.astro';
+import Play from '@/components/icons/Play.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import { pickLocale } from '@/lib/domain/i18n';
+import type { Project } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  projects: Project[];
+}
+
+const { locale, projects } = Astro.props;
+const copy = COPY[locale].sections.projects;
+const liveLabel = 'Live';
+const codeLabel = 'Code';
+
+const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[transition-delay:0.24s]'];
 ---
 
-<section aria-labelledby='projects-heading' class="flex flex-col gap-8">
-  <h2 class='sr-only' id='projects-heading'>Proyectos</h2>
-  {PROJECTS.map((project) => <Card project={project} />)}
+<section id="projects" aria-labelledby="projects-title" class="wrap">
+  <SectionHead
+    num="04"
+    eyebrow={copy.eyebrow}
+    title={copy.title}
+    sub={copy.sub}
+    id="projects-title"
+  />
+  <div class="flex flex-col gap-5">
+    {
+      projects.map((project, index) => {
+        const description = pickLocale(project.description, locale);
+        const delayClass = delays[index % delays.length];
+        return (
+          <Glass
+            as="article"
+            interactive
+            class={`reveal ${delayClass} flex flex-col min-[720px]:flex-row p-0 group overflow-hidden`}
+          >
+            {project.liveUrl ? (
+              <a
+                class="relative block overflow-hidden border-b border-glass-border min-[720px]:border-b-0 min-[720px]:border-r aspect-[16/10] min-[720px]:aspect-auto min-[720px]:w-[42%] min-[720px]:shrink-0 min-[720px]:self-stretch"
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener"
+                aria-label={`${project.name} live site`}
+              >
+                {project.imageUrl && (
+                  <Image
+                    src={project.imageUrl}
+                    alt={`${project.name} screenshot`}
+                    loading="lazy"
+                    width={800}
+                    height={500}
+                    widths={[400, 800]}
+                    sizes="(max-width: 720px) 100vw, 40vw"
+                    format="webp"
+                    quality={70}
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06] min-[720px]:absolute min-[720px]:inset-0"
+                  />
+                )}
+                <div
+                  class="absolute inset-0 bg-[linear-gradient(0deg,oklch(0.15_0.02_285/0.5),transparent_55%)] opacity-0 transition-opacity duration-400 group-hover:opacity-100"
+                  aria-hidden="true"
+                />
+              </a>
+            ) : (
+              <div class="relative block overflow-hidden border-b border-glass-border min-[720px]:border-b-0 min-[720px]:border-r aspect-[16/10] min-[720px]:aspect-auto min-[720px]:w-[42%] min-[720px]:shrink-0 min-[720px]:self-stretch">
+                {project.imageUrl && (
+                  <Image
+                    src={project.imageUrl}
+                    alt={`${project.name} screenshot`}
+                    loading="lazy"
+                    width={800}
+                    height={500}
+                    widths={[400, 800]}
+                    sizes="(max-width: 720px) 100vw, 40vw"
+                    format="webp"
+                    quality={70}
+                    class="w-full h-full object-cover min-[720px]:absolute min-[720px]:inset-0"
+                  />
+                )}
+              </div>
+            )}
+            <div class="p-[clamp(20px,3vw,30px)] flex flex-col gap-3 flex-1 min-w-0">
+              <h3 class="font-display text-[1.35rem] min-[720px]:text-[1.5rem] font-bold tracking-[-0.02em] min-w-0">
+                {project.name}
+              </h3>
+              <p class="text-text-soft text-[0.96rem] text-pretty">{description}</p>
+              {project.technologies.length > 0 && (
+                <div class="flex flex-wrap gap-2.5">
+                  {project.technologies.map((t) => (
+                    <TechIcon slug={t.key} label={t.label} />
+                  ))}
+                </div>
+              )}
+              <div class="flex flex-wrap gap-2.5 mt-auto pt-2">
+                {project.liveUrl && (
+                  <Button href={project.liveUrl} target="_blank" rel="noopener">
+                    <Play /> {liveLabel}
+                  </Button>
+                )}
+                {project.codeUrl && (
+                  <Button
+                    href={project.codeUrl}
+                    variant="ghost"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <GitHub /> {codeLabel}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </Glass>
+        );
+      })
+    }
+  </div>
 </section>

@@ -1,0 +1,68 @@
+---
+import Glass from '@/components/Glass.astro';
+import RoleCard from '@/components/RoleCard.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import { pickLocale } from '@/lib/domain/i18n';
+import type { Company } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  companies: Company[];
+}
+
+const { locale, companies } = Astro.props;
+const copy = COPY[locale].sections.experience;
+---
+
+<section id="experience" aria-labelledby="experience-title" class="wrap">
+  <SectionHead
+    num="01"
+    eyebrow={copy.eyebrow}
+    title={copy.title}
+    sub={copy.sub}
+    id="experience-title"
+  />
+  <div class="flex flex-col gap-5 relative">
+    {
+      companies.map((company) => {
+        const single = company.roles.length === 1;
+        const metaLine = pickLocale(company.metaLine, locale);
+        return (
+          <div class="reveal relative">
+            <div class="flex items-center gap-3.5 mb-4">
+              <Glass class="w-[46px] h-[46px] rounded-[13px] shrink-0 overflow-hidden">
+                {company.logoUrl && (
+                  <img
+                    src={company.logoUrl}
+                    alt={company.name}
+                    width="46"
+                    height="46"
+                    loading="lazy"
+                    class="w-full h-full object-cover block"
+                  />
+                )}
+              </Glass>
+              <div class="min-w-0">
+                <div class="font-display font-bold text-[1.25rem] leading-tight">{company.name}</div>
+                <div class="font-mono text-[0.85rem] text-text-faint mt-0.5">{metaLine}</div>
+              </div>
+            </div>
+            <div
+              class:list={[
+                single
+                  ? ''
+                  : 'flex flex-col gap-5 relative pl-[30px] before:content-[""] before:absolute before:left-[5px] before:top-3.5 before:bottom-3.5 before:w-[2px] before:bg-[linear-gradient(var(--accent),transparent)] before:opacity-50 max-[720px]:pl-[22px]',
+              ]}
+            >
+              {company.roles.map((role) => (
+                <RoleCard locale={locale} role={role} single={single} />
+              ))}
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>

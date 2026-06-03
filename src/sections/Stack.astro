@@ -1,0 +1,60 @@
+---
+import Glass from '@/components/Glass.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import Tag from '@/components/Tag.astro';
+import Chart from '@/components/icons/Chart.astro';
+import Code from '@/components/icons/Code.astro';
+import Git from '@/components/icons/Git.astro';
+import Layers from '@/components/icons/Layers.astro';
+import Mobile from '@/components/icons/Mobile.astro';
+import Spark from '@/components/icons/Spark.astro';
+import { COPY } from '@/config/copy';
+import type { Locale } from '@/config/i18n';
+import { pickLocale } from '@/lib/domain/i18n';
+import type { StackGroup } from '@/lib/domain/types';
+
+interface Props {
+  locale: Locale;
+  stackGroups: StackGroup[];
+}
+
+const { locale, stackGroups } = Astro.props;
+const copy = COPY[locale].sections.stack;
+
+const iconRegistry: Record<string, typeof Code> = {
+  code: Code,
+  mobile: Mobile,
+  git: Git,
+  spark: Spark,
+  chart: Chart,
+  layers: Layers,
+};
+
+const delays = ['', '[transition-delay:0.08s]', '[transition-delay:0.16s]', '[transition-delay:0.24s]'];
+---
+
+<section id="stack" aria-labelledby="stack-title" class="wrap">
+  <SectionHead num="03" eyebrow={copy.eyebrow} title={copy.title} sub={copy.sub} id="stack-title" />
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-4">
+    {
+      stackGroups.map((group, index) => {
+        const Icon = iconRegistry[group.iconKey] ?? Layers;
+        const label = pickLocale(group.label, locale);
+        const delayClass = delays[(index % 3) + 1];
+        return (
+          <Glass interactive class={`reveal ${delayClass} p-6`}>
+            <div class="flex items-center gap-[11px] mb-4">
+              <div class="w-9 h-9 rounded-[10px] grid place-items-center text-accent bg-accent-soft">
+                <Icon size={19} />
+              </div>
+              <h3 class="font-display text-[1.05rem] font-bold tracking-[-0.01em]">{label}</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {group.technologies.map((t) => <Tag slug={t.key}>{t.label}</Tag>)}
+            </div>
+          </Glass>
+        );
+      })
+    }
+  </div>
+</section>
