@@ -18,7 +18,8 @@ export const POST: APIRoute = async (context) => {
   try {
     const response = await fetch(hookUrl, { method: 'POST' });
     if (!response.ok) throw new Error(`deploy hook responded ${response.status}`);
-  } catch {
+  } catch (error) {
+    console.error('[admin] publish deploy hook failed:', error);
     setFlash(context.cookies, 'error');
     return context.redirect(REDIRECT);
   }

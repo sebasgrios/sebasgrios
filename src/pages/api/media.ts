@@ -48,7 +48,8 @@ export const POST: APIRoute = async (context) => {
       const custom = readString(form, 'filename');
       await uploadToBucket(client, bucket, sanitizeFileName(custom || file.name), file);
     }
-  } catch {
+  } catch (error) {
+    console.error('[admin] media operation failed:', error);
     setFlash(context.cookies, 'error');
     return context.redirect(REDIRECT);
   }

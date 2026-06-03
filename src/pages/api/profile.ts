@@ -39,7 +39,8 @@ export const POST: APIRoute = async (context) => {
   try {
     const supabase = createSupabaseServerClient(context);
     await updateProfile(supabase, parsed.data);
-  } catch {
+  } catch (error) {
+    console.error('[admin] profile update failed:', error);
     setFlash(context.cookies, 'error');
     return context.redirect('/admin/profile');
   }
