@@ -17,7 +17,7 @@ Estado actual: **v3.0.0 en producción** (`package.json` 3.0.0). Público + back
 Hitos cerrados:
 - **M1–M7** docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics.
 - **Backoffice** `/admin`: Google OAuth + RLS, CRUD de todas las entidades, media (Storage), publicar (deploy hook).
-- **Mejoras de cierre**: CI + Dependabot, e2e de guards, imágenes webp (`astro:assets`), headers SWR, factory CRUD, observabilidad, bump `@supabase/ssr` 0.10.
+- **Mejoras de cierre**: CI, e2e de guards, imágenes webp (`astro:assets`), headers SWR, factory CRUD, observabilidad, bump `@supabase/ssr` 0.10.
 - Changelog en [`CHANGELOG.md`](./CHANGELOG.md). Backlog/mejoras futuras en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 ## Documentación de referencia

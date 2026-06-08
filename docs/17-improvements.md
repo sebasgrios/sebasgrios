@@ -9,7 +9,6 @@ Backlog priorizado de mejoras a nivel de **código** e **infraestructura**, surg
 
 **Implementado y verificado** (build/check/test/e2e verdes):
 - ✅ **I1** CI (GitHub Actions: check + test + build).
-- ✅ **O5** Dependabot (npm + actions, weekly).
 - ✅ **C1** Cache-Control SWR para `/` y `/en/`.
 - ✅ **P1** Imágenes optimizadas con `astro:assets` + `sharp` (hero webp 1x/2x; proyectos webp responsive).
 - ✅ **Q1 (parcial)** e2e de los guards admin (`e2e/admin.spec.ts`).
@@ -143,8 +142,8 @@ Los deploys Preview de Cloudflare apuntan al **mismo** Supabase de producción. 
 ### O4 · Monitorización y alertas `[P3·S]`
 Cloudflare Web Analytics es solo RUM. Añadir uptime check (cron ping) y alertas de error (Sentry) para enterarse de caídas/errores sin mirar el dashboard.
 
-### O5 · Renovate/Dependabot `[P3·S]`
-Automatizar PRs de actualización de dependencias (Astro, Tailwind, Supabase) con la CI de I1 como red de seguridad.
+### O5 · Automatizar actualización de dependencias `[P3·S]`
+No hay automatización de actualización de dependencias; se actualizan manualmente. Si se quiere automatizar los PRs de actualización (Astro, Tailwind, Supabase), valorar **Renovate** con la CI de I1 como red de seguridad.
 
 ---
 
