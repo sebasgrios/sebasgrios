@@ -6,13 +6,13 @@ Briefing autocontenido para cualquier sesión/agente (Claude, Copilot, etc.) que
 
 Portfolio personal de **Sebastián González Ríos** (`sebasgrios.es`).
 
-Estás en la **rama `v3`**, una reescritura completa que:
+Es la **v3**, una reescritura completa que:
 - Migra de Astro 4 a **Astro 5** con adapter Cloudflare (SSR híbrido).
 - Reemplaza el contenido en `.ts` estáticos por **Supabase** (Postgres + Storage).
 - Implementa un nuevo diseño "Liquid Glass" con i18n es/en.
-- Deja preparada la base para un **backoffice** privado (`/admin`, Google OAuth via Supabase, RLS), implementación posterior.
+- Añade un **backoffice** privado (`/admin`, Google OAuth via Supabase, RLS), ya implementado.
 
-Estado actual: **v3.0.0 cerrada** (`package.json` 3.0.0). Público + backoffice implementados end-to-end y verificados (check/test/build/e2e verdes). Pendiente solo el **setup manual del ingeniero** (OAuth, secretos, deploy `v3 → develop → main`) — ver [`docs/17-improvements.md`](./docs/17-improvements.md).
+Estado actual: **v3.0.0 en producción** (`package.json` 3.0.0). Público + backoffice implementados end-to-end, verificados (check/test/build/e2e verdes) y **desplegados en `sebasgrios.es`** (release `develop → main`, PR #10; tag `v3.0.0`). La rama de desarrollo `v3` se mergeó y **ya no existe**; queda solo el endurecimiento opcional del ingeniero (deploy hook, rate limiting, backups) — ver [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 Hitos cerrados:
 - **M1–M7** docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics.
@@ -49,7 +49,7 @@ Documentos críticos:
 | Analytics | Cloudflare Web Analytics (sin cookies). |
 | Fuentes | Self-host Satoshi + General Sans + JetBrains Mono. NO CDN. |
 | Tweaks UI | **Eliminada**. Valores fijos en `/src/config/tweaks.ts`: glass `0.10`, accent hue `264` (azul), parallax `true`, animations `true`. Todos respetan `prefers-reduced-motion`. |
-| Git flow | `v3` → PR a `develop` → PR a `main`. |
+| Git flow | `develop` (integración) → PR → `main` (producción). La rama `v3` se mergeó y eliminó tras el release. |
 | Commits | Formato `<emoji> <subject imperativo en inglés>`. **Sin prefijo textual** (`feat:`, `fix:`, `docs:`...). Sin trailer `Co-Authored-By`. La tabla emoji→categoría vive en [docs/03-conventions.md](./docs/03-conventions.md). |
 | Naming | PascalCase componentes Astro, camelCase variables/funciones/campos TS, snake_case SQL, kebab-case carpetas/páginas. |
 | Comentarios | **Prohibidos** salvo invariante no obvia / workaround. Nada de explicar el "qué". |
@@ -122,7 +122,7 @@ npm run db:push        # push migrations to linked project
 1. **Antes de cualquier trabajo**, lee [`docs/15-workflows.md`](./docs/15-workflows.md) (flujo) y [`docs/03-conventions.md`](./docs/03-conventions.md) (estilo).
 2. **Cuando termines una feature**, redacta al ingeniero un paso a paso de verificación; espera su "ok" antes de commitear.
 3. **Commits sin trailer**. En inglés. Formato `<emoji> <subject>`, sin `feat:`/`fix:`/`docs:`. Ejemplo correcto: `✨ add floating badges to hero`.
-4. **Solo commitea a `v3`**. Nunca push directo a `main`/`develop` sin pedir.
+4. **Trabaja sobre `develop`** (rama de integración): commits directos permitidos; cambios grandes por rama de feature → PR a `develop`. A `main` solo por PR. Nunca push directo ni force a `main`.
 5. **Cuando cambies un contrato** (schema, viewModel, repos) actualiza `/docs` en el mismo commit.
 6. **No `any`, no `console.log`, no comentarios** salvo invariante no obvia.
 7. **Respeta `prefers-reduced-motion`** y `prefers-color-scheme` en cualquier animación o color.
@@ -188,7 +188,7 @@ Si llegas en frío:
 1. `cat AGENTS.md` (este archivo).
 2. `cat docs/index.md`.
 3. `git status && git log --oneline -20` para ver el progreso.
-4. Mira `docs/00-overview.md` para saber en qué hito estamos (M1...M8).
+4. Mira `docs/00-overview.md` para el alcance y la definición de «listo» (hitos M1–M8 ya cerrados).
 5. Si el ingeniero acaba de pedirte algo, sigue el "Cómo razonar" de arriba.
 
 Todo lo demás está en `/docs`. Esa carpeta es la fuente de verdad de las decisiones de este proyecto.

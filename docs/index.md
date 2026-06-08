@@ -21,7 +21,7 @@ Cada documento es autocontenido y enlaza al resto. Las decisiones cerradas con e
 | 10 | [Performance](./10-performance.md) | Prerender vs SSR, cache, imágenes, CWV target. |
 | 11 | [Accessibility](./11-accessibility.md) | Reglas a11y, `prefers-reduced-motion`, contraste, foco. |
 | 12 | [Deployment](./12-deployment.md) | Cloudflare Pages adapter, env vars, secretos, webhooks. |
-| 13 | [Backoffice (futuro)](./13-backoffice.md) | `/admin`, Google OAuth, RLS, CRUD, página 401. |
+| 13 | [Backoffice](./13-backoffice.md) | `/admin`, Google OAuth, RLS, CRUD, página 401. |
 | 14 | [Testing](./14-testing.md) | Vitest + Playwright, qué se testea y qué no. |
 | 15 | [Workflows](./15-workflows.md) | Dev/QA/deploy runbooks, flujo de commits y PRs. |
 | 16 | [Glossary](./16-glossary.md) | Términos del dominio (rol, sector, stack, etc.). |

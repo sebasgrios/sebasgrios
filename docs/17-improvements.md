@@ -111,7 +111,7 @@ Los endpoints hacen `catch {}` → flash `error` **silencioso**: en producción 
 ## 5 · Infraestructura y operaciones
 
 ### I1 · CI (GitHub Actions) `[P1·S]`
-No hay CI. El flujo `v3 → develop → main` debería bloquear merges con checks. Workflow mínimo:
+(Implementado ✅.) El flujo `develop → main` bloquea merges con checks. Workflow mínimo:
 ```yaml
 # .github/workflows/ci.yml
 name: ci
@@ -163,23 +163,20 @@ Automatizar PRs de actualización de dependencias (Astro, Tailwind, Supabase) co
 
 Acciones que **solo puede hacer el ingeniero** (secretos, decisiones de release, dashboards). Cada paso con su comprobación.
 
-### Ya hechos (automatizados / verificados)
+### Ya hechos (verificados)
 
-- ✅ `git push origin v3` → PR #9 en el commit de cierre.
+- ✅ Release completo: `v3 → develop` (PR #9) y `develop → main` (PR #10). v3.0.0 **en producción** en `sebasgrios.es`; rama `v3` eliminada; tag `v3.0.0` creado.
 - ✅ CI (GitHub Actions) verde: check + test + build.
-- ✅ Deploy Cloudflare del preview `v3` correcto (con `sharp` + SSR `/admin`), verificado: home webp, `/admin`→login, OG, headers SWR, CSRF + auth en `/api/*`.
+- ✅ Deploy Cloudflare verificado (con `sharp` + SSR `/admin`): home webp, `/admin`→login, OG, headers SWR, CSRF + auth en `/api/*`.
 - ✅ Google OAuth + primer admin en `user_roles` (confirmados por el ingeniero).
 
-### Pendiente (irreducible)
+### Pendiente (opcional)
 
 1. **(Opcional) Supabase CLI**: la app ya funciona con `nzbodijggjxhshqqpnue` (el deploy lo confirma). Solo si vas a usar la CLI para migraciones/tipos, re-linka: `supabase link --project-ref nzbodijggjxhshqqpnue`. Si no, **omítelo**.
 2. **Deploy hook `CF_DEPLOY_HOOK_URL`** *(necesario para el botón Publicar)*: Cloudflare Pages → Settings → Builds & deployments → crear Deploy hook (rama de prod) → guardar la URL como **Secret** en Settings → Environment variables → Production.
    - **Check**: en `/admin/publish` → "Publicar ahora" → toast verde + deployment nuevo.
 3. **Branch protection / CI obligatoria**: GitHub → Settings → Rules → ruleset sobre `main` + `develop` → marca **Require status checks to pass** y añade el check **`verify`** (ya existe, la CI corrió). Deja marcadas *Restrict deletions, Require PR before merging (approvals 0), Block force pushes*.
    - **Check**: un PR muestra el check `verify` y bloquea el merge si falla.
-4. **Release a producción** *(decisión tuya)*: mergea PR #9 (`v3 → develop`), luego `develop → main`.
-   - **Check**: `sebasgrios.es` sirve v3 (hero webp, backoffice operativo); Lighthouse mobile ≥ 95.
-5. **(Opcional) Tag**: tras `main`, `git tag v3.0.0 && git push origin v3.0.0`.
 
 ### Endurecimiento recomendado (antes de editar en vivo)
 

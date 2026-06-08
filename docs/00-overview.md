@@ -1,6 +1,6 @@
 # 00 · Overview
 
-> **Estado: v3.0.0 cerrada.** Público + backoffice implementados y verificados. Falta solo el setup manual del ingeniero (OAuth, secretos, deploy). Ver [`CHANGELOG.md`](../CHANGELOG.md) y [17-improvements](./17-improvements.md).
+> **Estado: v3.0.0 en producción.** Público + backoffice implementados, verificados y desplegados en `sebasgrios.es` (release `develop → main`, PR #10; tag `v3.0.0`). Solo queda el endurecimiento opcional del ingeniero. Ver [`CHANGELOG.md`](../CHANGELOG.md) y [17-improvements](./17-improvements.md).
 
 ## Objetivo
 
@@ -26,7 +26,7 @@ Reconstruir el portfolio personal del ingeniero (Sebastián González Ríos) en 
 
 ## Backoffice (implementado tras M7)
 
-El backoffice (`/admin`, CRUD, Google OAuth, RLS, Storage, publish) está **implementado end-to-end** (ver [13-backoffice](./13-backoffice.md)). Queda como setup manual del ingeniero: provider Google en Supabase, primer admin en `user_roles`, y el secreto `CF_DEPLOY_HOOK_URL` en Cloudflare.
+El backoffice (`/admin`, CRUD, Google OAuth, RLS, Storage, publish) está **implementado end-to-end** (ver [13-backoffice](./13-backoffice.md)) y operativo. Google OAuth y el primer admin en `user_roles` ya están configurados; el único pendiente opcional es el secreto `CF_DEPLOY_HOOK_URL` en Cloudflare para que el botón Publicar dispare el redeploy.
 
 ## Out-of-scope v3 (se hace después)
 
@@ -46,7 +46,7 @@ El backoffice (`/admin`, CRUD, Google OAuth, RLS, Storage, publish) está **impl
 | **M5 · Secciones públicas** | Nav, Hero, Experience, Education, Stack, Projects, Contact, Footer, responsive completo. | Captura desktop+móvil aprobada por el ingeniero. |
 | **M6 · i18n** | Ruta `/en/` funcional, fallback es→en, sitemap multilenguaje. | Ambas rutas renderizan con contenido correcto. |
 | **M7 · SEO/Perf** | Satori OG, sitemap, robots, schema.org `Person`, Cloudflare Web Analytics, Lighthouse > 95 en todas. | Reporte Lighthouse adjunto al PR. |
-| **M8 · QA + PR** | Tests Vitest, PR de `v3` → `develop`. | Merge tras revisión. |
+| **M8 · QA + release** | Tests Vitest + e2e, PR `develop → main`, deploy a producción. | Merge y sitio live en `sebasgrios.es`. |
 
 ## Definición de "listo" por feature
 

@@ -22,8 +22,8 @@
 
 ### Invalidación
 
-- El backoffice futuro disparará un **Cloudflare Deploy Hook** tras cualquier mutación.
-- Mientras no exista backoffice, cualquier cambio en el seed requiere `npm run build` + push (rebuild).
+- El backoffice (`/admin/publish`) dispara un **Cloudflare Deploy Hook** para reconstruir tras editar contenido.
+- Para el sembrado inicial (sin backoffice), cualquier cambio en el seed requiere `npm run build` + push (rebuild).
 
 ### Imágenes
 

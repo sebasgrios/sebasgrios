@@ -10,7 +10,7 @@
 
 ```
               ▲
-        e2e   │  Playwright (futuro backoffice + smoke público)
+        e2e   │  Playwright (guards backoffice + smoke público)
               │
        integ  │  Repos contra Supabase local (M4+)
               │
@@ -65,7 +65,7 @@ Smoke tests en `/e2e/`:
 
 (Pendiente: e2e del flujo admin autenticado y `responsive.spec.ts`.)
 
-### Futuros (cuando exista backoffice)
+### Futuros (flujo admin autenticado)
 
 4. `admin-login.spec.ts`: redirect a login si no hay sesión.
 5. `admin-edit.spec.ts`: login → editar profile → guardar → ver cambio en `/`.
@@ -81,7 +81,7 @@ await expect(anon.from('profile').update({ full_name: 'X' })).rejects.toThrow();
 
 ## CI
 
-`.github/workflows/ci.yml` (GitHub Actions) corre en PRs a `develop`/`main` y push a `v3`/`develop`: `pnpm check` + `pnpm test` + `pnpm build`. El `build` solo necesita la anon key pública (hardcodeada) → sin secretos. Falta marcarlo como *required status check* en GitHub (ver [17-improvements](./17-improvements.md), paso manual B). `e2e` aún no está en CI (necesita servidor + más tiempo).
+`.github/workflows/ci.yml` (GitHub Actions) corre en PRs a `develop`/`main` y en push a `develop`: `pnpm check` + `pnpm test` + `pnpm build`. El `build` solo necesita la anon key pública (hardcodeada) → sin secretos. Falta marcarlo como *required status check* en GitHub (ver [17-improvements](./17-improvements.md), pasos manuales). `e2e` aún no está en CI (necesita servidor + más tiempo).
 
 ## Lo que NO se testea
 

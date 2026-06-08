@@ -18,18 +18,16 @@
 ## Flujo git
 
 ```
-v3 (rama de trabajo de la reescritura)
+develop (integración + trabajo)
+  │  commits frecuentes / ramas de feature
   │
-  │  commits frecuentes
-  │
-  └──PR──▶ develop
-              │
-              └──PR──▶ main  (producción)
+  └──PR──▶ main  (producción · sebasgrios.es)
 ```
 
-- **Nunca** push directo a `main` ni a `develop` sin PR.
+- **Nunca** push directo a `main` sin PR.
 - **Nunca** force push a ramas compartidas.
-- Commits a `v3` directos están permitidos.
+- Commits directos a `develop` permitidos; los cambios grandes, por rama de feature → PR a `develop`.
+- La rama `v3` (reescritura) se mergeó y eliminó tras el release de v3.0.0; existe el tag `v3.0.0`.
 
 ## Crear un commit
 
@@ -44,7 +42,7 @@ Sin `-A`/`-a`. Sin trailer `Co-Authored-By`. En inglés. **Solo emoji + subject*
 ## Crear una PR
 
 ```bash
-gh pr create --base develop --head v3 \
+gh pr create --base main --head develop \
   --title "✨ short title" \
   --body "$(cat <<'EOF'
 ## Summary

@@ -88,17 +88,18 @@ Subject **imperativo** ("add", no "added"/"adds"), sin punto final, sin emojis a
 
 ## Branching
 
-- `main` — producción.
-- `develop` — pre-prod, integración.
-- `v3` — rama de trabajo de esta reescritura.
+- `main` — producción (`sebasgrios.es`).
+- `develop` — integración y rama de trabajo.
 
-Flujo de esta v3 (ver [15-workflows](./15-workflows.md)):
+Flujo (ver [15-workflows](./15-workflows.md)):
 
 ```
-work commits ─▶ v3 ─PR─▶ develop ─PR─▶ main
+work commits ─▶ develop ─PR─▶ main
 ```
 
-No se hace push directo a `main` ni a `develop` sin PR. La rama `v3` puede recibir commits directos durante el desarrollo.
+`develop` puede recibir commits directos; los cambios grandes van por rama de feature → PR a `develop`. A `main` solo se llega por PR. La rama `v3` de la reescritura se mergeó y eliminó tras el release de v3.0.0 (existe el tag `v3.0.0`).
+
+Histórico: 2026-06-08 — v3.0.0 desplegada a producción y eliminada la rama `v3`. El flujo pasa de `v3 → develop → main` a `develop → main`.
 
 ## Pull Requests
 

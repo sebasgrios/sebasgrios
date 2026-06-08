@@ -21,9 +21,9 @@ Patrón por entidad: schema en `src/lib/admin/schemas.ts`, lectura admin en `src
 
 **Auditoría**: cada mutación de `/api/*` registra una fila en **`admin_audit_log`** (migración 0014) de forma *best-effort* (`src/lib/data/audit.ts`); un fallo de log nunca rompe la acción.
 
-### Setup externo requerido (manual del ingeniero) `[PENDIENTE]`
+### Setup externo (manual del ingeniero) `[HECHO]`
 
-Antes de poder iniciar sesión:
+Ya configurado en producción. Pasos de referencia para reproducir el entorno:
 1. **Google Cloud Console**: crear credenciales OAuth 2.0 (Web). Authorized redirect URI → `https://<ref>.supabase.co/auth/v1/callback`.
 2. **Supabase dashboard** (proyecto linked): Authentication → Providers → Google → habilitar + pegar Client ID/Secret.
 3. **Supabase dashboard** → Authentication → URL Configuration → añadir a *Redirect URLs*: `https://sebasgrios.es/api/auth/callback` y `http://localhost:4321/api/auth/callback`.
@@ -105,19 +105,7 @@ Backoffice **totalmente responsive**. Tabla con scroll horizontal en mobile; en 
 
 ## Auditoría
 
-Cada acción de admin se logea en una tabla `admin_audit_log` (futura):
-
-```sql
-create table admin_audit_log (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid references auth.users(id),
-  action text not null,
-  entity text not null,
-  entity_id uuid,
-  payload jsonb,
-  created_at timestamptz not null default now()
-);
-```
+Implementada: cada mutación de `/api/*` registra una fila en `admin_audit_log` (migración 0014) de forma best-effort (`src/lib/data/audit.ts`); un fallo de log nunca rompe la acción. Esquema y RLS en [06-data-schema](./06-data-schema.md#admin_audit_log).
 
 ## Bootstrap del primer admin
 

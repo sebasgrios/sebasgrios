@@ -29,9 +29,9 @@ Los valores **públicos** (URL del sitio, URL + anon key de Supabase, token de C
 
 > No re-introducir lectura de `import.meta.env.PUBLIC_*` para estos valores sin resolver antes la disponibilidad en build de Cloudflare Pages.
 
-### Secretos: solo dashboard (futuro backoffice SSR)
+### Secretos: solo dashboard (backoffice SSR `/admin`)
 
-Estos **sí** son secretos y solo se usarán cuando exista `/admin` (SSR, no prerender), nunca llegan al cliente:
+Estos **sí** son secretos, usados por `/admin` (SSR, no prerender); nunca llegan al cliente:
 
 | Variable | Dónde | Uso |
 |---|---|---|
@@ -63,13 +63,13 @@ El provider Google **no** se configura por variables de Cloudflare ni en el repo
 
 ## Webhooks
 
-Cuando exista backoffice, después de cualquier `update/insert/delete` en tablas de contenido, una **Supabase Database Function** disparará el deploy hook de Cloudflare:
+El redeploy se dispara **manualmente** desde el backoffice: el botón Publicar (`/admin/publish`) hace `POST /api/publish`, que llama al deploy hook de Cloudflare:
 
 ```
 POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/<HOOK_ID>
 ```
 
-ID del hook guardado como secret en Supabase (no en repo).
+La URL del hook se guarda como secret `CF_DEPLOY_HOOK_URL` en Cloudflare Pages (no en repo). No se usa una Database Function de Supabase para esto.
 
 ## Despliegues
 
@@ -77,7 +77,6 @@ ID del hook guardado como secret en Supabase (no en repo).
 |---|---|
 | `main` | Production (`sebasgrios.es`). |
 | `develop` | Preview branch `develop.sebasgrios.es` (si se configura). |
-| `v3` | Preview ad-hoc por cada push. |
 
 Cloudflare crea preview automáticamente por cada PR.
 
