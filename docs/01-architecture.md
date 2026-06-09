@@ -5,7 +5,7 @@
 ```
                      ┌────────────────────────────────────────┐
                      │            Cloudflare Pages             │
-                     │      (Astro 5 · sitio estático)         │
+                     │      (Astro 6 · sitio estático)         │
                      │                                         │
    Visitante  ─────▶ │  /            → estático (prerender)    │
                      │  /en/         → estático (prerender)    │
@@ -25,7 +25,7 @@ La edición de contenido (escrituras, auth, media, publicar) vive en un **reposi
 
 ## Decisiones de runtime `[DECIDIDO]`
 
-- **Astro 5** con `output: 'static'`: el sitio entero se genera en build. No hay SSR ni worker.
+- **Astro 6** con `output: 'static'`: el sitio entero se genera en build. No hay SSR ni worker.
 - **Sin adapter**: al quitar el backoffice no queda ninguna ruta dinámica, así que se eliminó `@astrojs/cloudflare`. Cloudflare Pages sirve `dist/` como estático.
 - **Build-time data**: las páginas (`/`, `/en/`) y las OG (`/og/*.png`) se generan en build leyendo Supabase. Cuando los datos cambian, el backoffice dispara el **deploy hook** de Cloudflare y el sitio se reconstruye.
 - **Imágenes**: `astro:assets` + `sharp` optimizan en build (webp) las imágenes remotas de Supabase Storage.

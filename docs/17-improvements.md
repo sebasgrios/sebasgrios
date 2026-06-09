@@ -14,13 +14,15 @@ Backlog priorizado del **portfolio público** (sitio estático). No son bugs (el
 - ✅ Cache-Control SWR para `/` y `/en/`.
 - ✅ Imágenes optimizadas con `astro:assets` + `sharp` (hero webp 1x/2x; proyectos webp responsive).
 - ✅ **Paso a estático**: eliminado el backoffice SSR; `output: 'static'`, sin adapter ni worker. Desaparecen el binding `SESSION` KV, los round-trips de auth del middleware y la exclusión `_routes.json`.
+- ✅ **Optimización integral**: deps a latest (Astro 6, TS 6, Biome 2, Vitest 4); avatar/logos a webp (`astro:assets`); a11y (landmarks, skip-link al foco, contraste AA) con **axe en CI**; JSON-LD `Person` enriquecido; cabeceras COOP/CORP + CSP endurecida; **Lighthouse CI**.
 
 ---
 
 ## 1 · Seguridad
 
-### S1 · CSP sin `'unsafe-inline'` en `script-src` `[P2·M]`
-`_headers` permite `'unsafe-inline'` por el script anti-flash y el snippet de analytics. Ahora que **todo es estático** (sin páginas SSR) se pueden pre-hashear los inline scripts en build (SHA-256) o usar la **CSP experimental de Astro** (`experimental.csp`, auto-hash) y quitar `'unsafe-inline'`, endureciendo contra XSS. Verificar en un deploy preview.
+### S1 · Quitar `'unsafe-inline'` de la CSP `[P2·M]`
+**Hecho**: COOP/CORP, `object-src 'none'`, `frame-src 'none'`, `upgrade-insecure-requests` y `connect-src` más estricto en `_headers`.
+**Pendiente**: sigue `'unsafe-inline'` en `script-src`/`style-src`. Para quitarlo con la CSP estable de Astro 6 (`security.csp`, auto-hash de scripts/estilos) hay que **mover antes** los `style=` dinámicos de `TechIcon`/`Tag` (color de marca por tecnología) a CSS hasheable; si no, Astro hashea estilos e ignora `'unsafe-inline'`, rompiendo esos iconos. Verificar en deploy preview (consola sin violaciones CSP).
 
 ### Cabeceras extra `[P3·S]`
 Añadir `Cross-Origin-Opener-Policy: same-origin` y `Cross-Origin-Resource-Policy: same-origin` a `_headers`. La CSP/HSTS/XFO actuales ya son buenas.

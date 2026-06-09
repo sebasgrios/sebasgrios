@@ -87,7 +87,11 @@ X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
 X-Frame-Options: SAMEORIGIN
-Content-Security-Policy: default-src 'self'; img-src 'self' data: https://*.supabase.co; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; connect-src 'self' https://*.supabase.co https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; frame-src 'none'; img-src 'self' data: https://*.supabase.co; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; upgrade-insecure-requests
 ```
 
-`_headers` además fija cache largo para `/fonts/*` (immutable, 1 año) y `/og/*`. El `unsafe-inline` de `script-src` es necesario por el anti-flash y el snippet de analytics; valorar nonce a futuro.
+`_headers` además fija cache largo para `/fonts/*` (immutable, 1 año) y `/og/*`.
+
+Queda `'unsafe-inline'` en `script-src` (anti-flash + JSON-LD inline) y `style-src`. Eliminarlo requiere mover los `style=` dinámicos de `TechIcon`/`Tag` (color de marca por tecnología) a CSS hasheable para activar la CSP con hashes de Astro 6 (`security.csp`) — **pendiente** (ver [17-improvements](./17-improvements.md), S1).

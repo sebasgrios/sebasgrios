@@ -14,7 +14,7 @@ Reconstruir el portfolio personal del ingeniero (Sebastián González Ríos) en 
 
 ## Alcance v3 (in-scope)
 
-- Astro 5, sitio estático (`output: 'static'`) servido por Cloudflare Pages.
+- Astro 6, sitio estático (`output: 'static'`) servido por Cloudflare Pages.
 - Tailwind v4, TypeScript strict, Biome.
 - Schema Supabase + migraciones + tipos generados.
 - Seed de datos desde el contenido actual de `src/data/*.ts` + el nuevo contenido del diseño (companies/roles/sectores).

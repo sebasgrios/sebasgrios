@@ -7,13 +7,13 @@ Briefing autocontenido para cualquier sesión/agente (Claude, Copilot, etc.) que
 Portfolio personal de **Sebastián González Ríos** (`sebasgrios.es`).
 
 Es la **v3**, una reescritura completa que:
-- Migra de Astro 4 a **Astro 5**; hoy es un **sitio 100% estático** servido por Cloudflare Pages (sin SSR ni adapter).
+- Migra de Astro 4 a **Astro 6**; hoy es un **sitio 100% estático** servido por Cloudflare Pages (sin SSR ni adapter).
 - Reemplaza el contenido en `.ts` estáticos por **Supabase** (Postgres + Storage), leído en build.
 - Implementa un nuevo diseño "Liquid Glass" con i18n es/en.
 
 El **backoffice** (edición de contenido) se reescribió en **Next.js** y vive en un **repo separado** (`sebasgrios-backoffice`, `backoffice.sebasgrios.es`); ya no está en este repo. Ver [`docs/13-backoffice.md`](./docs/13-backoffice.md).
 
-Estado actual: **portfolio público estático en producción** en `sebasgrios.es` (Astro 5 + Supabase + Cloudflare Pages). La rama de desarrollo `v3` de la reescritura se mergeó y ya no existe (tag `v3.0.0`). Backlog en [`docs/17-improvements.md`](./docs/17-improvements.md).
+Estado actual: **portfolio público estático en producción** en `sebasgrios.es` (Astro 6 + Supabase + Cloudflare Pages). La rama de desarrollo `v3` de la reescritura se mergeó y ya no existe (tag `v3.0.0`). Backlog en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 Hitos cerrados:
 - **M1–M7** docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics.
@@ -37,7 +37,7 @@ Documentos críticos:
 
 | Tema | Decisión |
 |---|---|
-| Framework | Astro 5, **sitio estático** (`output: 'static'`, sin adapter). Cloudflare Pages sirve `dist/`. |
+| Framework | Astro 6, **sitio estático** (`output: 'static'`, sin adapter). Cloudflare Pages sirve `dist/`. |
 | Estilo | Tailwind v4 (via `@tailwindcss/vite`), TypeScript strict. |
 | Tooling | **Biome** (lint+format), Vitest, Playwright, Supabase CLI. NO ESLint/Prettier. |
 | BD | Supabase. Proyecto creado: **`sebasgrios`** (ref `nzbodijggjxhshqqpnue`, Frankfurt eu-central-1, free tier). Claude opera vía el **Supabase CLI ya instalado localmente**. Storage para imágenes/logos. |

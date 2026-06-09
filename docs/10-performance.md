@@ -27,7 +27,7 @@
 ### Imágenes
 
 - Servidas desde Supabase Storage con transformaciones (Image Transformations de Supabase) o vía `?width=...&format=webp`.
-- **Implementado**: hero y proyectos usan `<Image>` de `astro:assets` (servicio `sharp` en build, `imageService: 'compile'`) → **webp** optimizado en `/_astro/` (hero `densities=[1,2]`; proyectos `widths=[400,800]` + `sizes`). Logos/avatar quedan como `<img>` (tamaño ínfimo). `sharp` es `devDependency` (solo build; runtime passthrough).
+- **Implementado**: hero, proyectos, **logos de empresa y avatar del nav** usan `<Image>` de `astro:assets` (servicio `sharp` en build) → **webp** optimizado en `/_astro/` (hero `densities=[1,2]`; proyectos `widths`+`sizes`; logos/avatar `densities=[1,2]`). El avatar del nav pasó de ~201 KB en crudo a ~1 KB en webp. `sharp` es `devDependency` (solo build).
 - `loading="lazy"` por defecto excepto hero (`loading="eager" fetchpriority="high"`).
 - `srcset` con widths `[400, 800, 1200, 1600]` (proyectos), `[300, 600]` (avatar/logo), `[480, 720, 1080]` (hero).
 - `aspect-ratio` siempre declarado en CSS para evitar CLS.

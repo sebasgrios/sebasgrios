@@ -59,6 +59,7 @@ Smoke tests en `/e2e/`:
 
 1. `public.spec.ts`: visita `/` y `/en/`, secciones, locale switch, hreflang, JSON-LD.
 2. `theme.spec.ts`: click theme toggle alterna `data-theme` y persiste tras reload.
+3. `a11y.spec.ts`: **axe-core** sobre `/` y `/en/` en claro y oscuro; 0 violaciones serias/críticas (WCAG A/AA).
 
 (Pendiente: `responsive.spec.ts`.)
 
@@ -73,10 +74,13 @@ await expect(anon.from('profile').update({ full_name: 'X' })).rejects.toThrow();
 
 ## CI
 
-`.github/workflows/ci.yml` (GitHub Actions) corre en PRs a `develop`/`main` y en push a `develop`: `pnpm check` + `pnpm test` + `pnpm build`. El `build` solo necesita la anon key pública (hardcodeada) → sin secretos. Falta marcarlo como *required status check* en GitHub (ver [17-improvements](./17-improvements.md), pasos manuales). `e2e` aún no está en CI (necesita servidor + más tiempo).
+`.github/workflows/ci.yml` (GitHub Actions) corre en PRs a `develop`/`main` y en push a `develop`, en tres jobs:
+- **`verify`**: `pnpm check` + `pnpm test` + `pnpm build` (sin secretos; la anon key es pública).
+- **`e2e`**: Playwright (chromium) — smoke público + `a11y` (axe).
+- **`lighthouse`**: build + `lhci autorun` con budgets (`lighthouserc.json`): a11y y SEO como *error* (≥0.9), perf y best-practices como *warn*. Umbrales conservadores; subir a ≥0.95 tras confirmar el primer run verde.
 
 ## Lo que NO se testea
 
 - Renderizado de componentes Astro (snapshot tests dan poco valor frente al coste de mantenerlos).
 - Animaciones / parallax (visual; se valida a ojo).
-- Cloudflare Workers runtime específico (lo cubre el deploy preview).
+- La CSP efectiva por cabeceras `_headers` (no se aplica en `astro preview`; se valida en el deploy preview de Cloudflare).
