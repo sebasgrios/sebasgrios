@@ -28,12 +28,12 @@ const personRole = pickLocale(profile.role, locale);
   personName={profile.fullName}
   personRole={personRole}
 >
-  <Nav locale={locale} shortName={profile.shortName} avatarUrl={profile.avatarUrl} />
+  <Nav slot="nav" locale={locale} shortName={profile.shortName} avatarUrl={profile.avatarUrl} />
   <Hero locale={locale} profile={profile} stats={stats} />
   <Experience locale={locale} companies={companies} />
   <Education locale={locale} education={education} />
   <Stack locale={locale} stackGroups={stackGroups} />
   <Projects locale={locale} projects={projects} />
   <Contact locale={locale} profile={profile} />
-  <Footer profile={profile} />
+  <Footer slot="footer" profile={profile} />
 </BaseLayout>

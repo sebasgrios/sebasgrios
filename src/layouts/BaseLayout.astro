@@ -155,10 +155,17 @@ const jsonLd = graph.length
   <body>
     <BgField />
     <BgNoise />
-    <a href="#main" class="sr-only">Skip to main content</a>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[200] focus:rounded-full focus:border focus:border-glass-border focus:bg-bg-2 focus:px-4 focus:py-2 focus:text-sm focus:text-text focus:shadow-lg"
+    >
+      {locale === 'es' ? 'Saltar al contenido' : 'Skip to main content'}
+    </a>
+    <slot name="nav" />
     <main id="main" tabindex="-1">
       <slot />
     </main>
+    <slot name="footer" />
     <script>
       import '@/scripts/effects.client.ts';
     </script>
