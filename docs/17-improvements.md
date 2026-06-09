@@ -14,18 +14,17 @@ Backlog priorizado del **portfolio público** (sitio estático). No son bugs (el
 - ✅ Cache-Control SWR para `/` y `/en/`.
 - ✅ Imágenes optimizadas con `astro:assets` + `sharp` (hero webp 1x/2x; proyectos webp responsive).
 - ✅ **Paso a estático**: eliminado el backoffice SSR; `output: 'static'`, sin adapter ni worker. Desaparecen el binding `SESSION` KV, los round-trips de auth del middleware y la exclusión `_routes.json`.
-- ✅ **Optimización integral**: deps a latest (Astro 6, TS 6, Biome 2, Vitest 4); avatar/logos a webp (`astro:assets`); a11y (landmarks, skip-link al foco, contraste AA) con **axe en CI**; JSON-LD `Person` enriquecido; cabeceras COOP/CORP + CSP endurecida; **Lighthouse CI**.
+- ✅ **Optimización integral**: deps a latest (Astro 6, TS 6, Biome 2, Vitest 4); avatar/logos a webp (`astro:assets`); a11y (landmarks, skip-link al foco, contraste AA) con **axe en CI**; JSON-LD `Person` enriquecido; **CSP sin `'unsafe-inline'`** (hashes de Astro 6) + COOP/CORP; **Lighthouse CI**.
 
 ---
 
 ## 1 · Seguridad
 
-### S1 · Quitar `'unsafe-inline'` de la CSP `[P2·M]`
-**Hecho**: COOP/CORP, `object-src 'none'`, `frame-src 'none'`, `upgrade-insecure-requests` y `connect-src` más estricto en `_headers`.
-**Pendiente**: sigue `'unsafe-inline'` en `script-src`/`style-src`. Para quitarlo con la CSP estable de Astro 6 (`security.csp`, auto-hash de scripts/estilos) hay que **mover antes** los `style=` dinámicos de `TechIcon`/`Tag` (color de marca por tecnología) a CSS hasheable; si no, Astro hashea estilos e ignora `'unsafe-inline'`, rompiendo esos iconos. Verificar en deploy preview (consola sin violaciones CSP).
+### S1 · CSP sin `'unsafe-inline'` ✅ (hecho)
+`security.csp` de Astro 6 genera la CSP por `<meta>` con hashes SHA-256 de scripts/estilos inline; los colores de marca de los iconos se movieron de `style=` a `globals.css` (`[data-ti]`). `_headers` conserva `frame-ancestors`, `upgrade-insecure-requests` y COOP/CORP. **Nota**: Astro **no** hashea el contenido de `<style set:html>` dinámico (lo hashea como vacío) — por eso los colores van en CSS estático, no en un `<style>` generado. Verificado en `astro preview` (consola sin violaciones).
 
-### Cabeceras extra `[P3·S]`
-Añadir `Cross-Origin-Opener-Policy: same-origin` y `Cross-Origin-Resource-Policy: same-origin` a `_headers`. La CSP/HSTS/XFO actuales ya son buenas.
+### Cabeceras extra ✅ (hecho)
+`Cross-Origin-Opener-Policy: same-origin` y `Cross-Origin-Resource-Policy: same-origin` añadidas a `_headers` (junto a HSTS/XFO/Referrer/Permissions).
 
 ---
 

@@ -26,7 +26,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto s
 
 ### Security
 
-- Cabeceras **COOP/CORP** y CSP endurecida (`object-src 'none'`, `frame-src 'none'`, `upgrade-insecure-requests`, `connect-src` más estricto). Eliminar `'unsafe-inline'` queda pendiente (requiere refactor de estilos inline dinámicos de iconos).
+- **CSP sin `'unsafe-inline'`**: la política la genera Astro 6 (`security.csp`) por `<meta>` con hashes SHA-256 de scripts/estilos; los colores de iconos pasaron de `style=` inline a `globals.css` (`[data-ti]`). `_headers` añade COOP/CORP, `object-src 'none'`, `frame-src 'none'`, `frame-ancestors`, `upgrade-insecure-requests` y `connect-src` más estricto.
 
 ## [3.0.0] — 2026-06-08 — Reescritura v3
 

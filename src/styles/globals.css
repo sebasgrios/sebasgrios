@@ -439,6 +439,27 @@
   }
 }
 
+/* Tech brand colors — static mirror of brand() in src/lib/icons/techIconRegistry.ts.
+   Applied via [data-ti] on TechIcon/Tag so a hashed CSP needs no inline style. */
+[data-ti="typescript"] { --tech-color: #3178C6; }
+[data-ti="javascript"] { --tech-color: #F7DF1E; }
+[data-ti="react"], [data-ti="react16"], [data-ti="reactnative"] { --tech-color: #61DAFB; }
+[data-ti="nextjs"], [data-ti="githubcopilot"] { --tech-color: #A1A1AA; }
+[data-ti="astro"] { --tech-color: #BC52EE; }
+[data-ti="redux"] { --tech-color: #764ABC; }
+[data-ti="tailwindcss"] { --tech-color: #06B6D4; }
+[data-ti="html"] { --tech-color: #E34F26; }
+[data-ti="css"] { --tech-color: #663399; }
+[data-ti="nodejs"] { --tech-color: #5FA04E; }
+[data-ti="jenkins"] { --tech-color: #D24939; }
+[data-ti="bitbucket"] { --tech-color: #0052CC; }
+[data-ti="git"] { --tech-color: #F03C2E; }
+[data-ti="cloudflare"] { --tech-color: #F38020; }
+[data-ti="mysql"] { --tech-color: #4479A1; }
+[data-ti="wordpress"] { --tech-color: #21759B; }
+[data-ti="php"] { --tech-color: #777BB4; }
+[data-ti="java"] { --tech-color: #F89820; }
+
 @keyframes status-pulse {
   0% {
     box-shadow: 0 0 0 0 oklch(0.72 0.2 150 / 0.5);
