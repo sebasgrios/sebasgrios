@@ -16,6 +16,9 @@ interface Props {
   ogImageAlt?: string;
   personName?: string;
   personRole?: string;
+  worksFor?: string;
+  alumniOf?: string[];
+  knowsAbout?: string[];
   noindex?: boolean;
 }
 
@@ -28,6 +31,9 @@ const {
   ogImageAlt,
   personName,
   personRole,
+  worksFor,
+  alumniOf,
+  knowsAbout,
   noindex = false,
 } = Astro.props;
 
@@ -55,7 +61,7 @@ if (!noindex) {
     inLanguage: locale === 'es' ? 'es-ES' : 'en-US',
   });
   if (personName) {
-    graph.push({
+    const person: JsonLdNode = {
       '@type': 'Person',
       name: personName,
       jobTitle: personRole,
@@ -65,7 +71,17 @@ if (!noindex) {
       image: ogImageUrl,
       knowsLanguage: ['es', 'en'],
       sameAs: [SITE.defaultLinkedin, SITE.defaultGithub],
-    });
+    };
+    if (worksFor) {
+      person.worksFor = { '@type': 'Organization', name: worksFor };
+    }
+    if (alumniOf?.length) {
+      person.alumniOf = alumniOf.map((name) => ({ '@type': 'EducationalOrganization', name }));
+    }
+    if (knowsAbout?.length) {
+      person.knowsAbout = knowsAbout;
+    }
+    graph.push(person);
   }
 }
 const jsonLd = graph.length

@@ -19,6 +19,9 @@ const { profile, companies, education, stackGroups, projects, stats } = data;
 const metaTitle = pickLocale(profile.metaTitle, locale);
 const metaDescription = pickLocale(profile.metaDescription, locale);
 const personRole = pickLocale(profile.role, locale);
+const worksFor = companies[0]?.name;
+const alumniOf = [...new Set(education.map((e) => e.school))];
+const knowsAbout = [...new Set(stackGroups.flatMap((g) => g.technologies.map((t) => t.label)))];
 ---
 
 <BaseLayout
@@ -27,6 +30,9 @@ const personRole = pickLocale(profile.role, locale);
   locale={locale}
   personName={profile.fullName}
   personRole={personRole}
+  worksFor={worksFor}
+  alumniOf={alumniOf}
+  knowsAbout={knowsAbout}
 >
   <Nav slot="nav" locale={locale} shortName={profile.shortName} avatarUrl={profile.avatarUrl} />
   <Hero locale={locale} profile={profile} stats={stats} />
