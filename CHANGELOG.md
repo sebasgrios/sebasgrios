@@ -2,6 +2,12 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.0.2] — 2026-06-09
+
+### Changed
+
+- **Perf (móvil)**: eliminado el `preconnect`/`dns-prefetch` a Supabase (Lighthouse lo marcaba como conexión sin usar: las imágenes se optimizan a `/_astro` en build, no hay peticiones a Supabase en runtime) y añadido `Cache-Control: immutable` para `/_astro/*` en `_headers`.
+
 ## [4.0.1] — 2026-06-09
 
 ### Fixed
