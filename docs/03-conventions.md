@@ -33,7 +33,7 @@ Reglas estrictas. Aplican a humanos y a agentes.
 - **Sin `any`**. Si es inevitable, `unknown` + narrowing.
 - **Sin `console.log`** en código de producción. Usar el logger del worker.
 - **Sin abreviaturas** salvo aceptadas (`url`, `id`, `db`, `api`).
-- Funciones puras siempre que sea posible. Side-effects aislados en `/src/lib/data` y `/src/pages/api`.
+- Funciones puras siempre que sea posible. Side-effects aislados en `/src/lib/data`.
 - Early returns sobre `else` anidados.
 - Imports ordenados (Biome lo enfuerza): node builtins → externos → internos `@/` → relativos.
 
@@ -70,7 +70,7 @@ Ejemplos válidos:
 📚 describe stack groups RLS policies
 🔨 extract row-to-domain mapper in repos
 🚀 lazy-load below-the-fold project images
-📦 add @astrojs/cloudflare adapter
+📦 add @astrojs/sitemap integration
 👷 add github actions workflow for build
 🔧 bump astro from 5.18 to 5.19
 🚨 add tests for pickLocale fallback
@@ -129,7 +129,7 @@ Antes de cualquier commit:
 
 - **Secretos** nunca en repo. `.env.local` ignorado por git (ya está en `.gitignore`).
 - Variables públicas: prefijo `PUBLIC_` (Astro las expone al cliente).
-- `SUPABASE_SERVICE_ROLE_KEY` solo en variables de entorno del worker, jamás en cliente, jamás en logs.
+- Secretos (p. ej. service-role key) solo en variables de entorno del servicio que los use, jamás en cliente, jamás en logs.
 - Validar **toda** input externa (formularios, query params) con Zod.
 
 ## Accesibilidad obligatoria

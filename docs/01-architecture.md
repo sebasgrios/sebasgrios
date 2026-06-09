@@ -4,105 +4,84 @@
 
 ```
                      ┌────────────────────────────────────────┐
-                     │           Cloudflare Pages              │
-                     │  (Astro 5 con @astrojs/cloudflare)      │
+                     │            Cloudflare Pages             │
+                     │      (Astro 5 · sitio estático)         │
                      │                                         │
-   Visitante  ─────▶ │  /            → prerender (estático)    │
-                     │  /en/         → prerender (estático)    │
-   Editor admin ───▶ │  /admin/**    → SSR (server)            │
-                     │  /api/**      → server endpoints        │
-                     │  /og/*.png    → prerender (Satori)      │
+   Visitante  ─────▶ │  /            → estático (prerender)    │
+                     │  /en/         → estático (prerender)    │
+                     │  /og/*.png    → estático (Satori)       │
+                     │  /404         → estático                │
                      └──────────┬─────────────────────────────┘
-                                │
-                                │ supabase-js (server-side)
+                                │ supabase-js (solo en build)
                                 ▼
                      ┌────────────────────────────────────────┐
-                     │              Supabase                   │
-                     │  · Postgres (data)                      │
+                     │               Supabase                  │
+                     │  · Postgres (data, RLS public read)     │
                      │  · Storage (images/logos)               │
-                     │  · Auth (Google OAuth, admin)           │
-                     │  · RLS habilitado en todas las tablas   │
                      └────────────────────────────────────────┘
 ```
 
+La edición de contenido (escrituras, auth, media, publicar) vive en un **repositorio separado** (`sebasgrios-backoffice`, Next.js). Ver [13-backoffice](./13-backoffice.md).
+
 ## Decisiones de runtime `[DECIDIDO]`
 
-- **Astro 5** con `output: 'server'` y `prerender: true` por defecto en páginas públicas.
-- **Adapter Cloudflare** (`@astrojs/cloudflare`). Workers Runtime, no Node. Esto restringe librerías a las que funcionan en `workerd`.
-- **Prerender**: las páginas públicas (`/`, `/en/`) se generan en build leyendo Supabase. Cuando los datos cambien, el botón **Publicar** (`/admin/publish`) dispara el deploy hook de Cloudflare y se reconstruye.
-- **SSR puntual**: `/admin/**` y endpoints de mutación.
-- **Imágenes**: servidas desde Supabase Storage con transformación CDN (`?width=…&format=webp`). El componente `<Image>` de Astro envuelve la URL remota.
+- **Astro 5** con `output: 'static'`: el sitio entero se genera en build. No hay SSR ni worker.
+- **Sin adapter**: al quitar el backoffice no queda ninguna ruta dinámica, así que se eliminó `@astrojs/cloudflare`. Cloudflare Pages sirve `dist/` como estático.
+- **Build-time data**: las páginas (`/`, `/en/`) y las OG (`/og/*.png`) se generan en build leyendo Supabase. Cuando los datos cambian, el backoffice dispara el **deploy hook** de Cloudflare y el sitio se reconstruye.
+- **Imágenes**: `astro:assets` + `sharp` optimizan en build (webp) las imágenes remotas de Supabase Storage.
+
+Histórico: hasta v3.0.0 el output era `'server'` (SSR híbrido) con `@astrojs/cloudflare` para servir `/admin` + `/api`. Al mover el backoffice a un repo aparte, el portfolio pasó a estático puro.
 
 ## Capas
 
 ### Presentación (`/src/components`, `/src/sections`, `/src/layouts`)
 
 - Componentes **`.astro`** sin JS por defecto. Zero-JS es la norma.
-- JS solo cuando hay interactividad real (theme toggle, parallax, nav burger, reveal-on-scroll). Se aísla en componentes con `client:visible`/`client:idle` o en `<script>` embebidos.
-- Sin React, sin Vue, sin frameworks de UI. Astro nativo + Tailwind v4.
+- JS solo cuando hay interactividad real (theme toggle, parallax, nav burger, reveal-on-scroll), aislado en `<script>` o en `effects.client.ts`.
+- Sin React, sin Vue. Astro nativo + Tailwind v4.
 
 ### Dominio (`/src/lib/domain`)
 
 - Tipos de dominio puros (sin acoplar Supabase): `Profile`, `Company`, `Role`, `Education`, `Project`, `Technology`, `StackGroup`, `Locale`.
-- Helpers puros: `computeYearsOfExperience`, `formatDateRange`, `pickLocale`, `groupRolesByCompany`.
-- Testeable sin red, sin DOM.
+- Helpers puros: `computeYearsOfExperience`, `formatDateRange`, `pickLocale`, `groupRolesByCompany`. Testeable sin red, sin DOM.
 
 ### Datos (`/src/lib/data`)
 
-- Cliente Supabase tipado (`createServerClient(env)`).
-- Repositorios por agregado: `profileRepo.get()`, `companyRepo.listWithRoles()`, etc.
-- Cada repo devuelve **tipos de dominio**, no rows de la BD (mapper en medio).
-- El cliente Supabase es un **singleton** en memoria (`getServerClient()`); como las páginas públicas son prerender, las queries solo corren en build (cero round-trip en el hot path). No hay capa `astro:cache`.
+- Cliente Supabase tipado (`getServerClient()`), **solo lectura** (anon key, RLS public read).
+- Repositorios por agregado (`fetchProfile`, `fetchCompaniesWithRoles`, …) que devuelven **tipos de dominio** (mapper en medio), no rows de la BD.
+- El cliente es un **singleton** en memoria; como todo es estático, las queries solo corren en build (cero round-trip en runtime). No hay capa `astro:cache`.
 
-### Server (`/src/pages/api`, `/src/pages/og`)
+### OG (`/src/pages/og`)
 
-- Endpoints de mutación del backoffice: `POST /api/<entity>` (despacha create/update/delete por `_action`), `POST /api/media` (multipart), `POST /api/publish` (deploy hook), `POST /api/auth/*` (OAuth). Todos validan `is_admin` (middleware) + RLS.
-- Generación de OG images con `satori` (JSX→SVG) + `@resvg/resvg-wasm` (SVG→PNG), compatible con Cloudflare Workers. Prerender en build.
+- Generación de OG images con `satori` (JSX→SVG) + `@resvg/resvg-wasm` (SVG→PNG), **prerender en build** (Node). El `.wasm` se lee del disco con `node:fs` (`createRequire(...).resolve`).
 
 ### Configuración (`/src/config`)
 
-- `site.ts`: URL canónica, dominio, nombre, links sociales por defecto.
-- `i18n.ts`: locales, `Localized<T>`, helpers de locale. `copy.ts`: chrome copy es/en. `analytics.ts`, `supabase.ts`: config pública.
-- `tweaks.ts`: valores fijos sin UI — `glassIntensity = 0.1`, `accentHue = 264`, `parallax = true`, `entryAnimations = true`.
-- Los **tokens de diseño** no viven en un `theme.ts`: se declaran como CSS variables y `@theme` en `/src/styles/globals.css`.
+- `site.ts` (URL, dominio, links), `i18n.ts`, `copy.ts` (chrome es/en), `analytics.ts`, `supabase.ts` (URL + anon key públicas), `tweaks.ts`.
+- Los **tokens de diseño** viven como CSS variables y `@theme` en `/src/styles/globals.css`.
 
-## Flujo de datos público
+## Flujo de datos
 
 ```
 build ─▶ profileRepo.get()        ─┐
         companyRepo.listWithRoles()│
-        educationRepo.list()       │   compone ViewModel
+        educationRepo.list()       │   compone HomeViewModel
         stackRepo.listGroups()     ├──▶ que cada sección
         projectRepo.list()         │   consume.
         technologyRepo.dict()      ─┘
 ```
 
-- Una única función `loadHomeData(locale)` en `/src/lib/data/loaders.ts` orquesta todas las llamadas en paralelo y devuelve un `HomeViewModel`.
-- Cada sección Astro recibe **solo su slice** del view model como prop.
-
-## Flujo de datos del backoffice (ver [13-backoffice](./13-backoffice.md))
-
-```
-Admin (browser) ──▶ /admin/* (SSR Astro)
-                       │
-                       ├──▶ Supabase Auth (cookie)
-                       │
-                       ├──▶ /api/* (POST/PUT/DELETE)
-                       │       └─▶ supabase admin client (server)
-                       │              └─▶ trigger redeploy (CF deploy hook)
-                       │
-                       └──▶ render formularios + lista
-```
+- Una única función `loadHomeData(locale)` en `/src/lib/data/loaders.ts` orquesta las llamadas en paralelo y devuelve un `HomeViewModel`. Cada sección recibe **solo su slice**.
 
 ## Contratos clave
 
-- **HomeViewModel**: shape estable, definido en `/src/lib/domain/types.ts`. Cualquier cambio en este shape requiere actualizar todas las secciones y la documentación.
-- **Repos**: cada método es async, devuelve `Promise<DomainType>` o `Promise<DomainType[]>`. Errores se propagan; no se silencian.
-- **Cliente Supabase**: solo se instancia en server. Nunca llega al bundle de cliente.
+- **HomeViewModel**: shape estable en `/src/lib/domain/types.ts`. Cualquier cambio requiere actualizar las secciones y la documentación.
+- **Repos**: cada método es async y devuelve `Promise<DomainType>` o `Promise<DomainType[]>`. Errores se propagan; no se silencian.
+- **Cliente Supabase**: solo se instancia en build (server). Nunca llega al bundle de cliente.
 
 ## Lo que **no** es esta arquitectura
 
 - No es un SPA. Es contenido estático con islas mínimas.
-- No es serverless-first puro: el prerender hace la mayoría del trabajo. SSR solo donde aporta.
+- No tiene SSR ni worker: todo se genera en build.
 - No tiene capa GraphQL: supabase-js directo desde repos.
-- No tiene ORM: queries supabase-js + mapeo manual a tipos de dominio (más control, menos magia).
+- No tiene ORM: queries supabase-js + mapeo manual a tipos de dominio.

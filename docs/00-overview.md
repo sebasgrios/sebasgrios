@@ -8,25 +8,25 @@ Reconstruir el portfolio personal del ingeniero (Sebastián González Ríos) en 
 
 - Implemente el nuevo diseño "Liquid Glass" (ver [04-design-system](./04-design-system.md)).
 - Migre el contenido de ficheros `.ts` estáticos a **Supabase** (ver [06-data-schema](./06-data-schema.md)).
-- Prepare el terreno para un **backoffice** privado de CRUD (ver [13-backoffice](./13-backoffice.md)).
+- El **backoffice** de edición vive en un repo separado en Next.js (ver [13-backoffice](./13-backoffice.md)).
 - Soporte **i18n es/en** desde el inicio (ver [07-i18n](./07-i18n.md)).
 - Mantenga métricas Core Web Vitals en verde (LCP < 2.0s en 4G, CLS = 0, INP < 200ms).
 
 ## Alcance v3 (in-scope)
 
-- Astro 5 con adapter Cloudflare, SSR híbrido (prerender + SSR `/admin`).
+- Astro 5, sitio estático (`output: 'static'`) servido por Cloudflare Pages.
 - Tailwind v4, TypeScript strict, Biome.
 - Schema Supabase + migraciones + tipos generados.
 - Seed de datos desde el contenido actual de `src/data/*.ts` + el nuevo contenido del diseño (companies/roles/sectores).
 - Self-host de fuentes (Satoshi, General Sans, JetBrains Mono).
 - OG image dinámica con Satori.
 - Cloudflare Web Analytics.
-- Tests unitarios con Vitest. Playwright instalado pero suite mínima hasta backoffice.
+- Tests unitarios con Vitest. Playwright para smoke público.
 - Documentación completa en `/docs` + `AGENTS.md`.
 
-## Backoffice (implementado tras M7)
+## Backoffice (repo separado)
 
-El backoffice (`/admin`, CRUD, Google OAuth, RLS, Storage, publish) está **implementado end-to-end** (ver [13-backoffice](./13-backoffice.md)) y operativo. Google OAuth y el primer admin en `user_roles` ya están configurados; el único pendiente opcional es el secreto `CF_DEPLOY_HOOK_URL` en Cloudflare para que el botón Publicar dispare el redeploy.
+El backoffice de edición se reescribió en **Next.js** y vive en un repo aparte (`sebasgrios-backoffice`, `backoffice.sebasgrios.es`); habla con el mismo Supabase y dispara el deploy hook del portfolio para reconstruirlo. Ver [13-backoffice](./13-backoffice.md).
 
 ## Out-of-scope v3 (se hace después)
 

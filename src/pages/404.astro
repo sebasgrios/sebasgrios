@@ -3,7 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { COPY } from '@/config/copy';
 import { getLocaleFromPath } from '@/lib/i18n/getLocale';
 
-export const prerender = false;
+export const prerender = true;
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = COPY[locale];

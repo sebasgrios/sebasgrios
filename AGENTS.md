@@ -7,17 +7,18 @@ Briefing autocontenido para cualquier sesión/agente (Claude, Copilot, etc.) que
 Portfolio personal de **Sebastián González Ríos** (`sebasgrios.es`).
 
 Es la **v3**, una reescritura completa que:
-- Migra de Astro 4 a **Astro 5** con adapter Cloudflare (SSR híbrido).
-- Reemplaza el contenido en `.ts` estáticos por **Supabase** (Postgres + Storage).
+- Migra de Astro 4 a **Astro 5**; hoy es un **sitio 100% estático** servido por Cloudflare Pages (sin SSR ni adapter).
+- Reemplaza el contenido en `.ts` estáticos por **Supabase** (Postgres + Storage), leído en build.
 - Implementa un nuevo diseño "Liquid Glass" con i18n es/en.
-- Añade un **backoffice** privado (`/admin`, Google OAuth via Supabase, RLS), ya implementado.
 
-Estado actual: **v3.0.0 en producción** (`package.json` 3.0.0). Público + backoffice implementados end-to-end, verificados (check/test/build/e2e verdes) y **desplegados en `sebasgrios.es`** (release `develop → main`, PR #10; tag `v3.0.0`). La rama de desarrollo `v3` se mergeó y **ya no existe**; queda solo el endurecimiento opcional del ingeniero (deploy hook, rate limiting, backups) — ver [`docs/17-improvements.md`](./docs/17-improvements.md).
+El **backoffice** (edición de contenido) se reescribió en **Next.js** y vive en un **repo separado** (`sebasgrios-backoffice`, `backoffice.sebasgrios.es`); ya no está en este repo. Ver [`docs/13-backoffice.md`](./docs/13-backoffice.md).
+
+Estado actual: **portfolio público estático en producción** en `sebasgrios.es` (Astro 5 + Supabase + Cloudflare Pages). La rama de desarrollo `v3` de la reescritura se mergeó y ya no existe (tag `v3.0.0`). Backlog en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 Hitos cerrados:
 - **M1–M7** docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics.
-- **Backoffice** `/admin`: Google OAuth + RLS, CRUD de todas las entidades, media (Storage), publicar (deploy hook).
-- **Mejoras de cierre**: CI, e2e de guards, imágenes webp (`astro:assets`), headers SWR, factory CRUD, observabilidad, bump `@supabase/ssr` 0.10.
+- **Mejoras de cierre**: CI, imágenes webp (`astro:assets`), headers de cache SWR.
+- **Paso a estático**: eliminado el backoffice SSR del repo (movido a `sebasgrios-backoffice`); `output: 'static'`, sin adapter ni worker.
 - Changelog en [`CHANGELOG.md`](./CHANGELOG.md). Backlog/mejoras futuras en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 ## Documentación de referencia
@@ -36,7 +37,7 @@ Documentos críticos:
 
 | Tema | Decisión |
 |---|---|
-| Framework | Astro 5 + `@astrojs/cloudflare`, SSR híbrido (prerender público, SSR `/admin`). |
+| Framework | Astro 5, **sitio estático** (`output: 'static'`, sin adapter). Cloudflare Pages sirve `dist/`. |
 | Estilo | Tailwind v4 (via `@tailwindcss/vite`), TypeScript strict. |
 | Tooling | **Biome** (lint+format), Vitest, Playwright, Supabase CLI. NO ESLint/Prettier. |
 | BD | Supabase. Proyecto creado: **`sebasgrios`** (ref `nzbodijggjxhshqqpnue`, Frankfurt eu-central-1, free tier). Claude opera vía el **Supabase CLI ya instalado localmente**. Storage para imágenes/logos. |
@@ -44,7 +45,7 @@ Documentos críticos:
 | Schema | Híbrido: `text[]` para highlights, tabla `technologies` reutilizable con pivots M:N. |
 | Hero | Stats computadas (años, sectores, proyectos). Badges flotantes + status pill editables desde `profile`. |
 | Anchors | Siempre en inglés: `#experience #education #stack #projects #contact`. |
-| Backoffice | `/admin` (mismo deploy). Google OAuth via Supabase. RLS. Página `/401` con mismo glass system. |
+| Backoffice | Repo separado **`sebasgrios-backoffice`** (Next.js, `backoffice.sebasgrios.es`). Habla con el mismo Supabase + RLS. |
 | OG | Dinámica con Satori. |
 | Analytics | Cloudflare Web Analytics (sin cookies). |
 | Fuentes | Self-host Satoshi + General Sans + JetBrains Mono. NO CDN. |
@@ -73,10 +74,7 @@ Documentos críticos:
 │   ├── pages/
 │   │   ├── index.astro
 │   │   ├── en/index.astro
-│   │   ├── 401.astro
 │   │   ├── 404.astro
-│   │   ├── admin/         # backoffice SSR (login, dashboard, CRUD, media, publish)
-│   │   ├── api/           # endpoints SSR (auth, mutaciones por entidad, media, publish)
 │   │   └── og/[locale].png.ts
 │   ├── lib/
 │   │   ├── domain/        # tipos puros, helpers (dates, i18n, stats)
@@ -88,9 +86,8 @@ Documentos críticos:
 │   │   ├── tweaks.ts      # valores fijos del design
 │   │   ├── copy.ts        # chrome copy es/en
 │   │   └── i18n.ts        # locales
-│   ├── scripts/           # nav.client.ts, effects.client.ts
-│   ├── styles/            # fonts.css, globals.css
-│   └── middleware.ts      # locale + admin auth
+│   ├── scripts/           # effects.client.ts
+│   └── styles/            # fonts.css, globals.css
 ├── supabase/
 │   ├── migrations/        # 0001_*.sql, ...
 │   └── seed.sql
@@ -110,7 +107,7 @@ npm run dev            # dev server
 npm run check          # astro check + biome check
 npm test               # vitest
 npm run build          # astro check + astro build
-npm run preview        # wrangler pages dev dist
+npm run preview        # astro preview (sirve dist/)
 npm run e2e            # playwright
 npm run db:types       # gen types from supabase
 npm run db:reset       # reset local db (migraciones + seed)

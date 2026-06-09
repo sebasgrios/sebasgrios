@@ -312,7 +312,7 @@ create table admin_audit_log (
 );
 ```
 
-RLS: lectura + insert solo admin (`is_admin()`). Los endpoints `/api/*` insertan (best-effort) tras cada mutación. `user_id` se rellena solo con `auth.uid()`.
+RLS: lectura + insert solo admin (`is_admin()`). El backoffice (repo aparte) inserta (best-effort) tras cada mutación. `user_id` se rellena solo con `auth.uid()`.
 
 ## Seed
 

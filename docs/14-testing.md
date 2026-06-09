@@ -10,7 +10,7 @@
 
 ```
               ▲
-        e2e   │  Playwright (guards backoffice + smoke público)
+        e2e   │  Playwright (smoke público)
               │
        integ  │  Repos contra Supabase local (M4+)
               │
@@ -31,10 +31,8 @@ Configuración en `vitest.config.ts`. Carpetas `**/*.test.ts` colocadas junto al
 | `lib/domain/stats.ts` | `computeYearsOfExperience` (frontera de año), `countUniqueSectors`, `countProjects`. |
 | `lib/data/mappers.ts` | row snake_case → camelCase para cada entidad. |
 | `lib/i18n/getLocale.ts` | `getLocaleFromPath` (prefijo `/en/`, fallback). |
-| `lib/admin/forms.ts` | parseo de `FormData` (localized, bool, listas indexadas). |
-| `lib/admin/schemas.ts` | validación Zod de cada entidad (profile, technology, stack, education, company, role, project): locales requeridos, fechas, URLs vacías→null, enums, uuids, coerción de orden. |
 
-Suite actual: **57 tests** en 7 ficheros (`*.test.ts` colocados junto al código).
+Suite actual: **29 tests** en 5 ficheros (`*.test.ts` colocados junto al código).
 
 ### Patrón de test
 
@@ -61,14 +59,8 @@ Smoke tests en `/e2e/`:
 
 1. `public.spec.ts`: visita `/` y `/en/`, secciones, locale switch, hreflang, JSON-LD.
 2. `theme.spec.ts`: click theme toggle alterna `data-theme` y persiste tras reload.
-3. `admin.spec.ts`: guards del backoffice sin sesión (`/admin`→302 login, `POST /api/*`→401, `/admin/login` renderiza, `/api/auth/signin`→302).
 
-(Pendiente: e2e del flujo admin autenticado y `responsive.spec.ts`.)
-
-### Futuros (flujo admin autenticado)
-
-4. `admin-login.spec.ts`: redirect a login si no hay sesión.
-5. `admin-edit.spec.ts`: login → editar profile → guardar → ver cambio en `/`.
+(Pendiente: `responsive.spec.ts`.)
 
 ## RLS tests
 
