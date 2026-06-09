@@ -57,7 +57,7 @@ Histórico: hasta v3.0.0 el output era `'server'` (SSR híbrido) con `@astrojs/c
 
 ### Configuración (`/src/config`)
 
-- `site.ts` (URL, dominio, links), `i18n.ts`, `copy.ts` (chrome es/en), `analytics.ts`, `supabase.ts` (URL + anon key públicas), `tweaks.ts`.
+- `site.ts` (URL, dominio, links), `i18n.ts`, `copy.ts` (chrome es/en), `supabase.ts` (URL + anon key públicas), `tweaks.ts`.
 - Los **tokens de diseño** viven como CSS variables y `@theme` en `/src/styles/globals.css`.
 
 ## Flujo de datos
