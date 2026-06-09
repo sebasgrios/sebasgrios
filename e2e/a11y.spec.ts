@@ -15,7 +15,7 @@ async function seriousViolations(page: Page) {
 for (const path of ['/', '/en/']) {
   for (const scheme of ['light', 'dark'] as const) {
     test(`a11y ${scheme} · ${path}`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme });
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
       await page.goto(path);
       expect(await seriousViolations(page)).toEqual([]);
     });

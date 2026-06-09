@@ -2,7 +2,7 @@
   "name": "portfolio",
   "description": "Portfolio de Sebastián González Ríos",
   "type": "module",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "author": {
     "name": "Sebastián González Ríos",
@@ -33,7 +33,6 @@
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@resvg/resvg-wasm": "^2.6.2",
     "@supabase/supabase-js": "^2.107.0",
-    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.4",
     "satori": "^0.26.0",

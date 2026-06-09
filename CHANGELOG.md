@@ -2,7 +2,7 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
-## [Unreleased]
+## [4.0.0] — 2026-06-09
 
 ### Removed
 
