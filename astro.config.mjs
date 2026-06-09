@@ -14,7 +14,7 @@ export default defineConfig({
         "object-src 'none'",
         "frame-src 'none'",
         "img-src 'self' data: https://*.supabase.co",
-        "font-src 'self'",
+        "font-src 'self' data:",
         "connect-src 'self' https://cloudflareinsights.com",
       ],
       scriptDirective: {
