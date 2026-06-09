@@ -2,6 +2,12 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.0.3] — 2026-06-09
+
+### Changed
+
+- **Perf**: CSS crítico **inlineado** en el `<head>` (`build.inlineStylesheets: 'always'`) → elimina la última petición render-blocking y adelanta el descubrimiento de las fuentes. La CSP estricta lo hashea automáticamente (verificado en preview: sin violaciones, sin `'unsafe-inline'`).
+
 ## [4.0.2] — 2026-06-09
 
 ### Changed

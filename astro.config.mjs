@@ -5,6 +5,9 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://sebasgrios.es',
   output: 'static',
+  build: {
+    inlineStylesheets: 'always',
+  },
   security: {
     csp: {
       directives: [
