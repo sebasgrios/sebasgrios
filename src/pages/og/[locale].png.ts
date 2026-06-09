@@ -1,12 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
+import { initWasm, Resvg } from '@resvg/resvg-wasm';
+import type { APIRoute } from 'astro';
+import satori from 'satori';
 import { isLocale } from '@/config/i18n';
 import { fetchProfile } from '@/lib/data/repos';
 import { pickLocale } from '@/lib/domain/i18n';
-import { Resvg, initWasm } from '@resvg/resvg-wasm';
-import type { APIRoute } from 'astro';
-import satori from 'satori';
 
 const nodeRequire = createRequire(import.meta.url);
 
