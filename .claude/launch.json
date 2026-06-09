@@ -13,6 +13,13 @@
       "runtimeArgs": ["dev", "--port", "4399"],
       "port": 4399,
       "autoPort": false
+    },
+    {
+      "name": "astro-preview",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["preview", "--port", "4330"],
+      "port": 4330,
+      "autoPort": false
     }
   ]
 }

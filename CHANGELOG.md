@@ -15,6 +15,18 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto s
 - El portfolio pasa a **estático puro** (`output: 'static'`): sin adapter ni worker; Cloudflare Pages sirve `dist/`. `404` pasa a estático.
 - OG: el `.wasm` de resvg se lee del disco con `node:fs` en build (antes lo resolvía el adapter Cloudflare).
 - Documentación (`/docs`, `AGENTS.md`) y `robots.txt` alineados con el portfolio estático y el backoffice externo.
+- Dependencias subidas a últimas estables: **Astro 6**, **TypeScript 6**, **Biome 2** (config migrada), **Vitest 4**, supabase-js, simple-icons.
+- Imágenes: avatar del nav y logos de empresa servidos como **webp** optimizado vía `astro:assets` (el avatar pasó de ~201 KB a ~1 KB).
+
+### Added
+
+- **Accesibilidad**: landmarks correctos (`nav`/`main`/`footer` hermanos), skip-link visible al foco, contraste WCAG AA; test **axe-core** (`e2e/a11y.spec.ts`, claro y oscuro) en CI.
+- **SEO**: JSON-LD `Person` enriquecido con `worksFor`, `alumniOf` y `knowsAbout`.
+- **CI**: jobs `e2e` (Playwright + axe) y `lighthouse` (Lighthouse CI con budgets).
+
+### Security
+
+- **CSP sin `'unsafe-inline'`**: la política la genera Astro 6 (`security.csp`) por `<meta>` con hashes SHA-256 de scripts/estilos; los colores de iconos pasaron de `style=` inline a `globals.css` (`[data-ti]`). `_headers` añade COOP/CORP, `object-src 'none'`, `frame-src 'none'`, `frame-ancestors`, `upgrade-insecure-requests` y `connect-src` más estricto.
 
 ## [3.0.0] — 2026-06-08 — Reescritura v3
 

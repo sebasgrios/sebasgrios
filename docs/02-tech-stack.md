@@ -6,9 +6,9 @@ Versiones objetivo (las pinearemos en `package.json`). Cualquier upgrade mayor r
 
 | Paquete | Versión objetivo | Por qué |
 |---|---|---|
-| `astro` | `^5.x` (latest stable) | View transitions nativas, content layer, server islands. |
-| `typescript` | `^5.x` strict | Type safety, sin `any` sin justificar. |
-| `node` (local dev) | `>=22.0` (LTS activo, `.nvmrc=22`) | Requisito de Astro 5. |
+| `astro` | `^6.x` (latest stable) | View transitions nativas, content layer, CSP estable. |
+| `typescript` | `^6.x` strict | Type safety, sin `any` sin justificar. |
+| `node` (local dev) | `>=22.0` (LTS activo, `.nvmrc=22`) | Requisito de Astro 6. |
 
 ## Estilo
 
@@ -29,9 +29,11 @@ Versiones objetivo (las pinearemos en `package.json`). Cualquier upgrade mayor r
 
 | Paquete | Versión | Notas |
 |---|---|---|
-| `@biomejs/biome` | `^1.9.x` | Lint + format en una sola herramienta. Reemplaza ESLint + Prettier. |
-| `vitest` | `^2.x` | Unit tests. |
-| `@playwright/test` | `^1.4x` | E2E. Smoke público (`public`, `theme`). |
+| `@biomejs/biome` | `^2.x` | Lint + format en una sola herramienta. Reemplaza ESLint + Prettier. |
+| `vitest` | `^4.x` | Unit tests. |
+| `@playwright/test` | `^1.4x` | E2E. Smoke público (`public`, `theme`) + a11y (`a11y` con axe). |
+| `@axe-core/playwright` | `^4.x` | Auditoría a11y automatizada (WCAG A/AA) en `e2e/a11y.spec.ts`. |
+| `@lhci/cli` | `^0.15.x` | Lighthouse CI (perf/a11y/SEO/best-practices) en PRs. |
 | `@astrojs/check` | `^0.9.x` | `astro check` en CI. |
 | `sharp` | `^0.34.x` | devDependency; optimización de imágenes de `astro:assets` en build (webp). |
 
@@ -49,8 +51,8 @@ Satoshi y General Sans se cargan con `@font-face` desde `/src/styles/fonts.css`,
 
 | Paquete | Versión | Notas |
 |---|---|---|
-| `satori` | `^0.26.x` | Render JSX-like → SVG. Compatible con Workers. |
-| `@resvg/resvg-wasm` | `^2.6.x` | SVG → PNG vía WASM. Compatible con Cloudflare Workers. |
+| `satori` | `^0.26.x` | Render JSX-like → SVG, en build. |
+| `@resvg/resvg-wasm` | `^2.6.x` | SVG → PNG vía WASM; el `.wasm` se lee con `node:fs` en build. |
 
 Endpoint en `src/pages/og/[locale].png.ts` con `prerender = true` + `getStaticPaths` → genera `/og/es.png` y `/og/en.png` en build como ficheros estáticos (sin coste runtime). El `.wasm` de resvg y la fuente Inter (`src/assets/og/inter-latin-500.ttf`, self-hosteada) se leen del disco con `node:fs` en build (sin red, sin CDN).
 

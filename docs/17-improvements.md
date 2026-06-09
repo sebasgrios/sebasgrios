@@ -14,16 +14,17 @@ Backlog priorizado del **portfolio público** (sitio estático). No son bugs (el
 - ✅ Cache-Control SWR para `/` y `/en/`.
 - ✅ Imágenes optimizadas con `astro:assets` + `sharp` (hero webp 1x/2x; proyectos webp responsive).
 - ✅ **Paso a estático**: eliminado el backoffice SSR; `output: 'static'`, sin adapter ni worker. Desaparecen el binding `SESSION` KV, los round-trips de auth del middleware y la exclusión `_routes.json`.
+- ✅ **Optimización integral**: deps a latest (Astro 6, TS 6, Biome 2, Vitest 4); avatar/logos a webp (`astro:assets`); a11y (landmarks, skip-link al foco, contraste AA) con **axe en CI**; JSON-LD `Person` enriquecido; **CSP sin `'unsafe-inline'`** (hashes de Astro 6) + COOP/CORP; **Lighthouse CI**.
 
 ---
 
 ## 1 · Seguridad
 
-### S1 · CSP sin `'unsafe-inline'` en `script-src` `[P2·M]`
-`_headers` permite `'unsafe-inline'` por el script anti-flash y el snippet de analytics. Ahora que **todo es estático** (sin páginas SSR) se pueden pre-hashear los inline scripts en build (SHA-256) o usar la **CSP experimental de Astro** (`experimental.csp`, auto-hash) y quitar `'unsafe-inline'`, endureciendo contra XSS. Verificar en un deploy preview.
+### S1 · CSP sin `'unsafe-inline'` ✅ (hecho)
+`security.csp` de Astro 6 genera la CSP por `<meta>` con hashes SHA-256 de scripts/estilos inline; los colores de marca de los iconos se movieron de `style=` a `globals.css` (`[data-ti]`). `_headers` conserva `frame-ancestors`, `upgrade-insecure-requests` y COOP/CORP. **Nota**: Astro **no** hashea el contenido de `<style set:html>` dinámico (lo hashea como vacío) — por eso los colores van en CSS estático, no en un `<style>` generado. Verificado en `astro preview` (consola sin violaciones).
 
-### Cabeceras extra `[P3·S]`
-Añadir `Cross-Origin-Opener-Policy: same-origin` y `Cross-Origin-Resource-Policy: same-origin` a `_headers`. La CSP/HSTS/XFO actuales ya son buenas.
+### Cabeceras extra ✅ (hecho)
+`Cross-Origin-Opener-Policy: same-origin` y `Cross-Origin-Resource-Policy: same-origin` añadidas a `_headers` (junto a HSTS/XFO/Referrer/Permissions).
 
 ---
 

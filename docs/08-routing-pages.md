@@ -87,7 +87,13 @@ X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
 X-Frame-Options: SAMEORIGIN
-Content-Security-Policy: default-src 'self'; img-src 'self' data: https://*.supabase.co; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; connect-src 'self' https://*.supabase.co https://cloudflareinsights.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Content-Security-Policy: frame-ancestors 'self'; upgrade-insecure-requests
 ```
 
-`_headers` además fija cache largo para `/fonts/*` (immutable, 1 año) y `/og/*`. El `unsafe-inline` de `script-src` es necesario por el anti-flash y el snippet de analytics; valorar nonce a futuro.
+`_headers` además fija cache largo para `/fonts/*` (immutable, 1 año) y `/og/*`.
+
+**CSP**: el grueso de la política lo genera **Astro 6** (`security.csp` en `astro.config.mjs`) como `<meta http-equiv>` por página, con **hashes SHA-256** de los scripts/estilos inline (anti-flash, JSON-LD, estilos scoped) → **sin `'unsafe-inline'`**. Directivas: `default-src 'self'`, `script-src 'self' <hashes> https://static.cloudflareinsights.com`, `style-src 'self' <hashes>`, `img-src`/`font-src`/`connect-src`, `object-src 'none'`, `frame-src 'none'`. En `_headers` quedan solo `frame-ancestors` y `upgrade-insecure-requests` (que el `<meta>` no puede aplicar).
+
+> Los colores de marca de los iconos (`TechIcon`/`Tag`) viven en `globals.css` vía `[data-ti="…"]`, no en `style=` inline, para ser compatibles con la CSP hasheada.
