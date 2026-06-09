@@ -40,7 +40,7 @@ const sectorsLabel = `${stats.sectorsCount} ${copy.hero.statSectors}`;
     class="grid items-start gap-x-[clamp(28px,4vw,56px)] grid-cols-[1.25fr_0.85fr] grid-rows-[auto_1fr] [grid-template-areas:'badge_photo''main_photo'] max-[940px]:grid-cols-[1fr] max-[940px]:grid-rows-[auto_auto_auto] max-[940px]:[grid-template-areas:'badge''photo''main'] max-[940px]:gap-x-0"
   >
     <Glass
-      class="reveal [grid-area:badge] justify-self-start self-start inline-flex items-center gap-2.5 mb-[26px] px-[15px] py-[7px] rounded-full text-[0.85rem] font-medium"
+      class="enter [grid-area:badge] justify-self-start self-start inline-flex items-center gap-2.5 mb-[26px] px-[15px] py-[7px] rounded-full text-[0.85rem] font-medium"
     >
       <span
         class="w-[7px] h-[7px] rounded-full bg-[oklch(0.72_0.2_150)] data-[active=true]:animate-[status-pulse_2.4s_infinite]"
@@ -49,7 +49,7 @@ const sectorsLabel = `${stats.sectorsCount} ${copy.hero.statSectors}`;
       {status}
     </Glass>
     <div
-      class="reveal [transition-delay:0.16s] [grid-area:photo] self-center relative max-[940px]:max-w-[min(380px,calc(50%+150px))] max-[940px]:mx-auto max-[940px]:mt-1 max-[940px]:mb-[26px]"
+      class="enter [animation-delay:0.16s] [grid-area:photo] self-center relative max-[940px]:max-w-[min(380px,calc(50%+150px))] max-[940px]:mx-auto max-[940px]:mt-1 max-[940px]:mb-[26px]"
     >
       <div class="relative will-change-transform" data-parallax>
         <Glass
@@ -97,22 +97,22 @@ const sectorsLabel = `${stats.sectorsCount} ${copy.hero.statSectors}`;
     </div>
     <div class="[grid-area:main] self-start min-w-0">
       <h1
-        class="reveal [transition-delay:0.08s] font-display text-[clamp(2.6rem,7vw,5rem)] font-black tracking-[-0.02em] leading-[1.05]"
+        class="enter [animation-delay:0.08s] font-display text-[clamp(2.6rem,7vw,5rem)] font-black tracking-[-0.02em] leading-[1.05]"
       >
         {firstName}<br />{lastName}
       </h1>
       <p
-        class="reveal [transition-delay:0.16s] mt-3.5 font-display font-semibold text-[clamp(1.1rem,2.4vw,1.5rem)] text-text-soft tracking-[-0.01em]"
+        class="enter [animation-delay:0.16s] mt-3.5 font-display font-semibold text-[clamp(1.1rem,2.4vw,1.5rem)] text-text-soft tracking-[-0.01em]"
       >
         {role}
       </p>
       <p
-        class="reveal [transition-delay:0.16s] mt-[22px] max-w-[48ch] text-text-soft text-[1.1rem] text-pretty"
+        class="enter [animation-delay:0.16s] mt-[22px] max-w-[48ch] text-text-soft text-[1.1rem] text-pretty"
       >
         {lead}
       </p>
       <div
-        class="reveal [transition-delay:0.24s] flex flex-wrap gap-3 mt-8 max-[720px]:gap-2.5 max-[720px]:[&_.btn]:justify-center max-[720px]:[&_.btn-ghost]:flex-1 max-[720px]:[&_.btn-ghost]:basis-0 max-[720px]:[&_.btn-ghost]:min-w-0 max-[720px]:[&_.btn-ghost]:order-1 max-[720px]:[&_.btn-primary]:basis-full max-[720px]:[&_.btn-primary]:order-2"
+        class="enter [animation-delay:0.24s] flex flex-wrap gap-3 mt-8 max-[720px]:gap-2.5 max-[720px]:[&_.btn]:justify-center max-[720px]:[&_.btn-ghost]:flex-1 max-[720px]:[&_.btn-ghost]:basis-0 max-[720px]:[&_.btn-ghost]:min-w-0 max-[720px]:[&_.btn-ghost]:order-1 max-[720px]:[&_.btn-primary]:basis-full max-[720px]:[&_.btn-primary]:order-2"
       >
         <Button href="#contact">
           {copy.hero.cta} <Arrow />
@@ -133,7 +133,7 @@ const sectorsLabel = `${stats.sectorsCount} ${copy.hero.statSectors}`;
         }
       </div>
       <div
-        class="reveal [transition-delay:0.24s] flex flex-wrap gap-3.5 mt-10 max-[720px]:[&>.stat]:flex-1 max-[720px]:[&>.stat]:basis-[140px] max-[720px]:[&>.stat]:min-w-0 max-[460px]:gap-2.5"
+        class="enter [animation-delay:0.24s] flex flex-wrap gap-3.5 mt-10 max-[720px]:[&>.stat]:flex-1 max-[720px]:[&>.stat]:basis-[140px] max-[720px]:[&>.stat]:min-w-0 max-[460px]:gap-2.5"
       >
         <Glass class="stat px-5 py-4 rounded-[var(--radius-glass-sm)] min-w-[120px] flex-1 basis-[140px]">
           <div

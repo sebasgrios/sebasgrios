@@ -246,6 +246,23 @@
   }
 }
 
+/* Above-the-fold entrance: CSS load animation (no JS), so the LCP element is not
+   gated behind the IntersectionObserver reveal (which delayed paint on mobile). */
+@utility enter {
+  animation: enter 0.8s var(--ease) both;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @utility btn {
   display: inline-flex;
   align-items: center;
@@ -485,5 +502,10 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+  .enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

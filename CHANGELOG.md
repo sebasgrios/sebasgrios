@@ -7,6 +7,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto s
 ### Fixed
 
 - CSP `font-src`: permite `data:` (Vite inlinea un subset de JetBrains Mono como `data:font/woff2` y la CSP lo bloqueaba en producción).
+- **LCP móvil**: la entrada del héroe (above-the-fold) pasa de la animación `reveal` (dependiente de JS / IntersectionObserver) a una **animación CSS al cargar** (`enter`), para que el elemento LCP no espere al JS. En móvil con throttling el LCP llegaba a ~5,9 s; el `reveal` on-scroll se mantiene para las secciones inferiores.
 
 ### Changed
 
