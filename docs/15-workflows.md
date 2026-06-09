@@ -131,7 +131,7 @@ Claude lo orquesta usando la **Supabase CLI local del ingeniero**:
 
 ## Añadir/editar contenido (rol, proyecto, etc.)
 
-Vía el **backoffice**: entra en `/admin`, abre la categoría (p. ej. Empresas y roles), edita en el acordeón y guarda. Luego pulsa **Publicar** (`/admin/publish`) para reconstruir el sitio prerenderizado.
+Vía el **backoffice** (repo aparte `sebasgrios-backoffice`): edita la entidad y pulsa **Publicar**, que dispara el deploy hook de Cloudflare y reconstruye este sitio estático.
 
 Para sembrar contenido inicial sin backoffice (bootstrap), aún se puede editar `/supabase/seed.sql` + `supabase db reset`.
 

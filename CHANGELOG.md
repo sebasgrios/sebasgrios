@@ -2,6 +2,20 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [Unreleased]
+
+### Removed
+
+- **Backoffice** (`/admin` + `/api`): el panel SSR se eliminó del repo del portfolio; se reescribe en Next.js en un repo separado (`sebasgrios-backoffice`, `backoffice.sebasgrios.es`).
+- Dependencias que solo usaba el backoffice/SSR: `@astrojs/cloudflare`, `@supabase/ssr`, `@tailwindcss/forms`, `zod`, `wrangler`.
+- Páginas `/401` y `/dev/design`, y el middleware (su única función, fijar el locale, no se consumía).
+
+### Changed
+
+- El portfolio pasa a **estático puro** (`output: 'static'`): sin adapter ni worker; Cloudflare Pages sirve `dist/`. `404` pasa a estático.
+- OG: el `.wasm` de resvg se lee del disco con `node:fs` en build (antes lo resolvía el adapter Cloudflare).
+- Documentación (`/docs`, `AGENTS.md`) y `robots.txt` alineados con el portfolio estático y el backoffice externo.
+
 ## [3.0.0] — 2026-06-08 — Reescritura v3
 
 Reescritura completa del portfolio: diseño **Liquid Glass**, **Astro 5** + Cloudflare (SSR híbrido), contenido en **Supabase**, **i18n es/en** y **backoffice** privado end-to-end.

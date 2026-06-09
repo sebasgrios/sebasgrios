@@ -88,7 +88,9 @@ Usar mínimo necesario. Lo nativo prima sobre ARIA. Casos justificados:
 - `aria-controls` en burger apuntando a `nav-mobile`.
 - `aria-hidden="true"` en background blobs/noise y en iconos puramente decorativos dentro de botones que ya tienen label.
 
-## Forms (backoffice)
+## Forms (backoffice, repo aparte)
+
+> El portfolio público no tiene formularios; estas reglas aplican al backoffice (`sebasgrios-backoffice`).
 
 - Cada `<input>` con `<label>` asociado (no placeholder-only).
 - Errores con `aria-live="polite"` y `aria-invalid="true"` en el input.

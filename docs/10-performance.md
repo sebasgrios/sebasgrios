@@ -15,14 +15,13 @@
 
 ### Rendering
 
-- **Prerender** para `/` y `/en/`. Cero round-trip a Supabase en hot path.
-- **SSR** solo para `/admin/**` (no impacta a visitantes).
+- **Estático**: `/`, `/en/` y `/og/*` se generan en build. Cero round-trip a Supabase en runtime.
 - **Stale-while-revalidate** vía `Cache-Control: public, max-age=600, s-maxage=3600, stale-while-revalidate=86400` para páginas prerendered.
 - **Edge caching** de Cloudflare por defecto activo.
 
 ### Invalidación
 
-- El backoffice (`/admin/publish`) dispara un **Cloudflare Deploy Hook** para reconstruir tras editar contenido.
+- El **backoffice** (repo aparte) dispara un **Cloudflare Deploy Hook** para reconstruir el portfolio tras editar contenido.
 - Para el sembrado inicial (sin backoffice), cualquier cambio en el seed requiere `npm run build` + push (rebuild).
 
 ### Imágenes
@@ -63,7 +62,7 @@
 ### HTML
 
 - Sin comentarios HTML innecesarios.
-- Minificación automática por adapter.
+- Minificación automática en build.
 
 ## Monitorización
 

@@ -1,191 +1,68 @@
 # 17 · Mejoras propuestas
 
-Backlog priorizado de mejoras a nivel de **código** e **infraestructura**, surgido de la auditoría del proyecto. No son bugs (el código está verde: `check` 0 errores, 57 tests, `build` OK); son oportunidades de robustez, rendimiento, seguridad y escalabilidad.
+Backlog priorizado del **portfolio público** (sitio estático). No son bugs (el código está verde: `check` 0 errores, 29 tests, `build` OK); son oportunidades de robustez, rendimiento, seguridad y SEO.
 
-**Prioridad**: `P1` alto valor / hacer pronto · `P2` medio · `P3` nice-to-have.
+**Prioridad**: `P1` alto valor · `P2` medio · `P3` nice-to-have.
 **Esfuerzo**: `S` < 1h · `M` 1-4h · `L` > medio día.
 
-## Estado (cierre de v3)
+> El backoffice y sus mejoras (auth, endpoints, audit log, rate limiting, factory CRUD, observabilidad de mutaciones, deprecación de `@supabase/ssr`) se movieron al repo **`sebasgrios-backoffice`**. Lo de aquí es solo el sitio público.
 
-**Implementado y verificado** (build/check/test/e2e verdes):
-- ✅ **I1** CI (GitHub Actions: check + test + build).
-- ✅ **C1** Cache-Control SWR para `/` y `/en/`.
-- ✅ **P1** Imágenes optimizadas con `astro:assets` + `sharp` (hero webp 1x/2x; proyectos webp responsive).
-- ✅ **Q1 (parcial)** e2e de los guards admin (`e2e/admin.spec.ts`).
-- ✅ **E2** factory genérico de endpoints CRUD (`src/lib/admin/crud.ts`, con test) → 6 endpoints de ~55 a ~15 líneas.
-- ✅ **Q3 (parcial)** observabilidad: `console.error` en los `catch` de los endpoints (centralizado en el factory).
-- ✅ **Q2** bump `@supabase/ssr` 0.5→0.10 (elimina la deprecación y el cast `as unknown`).
-- ✅ **E1** sync de pivots **atómico** vía RPC `set_entity_technologies` (migración 0013, aplicada) → elimina las 4 funciones sync duplicadas.
-- ✅ **S3** **audit log** `admin_audit_log` (migración 0014, aplicada) + logging best-effort en todos los `/api/*`.
-- ✅ Hardening de subida de medios (solo imágenes, 5 MB); componente `DeleteForm`.
+## Estado
 
-**Diferido (bloqueo real, no de pereza):**
-- **S1** CSP sin `'unsafe-inline'`: Astro **inlinea 4+ scripts** en el HTML y las páginas SSR de `/admin` añaden más → no se pueden pre-hashear desde el build. Requiere la **CSP experimental de Astro** (`experimental.csp`, auto-hash) **verificada en un deploy preview** antes de quitar `'unsafe-inline'`. Forzarlo a ciegas rompería scripts en producción.
-- **Q4** Lighthouse CI: mejor añadirlo cuando exista URL de preview estable (evitar CI flaky).
-
-**Requiere acción manual del ingeniero** (dashboard/secretos/BD): ver «[Pasos manuales](#pasos-manuales-del-ingeniero)» al final.
+**Implementado y verificado:**
+- ✅ CI (GitHub Actions: check + test + build) en PRs a `develop`/`main`.
+- ✅ Cache-Control SWR para `/` y `/en/`.
+- ✅ Imágenes optimizadas con `astro:assets` + `sharp` (hero webp 1x/2x; proyectos webp responsive).
+- ✅ **Paso a estático**: eliminado el backoffice SSR; `output: 'static'`, sin adapter ni worker. Desaparecen el binding `SESSION` KV, los round-trips de auth del middleware y la exclusión `_routes.json`.
 
 ---
 
-## 1 · Rendimiento
-
-### P1 · Imágenes responsive y optimizadas `[P1·M]`
-Hoy las secciones públicas usan `<img src={supabaseUrl}>` crudo: sin `srcset`, sin `width` servida, sin `webp`/`avif`. Es la mayor brecha de rendimiento (LCP del hero, ancho de banda). El spec ([10-performance](./10-performance.md)) ya lo pide pero no está implementado.
-
-**Propuesta**: helper que use las **Image Transformations de Supabase** (`/storage/v1/render/image/public/...?width=&quality=&format=webp`) y emita `srcset`. Aplicar primero a la foto del hero (LCP) y capturas de proyectos.
-```ts
-// src/lib/images.ts
-export function supaImage(url: string, w: number, q = 70) {
-  return url.replace('/object/public/', '/render/image/public/') + `?width=${w}&quality=${q}`;
-}
-// srcset con [400, 800, 1200, 1600]
-```
-Alternativa: `<Image>` de `astro:assets` (ya hay `image.remotePatterns` configurado), aunque en SSR Cloudflare el servicio de imágenes es `compile` y solo optimiza en build (las públicas son prerender → sirve).
-
-### C1 · Cache-Control SWR para HTML prerenderizado `[P2·S]`
-`public/_headers` cachea `/fonts/*` y `/og/*` pero no el HTML. Añadir (valor del spec 10):
-```
-/
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=86400
-/en/
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=86400
-```
-Edge cache 1h + revalidación; el deploy hook (Publicar) refresca.
-
-### Middleware admin: 2 round-trips `[P3·M]`
-Cada request a `/admin/**` y `/api/**` hace `auth.getUser()` **y** `rpc('is_admin')` secuenciales. Para tráfico admin (bajo) es aceptable. Optimización: leer el claim de rol del JWT (custom access token hook de Supabase) y evitar el RPC.
-
----
-
-## 2 · Seguridad
+## 1 · Seguridad
 
 ### S1 · CSP sin `'unsafe-inline'` en `script-src` `[P2·M]`
-`_headers` permite `'unsafe-inline'` por el script anti-flash y el snippet de analytics. Como las páginas públicas son prerender, se pueden usar **hashes SHA-256** de los inline scripts en la CSP (en vez de `'unsafe-inline'`), endureciendo contra XSS. Generar los hashes en build.
-
-### S2 · Rate limiting en `/api/*` `[P2·S]`
-Los endpoints de auth y mutación no tienen rate limiting de aplicación (Supabase Auth sí tiene el suyo). Añadir una **regla de Rate Limiting de Cloudflare** (WAF) sobre `/api/*` y `/admin/login`. Infra, sin código.
-
-### S3 · Tabla de auditoría `admin_audit_log` `[P2·M]`
-[13-backoffice](./13-backoffice.md) ya la diseña pero no existe la migración. Crearla y registrar cada mutación (user_id, action, entity, entity_id, payload) para trazabilidad. Insert desde los endpoints o un trigger.
+`_headers` permite `'unsafe-inline'` por el script anti-flash y el snippet de analytics. Ahora que **todo es estático** (sin páginas SSR) se pueden pre-hashear los inline scripts en build (SHA-256) o usar la **CSP experimental de Astro** (`experimental.csp`, auto-hash) y quitar `'unsafe-inline'`, endureciendo contra XSS. Verificar en un deploy preview.
 
 ### Cabeceras extra `[P3·S]`
 Añadir `Cross-Origin-Opener-Policy: same-origin` y `Cross-Origin-Resource-Policy: same-origin` a `_headers`. La CSP/HSTS/XFO actuales ya son buenas.
 
 ---
 
-## 3 · Escalabilidad y estructura
+## 2 · Rendimiento y SEO
 
-### E1 · Sincronización atómica de pivots vía RPC `[P2·M]`
-El guardado de tecnologías hace `delete` + `insert` en dos queries **no transaccionales** (4 funciones casi idénticas en `mutations.ts`). Una función Postgres resolvería atomicidad y elimina la duplicación:
-```sql
-create function set_entity_technologies(p_table text, p_fk text, p_id uuid, p_ids uuid[])
-returns void language plpgsql security invoker as $$ ... delete + insert ... $$;
-```
-Llamada única `client.rpc('set_entity_technologies', {...})`. Respeta RLS con `security invoker`.
+### Lighthouse CI `[P2·M]`
+[10-performance](./10-performance.md) fija CWV (LCP < 2s, CLS 0, Perf ≥ 95). Añadir Lighthouse CI a los PRs que tocan render para detectar regresiones, usando la URL de preview de Cloudflare.
 
-### E2 · Factory genérico de endpoints CRUD `[P2·M]`
-Los 7 endpoints `/api/<entity>.ts` comparten ~95% del boilerplate (check admin → dispatch `_action` → parse → flash → redirect). Un `createCrudHandler({ schema, parse, create, update, remove, redirect })` quitaría ~300 líneas y centraliza el patrón. Riesgo: toca todas las rutas de mutación → hacer con tests.
-
-### E3 · Lecturas admin genéricas `[P3·S]`
-Los `fetch*Admin` repiten el agrupado de pivots (groupBy fk). Extraer un helper `groupPivots(rows, fk)` reutilizable.
+### Afinado SEO `[P3·S]`
+Revisar el JSON-LD (ya presente), `lastmod` en el sitemap y el `Cache-Control` por tipo de recurso. Asegurar `hreflang` y canónicas correctas en ambos locales.
 
 ---
 
-## 4 · Calidad de código y testing
+## 3 · Datos / operaciones (Supabase compartido)
 
-### Q1 · e2e del backoffice `[P2·M]`
-No hay cobertura e2e del flujo admin (está tras auth). Añadir Playwright con sesión admin sembrada (helper que cree un JWT de servicio en entorno de test, o un bypass solo-test). Cubrir: login → editar perfil → toast → publicar.
+> El **backoffice** es el dueño del schema (`supabase/`). Estos puntos afectan al dato compartido y conviene coordinarlos entre repos.
 
-### Q2 · Deprecación de `@supabase/ssr` `[P3·S]`
-`createServerClient` dispara 1 *hint* de deprecación (de ahí el `as unknown as SupabaseServerClient` en `supabaseServer.ts`). Subir `@supabase/ssr` a `^0.6+` y revisar la firma de cookies para eliminar el cast.
+### Filtro `is_visible` en lecturas `[P1·S]`
+Cuando el backoffice añada la columna `is_visible` (ocultar), el portfolio debe **filtrar** las filas ocultas en `repos.ts`/`loaders.ts` (`.eq('is_visible', true)`) y regenerar `database.types.ts`.
 
-### Q3 · Observabilidad de errores `[P2·M]`
-Los endpoints hacen `catch {}` → flash `error` **silencioso**: en producción no hay traza. Integrar un logger compatible con Workers (Sentry, Logflare, o `Astro` + Cloudflare Logpush) para capturar el error real. Sin esto, depurar un fallo de guardado en vivo es a ciegas.
+### Backups de la BD `[P2·S]`
+El free tier de Supabase tiene backups limitados. Programar un `pg_dump` lógico periódico a un bucket. Puede vivir en el repo backoffice como dueño del schema.
 
-### Q4 · Lighthouse CI `[P2·M]`
-[10-performance](./10-performance.md) fija CWV (LCP < 2s, CLS 0, Perf ≥ 95). Añadir Lighthouse CI a los PRs que tocan render para detectar regresiones.
+### Branch DB para Preview `[P3·M]`
+Los deploys Preview apuntan al **mismo** Supabase de producción. Con Supabase Branching, aislar la BD de preview evita tocar datos reales en QA.
 
 ---
 
-## 5 · Infraestructura y operaciones
+## 4 · Dependencias
 
-### I1 · CI (GitHub Actions) `[P1·S]`
-(Implementado ✅.) El flujo `develop → main` bloquea merges con checks. Workflow mínimo:
-```yaml
-# .github/workflows/ci.yml
-name: ci
-on: { pull_request: { branches: [develop, main] } }
-jobs:
-  verify:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm check
-      - run: pnpm test
-      - run: pnpm build
-```
-(El `build` prerender solo necesita la anon key pública, ya hardcodeada → CI sin secretos.)
-
-### O1 · Binding `SESSION` KV del adapter `[P1·S]`
-Cada `astro build` avisa: *"Enabling sessions with Cloudflare KV with the SESSION KV binding… add the binding"*. Astro 5 activa el feature de sessions y espera un KV namespace `SESSION`. **No usamos** `Astro.session` (auth vía cookies de Supabase). Opciones: (a) desactivar el feature, o (b) crear el KV namespace y declararlo en `wrangler.jsonc`. Resolver para evitar un fallo runtime si algo lo invocara.
-
-### O2 · Backups de la BD `[P2·S]`
-El free tier de Supabase tiene backups limitados. Programar un `pg_dump` lógico periódico (cron en CI/GitHub Actions) a un bucket. Crítico al pasar a edición en vivo desde el backoffice.
-
-### O3 · Branch DB para Preview `[P3·M]`
-Los deploys Preview de Cloudflare apuntan al **mismo** Supabase de producción. Con Supabase Branching, aislar la BD de preview evita tocar datos reales en QA.
-
-### O4 · Monitorización y alertas `[P3·S]`
-Cloudflare Web Analytics es solo RUM. Añadir uptime check (cron ping) y alertas de error (Sentry) para enterarse de caídas/errores sin mirar el dashboard.
-
-### O5 · Automatizar actualización de dependencias `[P3·S]`
-No hay automatización de actualización de dependencias; se actualizan manualmente. Si se quiere automatizar los PRs de actualización (Astro, Tailwind, Supabase), valorar **Renovate** con la CI de I1 como red de seguridad.
+### Automatizar actualización de dependencias `[P3·S]`
+Se actualizan manualmente. Si se quiere automatizar los PRs (Astro, Tailwind, Supabase), valorar **Renovate** con la CI como red de seguridad.
 
 ---
 
 ## Orden sugerido
 
-1. **I1** (CI ✅) + **O1** (binding SESSION) — base operativa, esfuerzo bajo.
-2. **P1** (imágenes ✅) — mayor impacto en CWV.
-3. **Q3** (observabilidad) + **S3** (audit log) — antes de operar en vivo desde el backoffice.
-4. **E1** (RPC pivots) + **E2** (factory CRUD) — deuda de duplicación.
-5. **S1** (CSP hashes) + **S2** (rate limit) + **O2** (backups) — endurecimiento.
-6. Resto (P3) según disponibilidad.
-
----
-
-## Pasos manuales del ingeniero
-
-Acciones que **solo puede hacer el ingeniero** (secretos, decisiones de release, dashboards). Cada paso con su comprobación.
-
-### Ya hechos (verificados)
-
-- ✅ Release completo: `v3 → develop` (PR #9) y `develop → main` (PR #10). v3.0.0 **en producción** en `sebasgrios.es`; rama `v3` eliminada; tag `v3.0.0` creado.
-- ✅ CI (GitHub Actions) verde: check + test + build.
-- ✅ Deploy Cloudflare verificado (con `sharp` + SSR `/admin`): home webp, `/admin`→login, OG, headers SWR, CSRF + auth en `/api/*`.
-- ✅ Google OAuth + primer admin en `user_roles` (confirmados por el ingeniero).
-
-### Pendiente (opcional)
-
-1. **(Opcional) Supabase CLI**: la app ya funciona con `nzbodijggjxhshqqpnue` (el deploy lo confirma). Solo si vas a usar la CLI para migraciones/tipos, re-linka: `supabase link --project-ref nzbodijggjxhshqqpnue`. Si no, **omítelo**.
-2. **Deploy hook `CF_DEPLOY_HOOK_URL`** *(necesario para el botón Publicar)*: Cloudflare Pages → Settings → Builds & deployments → crear Deploy hook (rama de prod) → guardar la URL como **Secret** en Settings → Environment variables → Production.
-   - **Check**: en `/admin/publish` → "Publicar ahora" → toast verde + deployment nuevo.
-3. **Branch protection / CI obligatoria**: GitHub → Settings → Rules → ruleset sobre `main` + `develop` → marca **Require status checks to pass** y añade el check **`verify`** (ya existe, la CI corrió). Deja marcadas *Restrict deletions, Require PR before merging (approvals 0), Block force pushes*.
-   - **Check**: un PR muestra el check `verify` y bloquea el merge si falla.
-
-### Endurecimiento recomendado (antes de editar en vivo)
-
-6. **Rate limiting**: Cloudflare → Security → WAF → regla sobre `/api/*` y `/admin/login` (~30 req/min/IP). *Check*: ráfaga a `/api/auth/signin` → `429`.
-7. **Backups BD**: cron `pg_dump` con la connection string como secret a un bucket. *Check*: dump reciente.
-8. **Sentry** (observabilidad completa): proyecto + DSN como secret; se integra en los `catch` (que ya hacen `console.error`).
-
-### Mejoras avanzadas (las implemento yo cuando quieras)
-
-- **S1** CSP estricta sin `'unsafe-inline'`: requiere `experimental.csp` de Astro **verificada en un deploy preview** (no se puede pre-hashear desde el build por los scripts inline + páginas SSR).
-- **Q4** Lighthouse CI, **O3** Branch DB de preview.
-
-> **E1** (RPC pivots) y **S3** (audit log) ya están **implementados y aplicados** a la BD (migraciones 0013/0014). Verifica al editar: guardar las tecnologías de un grupo en `/admin/stack` debe persistir; las mutaciones deben aparecer en `select * from admin_audit_log`.
+1. **Filtro `is_visible`** cuando el backoffice lo introduzca (coordinado entre repos).
+2. **S1** CSP sin `'unsafe-inline'` — ahora factible al ser todo estático.
+3. **Lighthouse CI** + cabeceras extra.
+4. **Backups** + **Branch DB** de preview.
+5. Resto (P3) según disponibilidad.

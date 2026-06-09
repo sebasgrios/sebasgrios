@@ -4,33 +4,17 @@
 
 ```
 src/pages/
-├── index.astro                  # home es (prerender)
+├── index.astro                  # home es (estático)
 ├── en/
-│   └── index.astro              # home en (prerender)
-├── 404.astro                    # not found, bilingual
-├── 401.astro                    # acceso denegado backoffice (visual mismo glass)
-├── admin/                       # SSR, protegido (ver 13-backoffice)
-│   ├── index.astro              # dashboard
-│   ├── login.astro              # login Google
-│   ├── profile.astro
-│   ├── companies.astro          # empresas + roles anidados
-│   ├── education.astro
-│   ├── stack.astro
-│   ├── technologies.astro
-│   ├── projects.astro
-│   ├── media.astro              # gestor de Storage
-│   └── publish.astro            # deploy hook
-├── og/
-│   └── [locale].png.ts          # OG image dinámica por locale
-└── api/                         # SSR endpoints (POST), protegidos salvo auth/
-    ├── auth/{signin,callback,signout}.ts
-    ├── profile.ts · technologies.ts · stack.ts · education.ts
-    ├── companies.ts · roles.ts · projects.ts
-    ├── media.ts                 # multipart upload/delete
-    └── publish.ts               # dispara CF deploy hook
+│   └── index.astro              # home en (estático)
+├── 404.astro                    # not found, bilingüe (estático)
+└── og/
+    └── [locale].png.ts          # OG image por locale (estático en build)
 ```
 
-## Prerender vs SSR
+La edición de contenido (panel admin) vive en un repositorio separado; ver [13-backoffice](./13-backoffice.md).
+
+## Output estático
 
 ```astro
 ---
@@ -39,7 +23,7 @@ export const prerender = true;
 ---
 ```
 
-Por defecto en este proyecto `output: 'server'`, así que cada página debe declarar `prerender = true` explícitamente. Solo `/admin/**` y `/api/**` quedan SSR.
+`output: 'static'`: todo el sitio se genera en build. No hay rutas SSR ni endpoints dinámicos.
 
 ## Anchors estables
 
@@ -51,7 +35,7 @@ Layout `BaseLayout.astro` recibe props `{ title, description, locale, canonical?
 
 - `<html lang>`
 - `<title>` + `<meta name="description">` + `<meta name="author">`
-- `<meta name="robots" content="noindex, nofollow">` **solo si `noindex`** (404, 401, `/dev/*`)
+- `<meta name="robots" content="noindex, nofollow">` **solo si `noindex`** (404)
 - `<meta name="theme-color">` claro/oscuro vía `media`
 - `<link rel="preload">` de Satoshi-Black y GeneralSans-Regular
 - `<link rel="canonical">`
@@ -65,20 +49,17 @@ Layout `BaseLayout.astro` recibe props `{ title, description, locale, canonical?
 
 ## Sitemap
 
-`@astrojs/sitemap` con `i18n` config. Output `/sitemap-index.xml` + `/sitemap-0.xml`.
+`@astrojs/sitemap` con `i18n` config. Output `/sitemap-index.xml` + `/sitemap-0.xml`. Filtra `/404` vía `filter` en `astro.config.mjs`.
 
 ## robots.txt
 
 ```
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /api/
-Disallow: /dev/
 Sitemap: https://sebasgrios.es/sitemap-index.xml
 ```
 
-El sitemap (`@astrojs/sitemap`) además filtra `/401`, `/404` y `/dev/` vía `filter` en `astro.config.mjs`, y esas páginas llevan `noindex` en el `<head>`. Defensa en tres capas: `robots.txt` + `filter` del sitemap + `meta robots`.
+`/404` lleva además `noindex` en el `<head>` y queda excluida del sitemap. Defensa en capas: `filter` del sitemap + `meta robots`.
 
 ## OG image
 
@@ -86,8 +67,8 @@ Endpoint `/og/[locale].png.ts` genera con Satori y devuelve `image/png`:
 
 - Background: gradiente azul oscuro.
 - Texto: `profile.fullName` + `pickLocale(profile.role, locale)` + `sebasgrios.es`. Fuente Inter self-hosteada (`src/assets/og/inter-latin-500.ttf`), leída en build.
-- Tamaño: 1200×630, render Satori → PNG (resvg-wasm).
-- `prerender = true`: se generan en build como ficheros estáticos; `_headers` cachea `/og/*` (`max-age=86400, s-maxage=604800`).
+- Tamaño: 1200×630, render Satori → PNG (resvg-wasm; el `.wasm` se lee del disco con `node:fs` en build).
+- `prerender = true` + `getStaticPaths`: se generan `/og/es.png` y `/og/en.png` como ficheros estáticos; `_headers` cachea `/og/*`.
 
 ## Códigos HTTP
 
@@ -95,17 +76,6 @@ Endpoint `/og/[locale].png.ts` genera con Satori y devuelve `image/png`:
 |---|---|---|
 | `/` `/en/` | 200 | indexables. |
 | ruta inexistente | 404 | `404.astro` bilingüe (detecta locale por prefijo). `noindex`. |
-| `/dev/design` | 404 en prod / 200 en dev | showcase interno. `noindex`. |
-| `/admin/login` | 200 | login Google (SSR, `noindex`). |
-| `/admin/**` sin sesión | 302 → `/admin/login` | Server middleware. |
-| `/admin/**` con sesión sin rol admin | 302 → `/401` | `401.astro` con CTA `Volver al portfolio`. |
-| `/api/auth/{signin,callback,signout}` | 302 | flujo OAuth (PKCE) con `@supabase/ssr`. |
-
-## Middleware
-
-`/src/middleware.ts`:
-- Para todas las páginas, fija `Astro.locals.locale`.
-- Para `/admin/**` (excepto `/admin/login`): crea el cliente SSR (`createSupabaseServerClient`), valida el usuario con `supabase.auth.getUser()`. Sin sesión → `redirect('/admin/login')`. Con sesión, comprueba `is_admin()` (RPC con RLS); si no es admin → `redirect('/401')`. Expone `Astro.locals.user` e `Astro.locals.isAdmin`.
 
 ## Headers de seguridad
 
