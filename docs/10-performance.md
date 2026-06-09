@@ -47,7 +47,7 @@
 
 - Cero frameworks de UI runtime.
 - 3 scripts deferred (ver [09-components](./09-components.md)).
-- Sin polyfills (Cloudflare workers / modern browsers only).
+- Sin polyfills (modern browsers only).
 
 ### CSS
 
