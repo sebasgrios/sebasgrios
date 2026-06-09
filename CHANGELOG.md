@@ -2,6 +2,17 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.0.1] — 2026-06-09
+
+### Fixed
+
+- CSP `font-src`: permite `data:` (Vite inlinea un subset de JetBrains Mono como `data:font/woff2` y la CSP lo bloqueaba en producción).
+- **LCP móvil**: la entrada del héroe (above-the-fold) pasa de la animación `reveal` (dependiente de JS / IntersectionObserver) a una **animación CSS al cargar** (`enter`), para que el elemento LCP no espere al JS. En móvil con throttling el LCP llegaba a ~5,9 s; el `reveal` on-scroll se mantiene para las secciones inferiores.
+
+### Changed
+
+- **Analytics**: eliminado el snippet manual de Cloudflare Web Analytics (`src/config/analytics.ts` + beacon en `BaseLayout`). Se pasa a **Cloudflare Pages Web Analytics** (auto-inyectado en el edge, RUM *same-origin*) → desaparece el error CORS en `/cdn-cgi/rum`.
+
 ## [4.0.0] — 2026-06-09
 
 ### Removed

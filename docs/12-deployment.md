@@ -25,9 +25,11 @@ Los `db:*` se conservan mientras `supabase/` viva en este repo; el backoffice pa
 
 ### Config pública: en código, no en env `[DECIDIDO]`
 
-Los valores **públicos** (URL del sitio, URL + anon key de Supabase, token de Cloudflare Web Analytics) viven hardcodeados en `src/config/*` (`site.ts`, `supabase.ts`, `analytics.ts`), como **única fuente de verdad**.
+Los valores **públicos** (URL del sitio, URL + anon key de Supabase) viven hardcodeados en `src/config/*` (`site.ts`, `supabase.ts`), como **única fuente de verdad**.
 
-**Por qué no se leen de `.env`/dashboard**: el sitio se genera en build (`loadHomeData()` → `getServerClient()` corre durante `astro build`) y Cloudflare Pages **no expone** las variables del dashboard al proceso de build. Son valores públicos por diseño (la anon key está protegida por RLS; el beacon token es un snippet público de cliente), por lo que vivir en el repo es seguro.
+**Por qué no se leen de `.env`/dashboard**: el sitio se genera en build (`loadHomeData()` → `getServerClient()` corre durante `astro build`) y Cloudflare Pages **no expone** las variables del dashboard al proceso de build. La anon key es pública por diseño (protegida por RLS), por lo que vivir en el repo es seguro.
+
+> **Analytics**: Cloudflare Web Analytics se activa en el proyecto de Pages (dashboard) y se **auto-inyecta** en el edge con RUM *same-origin*. No hay snippet ni token en el repo (antes en `analytics.ts`, ya eliminado) → sin error CORS en `/cdn-cgi/rum`.
 
 > No re-introducir lectura de `import.meta.env.PUBLIC_*` para estos valores sin resolver antes su disponibilidad en build.
 

@@ -45,7 +45,7 @@ Layout `BaseLayout.astro` recibe props `{ title, description, locale, canonical?
 - `<script type="application/ld+json">` con un `@graph` de schema.org `WebSite` + `Person` (el `Person` solo cuando la página pasa `personName`; todo el bloque se omite si `noindex`)
 - `<link rel="preconnect">` + `<link rel="dns-prefetch">` al host de Supabase
 - Anti-flash theme script (inline, antes de styles)
-- Cloudflare Web Analytics snippet (solo prod)
+- (Cloudflare Web Analytics lo auto-inyecta Cloudflare Pages en el edge; ya no va en el `<head>` del repo)
 
 ## Sitemap
 

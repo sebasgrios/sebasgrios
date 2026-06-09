@@ -1,7 +1,6 @@
 ---
 import BgField from '@/components/BgField.astro';
 import BgNoise from '@/components/BgNoise.astro';
-import { CLOUDFLARE_WEB_ANALYTICS } from '@/config/analytics';
 import type { Locale } from '@/config/i18n';
 import { SITE } from '@/config/site';
 import { SUPABASE } from '@/config/supabase';
@@ -47,9 +46,6 @@ const ogImageUrl = ogImage ?? new URL(`/og/${locale}.png`, SITE.url).toString();
 const ogImageAltText = ogImageAlt ?? title;
 const ogLocale = locale === 'es' ? 'es_ES' : 'en_US';
 const ogLocaleAlternate = locale === 'es' ? 'en_US' : 'es_ES';
-
-const beaconToken = CLOUDFLARE_WEB_ANALYTICS.beaconToken;
-const showAnalytics = import.meta.env.PROD && !!beaconToken;
 
 type JsonLdNode = Record<string, unknown>;
 const graph: JsonLdNode[] = [];
@@ -157,16 +153,6 @@ const jsonLd = graph.length
         }
       })();
     </script>
-    {
-      showAnalytics && (
-        <script
-          is:inline
-          defer
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon={`{"token":"${beaconToken}"}`}
-        />
-      )
-    }
   </head>
   <body>
     <BgField />
