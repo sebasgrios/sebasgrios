@@ -18,7 +18,7 @@ import {
   siTailwindcss,
   siTypescript,
   siWordpress,
-} from 'simple-icons/icons';
+} from 'simple-icons';
 
 interface IconDef {
   inner: string;

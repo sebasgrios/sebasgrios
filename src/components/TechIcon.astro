@@ -4,27 +4,16 @@ import { getTechIcon } from '@/lib/icons/techIconRegistry';
 interface Props {
   slug: string;
   label: string;
-  size?: number;
 }
 
-const { slug, label, size = 36 } = Astro.props;
+const { slug, label } = Astro.props;
 const icon = getTechIcon(slug);
 const isStroke = icon?.kind === 'stroke';
-const styleParts = [`--tech-icon-size:${size}px`];
-if (icon?.color) styleParts.push(`--tech-color:${icon.color}`);
-const inlineStyle = styleParts.join(';');
 ---
 
 {
   icon ? (
-    <span
-      class="tech-icon"
-      data-tooltip={label}
-      style={inlineStyle}
-      tabindex="0"
-      role="img"
-      aria-label={label}
-    >
+    <span class="tech-icon" data-ti={slug} data-tooltip={label} tabindex="0" role="img" aria-label={label}>
       <svg
         viewBox={icon.viewBox ?? '0 0 24 24'}
         fill={isStroke ? 'none' : 'currentColor'}

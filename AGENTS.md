@@ -6,18 +6,19 @@ Briefing autocontenido para cualquier sesión/agente (Claude, Copilot, etc.) que
 
 Portfolio personal de **Sebastián González Ríos** (`sebasgrios.es`).
 
-Estás en la **rama `v3`**, una reescritura completa que:
-- Migra de Astro 4 a **Astro 5** con adapter Cloudflare (SSR híbrido).
-- Reemplaza el contenido en `.ts` estáticos por **Supabase** (Postgres + Storage).
+Es la **v3**, una reescritura completa que:
+- Migra de Astro 4 a **Astro 6**; hoy es un **sitio 100% estático** servido por Cloudflare Pages (sin SSR ni adapter).
+- Reemplaza el contenido en `.ts` estáticos por **Supabase** (Postgres + Storage), leído en build.
 - Implementa un nuevo diseño "Liquid Glass" con i18n es/en.
-- Deja preparada la base para un **backoffice** privado (`/admin`, Google OAuth via Supabase, RLS), implementación posterior.
 
-Estado actual: **v3.0.0 cerrada** (`package.json` 3.0.0). Público + backoffice implementados end-to-end y verificados (check/test/build/e2e verdes). Pendiente solo el **setup manual del ingeniero** (OAuth, secretos, deploy `v3 → develop → main`) — ver [`docs/17-improvements.md`](./docs/17-improvements.md).
+El **backoffice** (edición de contenido) se reescribió en **Next.js** y vive en un **repo separado** (`sebasgrios-backoffice`, `backoffice.sebasgrios.es`); ya no está en este repo. Ver [`docs/13-backoffice.md`](./docs/13-backoffice.md).
+
+Estado actual: **portfolio público estático en producción** en `sebasgrios.es` (Astro 6 + Supabase + Cloudflare Pages). La rama de desarrollo `v3` de la reescritura se mergeó y ya no existe (tag `v3.0.0`). Backlog en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 Hitos cerrados:
 - **M1–M7** docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics.
-- **Backoffice** `/admin`: Google OAuth + RLS, CRUD de todas las entidades, media (Storage), publicar (deploy hook).
-- **Mejoras de cierre**: CI + Dependabot, e2e de guards, imágenes webp (`astro:assets`), headers SWR, factory CRUD, observabilidad, bump `@supabase/ssr` 0.10.
+- **Mejoras de cierre**: CI, imágenes webp (`astro:assets`), headers de cache SWR.
+- **Paso a estático**: eliminado el backoffice SSR del repo (movido a `sebasgrios-backoffice`); `output: 'static'`, sin adapter ni worker.
 - Changelog en [`CHANGELOG.md`](./CHANGELOG.md). Backlog/mejoras futuras en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
 ## Documentación de referencia
@@ -36,7 +37,7 @@ Documentos críticos:
 
 | Tema | Decisión |
 |---|---|
-| Framework | Astro 5 + `@astrojs/cloudflare`, SSR híbrido (prerender público, SSR `/admin`). |
+| Framework | Astro 6, **sitio estático** (`output: 'static'`, sin adapter). Cloudflare Pages sirve `dist/`. |
 | Estilo | Tailwind v4 (via `@tailwindcss/vite`), TypeScript strict. |
 | Tooling | **Biome** (lint+format), Vitest, Playwright, Supabase CLI. NO ESLint/Prettier. |
 | BD | Supabase. Proyecto creado: **`sebasgrios`** (ref `nzbodijggjxhshqqpnue`, Frankfurt eu-central-1, free tier). Claude opera vía el **Supabase CLI ya instalado localmente**. Storage para imágenes/logos. |
@@ -44,12 +45,12 @@ Documentos críticos:
 | Schema | Híbrido: `text[]` para highlights, tabla `technologies` reutilizable con pivots M:N. |
 | Hero | Stats computadas (años, sectores, proyectos). Badges flotantes + status pill editables desde `profile`. |
 | Anchors | Siempre en inglés: `#experience #education #stack #projects #contact`. |
-| Backoffice | `/admin` (mismo deploy). Google OAuth via Supabase. RLS. Página `/401` con mismo glass system. |
+| Backoffice | Repo separado **`sebasgrios-backoffice`** (Next.js, `backoffice.sebasgrios.es`). Habla con el mismo Supabase + RLS. |
 | OG | Dinámica con Satori. |
 | Analytics | Cloudflare Web Analytics (sin cookies). |
 | Fuentes | Self-host Satoshi + General Sans + JetBrains Mono. NO CDN. |
 | Tweaks UI | **Eliminada**. Valores fijos en `/src/config/tweaks.ts`: glass `0.10`, accent hue `264` (azul), parallax `true`, animations `true`. Todos respetan `prefers-reduced-motion`. |
-| Git flow | `v3` → PR a `develop` → PR a `main`. |
+| Git flow | `develop` (integración) → PR → `main` (producción). La rama `v3` se mergeó y eliminó tras el release. |
 | Commits | Formato `<emoji> <subject imperativo en inglés>`. **Sin prefijo textual** (`feat:`, `fix:`, `docs:`...). Sin trailer `Co-Authored-By`. La tabla emoji→categoría vive en [docs/03-conventions.md](./docs/03-conventions.md). |
 | Naming | PascalCase componentes Astro, camelCase variables/funciones/campos TS, snake_case SQL, kebab-case carpetas/páginas. |
 | Comentarios | **Prohibidos** salvo invariante no obvia / workaround. Nada de explicar el "qué". |
@@ -73,10 +74,7 @@ Documentos críticos:
 │   ├── pages/
 │   │   ├── index.astro
 │   │   ├── en/index.astro
-│   │   ├── 401.astro
 │   │   ├── 404.astro
-│   │   ├── admin/         # backoffice SSR (login, dashboard, CRUD, media, publish)
-│   │   ├── api/           # endpoints SSR (auth, mutaciones por entidad, media, publish)
 │   │   └── og/[locale].png.ts
 │   ├── lib/
 │   │   ├── domain/        # tipos puros, helpers (dates, i18n, stats)
@@ -88,9 +86,8 @@ Documentos críticos:
 │   │   ├── tweaks.ts      # valores fijos del design
 │   │   ├── copy.ts        # chrome copy es/en
 │   │   └── i18n.ts        # locales
-│   ├── scripts/           # nav.client.ts, effects.client.ts
-│   ├── styles/            # fonts.css, globals.css
-│   └── middleware.ts      # locale + admin auth
+│   ├── scripts/           # effects.client.ts
+│   └── styles/            # fonts.css, globals.css
 ├── supabase/
 │   ├── migrations/        # 0001_*.sql, ...
 │   └── seed.sql
@@ -110,7 +107,7 @@ npm run dev            # dev server
 npm run check          # astro check + biome check
 npm test               # vitest
 npm run build          # astro check + astro build
-npm run preview        # wrangler pages dev dist
+npm run preview        # astro preview (sirve dist/)
 npm run e2e            # playwright
 npm run db:types       # gen types from supabase
 npm run db:reset       # reset local db (migraciones + seed)
@@ -122,7 +119,7 @@ npm run db:push        # push migrations to linked project
 1. **Antes de cualquier trabajo**, lee [`docs/15-workflows.md`](./docs/15-workflows.md) (flujo) y [`docs/03-conventions.md`](./docs/03-conventions.md) (estilo).
 2. **Cuando termines una feature**, redacta al ingeniero un paso a paso de verificación; espera su "ok" antes de commitear.
 3. **Commits sin trailer**. En inglés. Formato `<emoji> <subject>`, sin `feat:`/`fix:`/`docs:`. Ejemplo correcto: `✨ add floating badges to hero`.
-4. **Solo commitea a `v3`**. Nunca push directo a `main`/`develop` sin pedir.
+4. **Trabaja sobre `develop`** (rama de integración): commits directos permitidos; cambios grandes por rama de feature → PR a `develop`. A `main` solo por PR. Nunca push directo ni force a `main`.
 5. **Cuando cambies un contrato** (schema, viewModel, repos) actualiza `/docs` en el mismo commit.
 6. **No `any`, no `console.log`, no comentarios** salvo invariante no obvia.
 7. **Respeta `prefers-reduced-motion`** y `prefers-color-scheme` en cualquier animación o color.
@@ -188,7 +185,7 @@ Si llegas en frío:
 1. `cat AGENTS.md` (este archivo).
 2. `cat docs/index.md`.
 3. `git status && git log --oneline -20` para ver el progreso.
-4. Mira `docs/00-overview.md` para saber en qué hito estamos (M1...M8).
+4. Mira `docs/00-overview.md` para el alcance y la definición de «listo» (hitos M1–M8 ya cerrados).
 5. Si el ingeniero acaba de pedirte algo, sigue el "Cómo razonar" de arriba.
 
 Todo lo demás está en `/docs`. Esa carpeta es la fuente de verdad de las decisiones de este proyecto.

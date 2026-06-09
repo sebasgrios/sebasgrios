@@ -15,20 +15,19 @@
 
 ### Rendering
 
-- **Prerender** para `/` y `/en/`. Cero round-trip a Supabase en hot path.
-- **SSR** solo para `/admin/**` (no impacta a visitantes).
+- **Estático**: `/`, `/en/` y `/og/*` se generan en build. Cero round-trip a Supabase en runtime.
 - **Stale-while-revalidate** vía `Cache-Control: public, max-age=600, s-maxage=3600, stale-while-revalidate=86400` para páginas prerendered.
 - **Edge caching** de Cloudflare por defecto activo.
 
 ### Invalidación
 
-- El backoffice futuro disparará un **Cloudflare Deploy Hook** tras cualquier mutación.
-- Mientras no exista backoffice, cualquier cambio en el seed requiere `npm run build` + push (rebuild).
+- El **backoffice** (repo aparte) dispara un **Cloudflare Deploy Hook** para reconstruir el portfolio tras editar contenido.
+- Para el sembrado inicial (sin backoffice), cualquier cambio en el seed requiere `npm run build` + push (rebuild).
 
 ### Imágenes
 
 - Servidas desde Supabase Storage con transformaciones (Image Transformations de Supabase) o vía `?width=...&format=webp`.
-- **Implementado**: hero y proyectos usan `<Image>` de `astro:assets` (servicio `sharp` en build, `imageService: 'compile'`) → **webp** optimizado en `/_astro/` (hero `densities=[1,2]`; proyectos `widths=[400,800]` + `sizes`). Logos/avatar quedan como `<img>` (tamaño ínfimo). `sharp` es `devDependency` (solo build; runtime passthrough).
+- **Implementado**: hero, proyectos, **logos de empresa y avatar del nav** usan `<Image>` de `astro:assets` (servicio `sharp` en build) → **webp** optimizado en `/_astro/` (hero `densities=[1,2]`; proyectos `widths`+`sizes`; logos/avatar `densities=[1,2]`). El avatar del nav pasó de ~201 KB en crudo a ~1 KB en webp. `sharp` es `devDependency` (solo build).
 - `loading="lazy"` por defecto excepto hero (`loading="eager" fetchpriority="high"`).
 - `srcset` con widths `[400, 800, 1200, 1600]` (proyectos), `[300, 600]` (avatar/logo), `[480, 720, 1080]` (hero).
 - `aspect-ratio` siempre declarado en CSS para evitar CLS.
@@ -48,7 +47,7 @@
 
 - Cero frameworks de UI runtime.
 - 3 scripts deferred (ver [09-components](./09-components.md)).
-- Sin polyfills (Cloudflare workers / modern browsers only).
+- Sin polyfills (modern browsers only).
 
 ### CSS
 
@@ -63,7 +62,7 @@
 ### HTML
 
 - Sin comentarios HTML innecesarios.
-- Minificación automática por adapter.
+- Minificación automática en build.
 
 ## Monitorización
 

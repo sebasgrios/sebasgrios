@@ -2,7 +2,33 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
-## [3.0.0] — Reescritura v3
+## [4.0.0] — 2026-06-09
+
+### Removed
+
+- **Backoffice** (`/admin` + `/api`): el panel SSR se eliminó del repo del portfolio; se reescribe en Next.js en un repo separado (`sebasgrios-backoffice`, `backoffice.sebasgrios.es`).
+- Dependencias que solo usaba el backoffice/SSR: `@astrojs/cloudflare`, `@supabase/ssr`, `@tailwindcss/forms`, `zod`, `wrangler`.
+- Páginas `/401` y `/dev/design`, y el middleware (su única función, fijar el locale, no se consumía).
+
+### Changed
+
+- El portfolio pasa a **estático puro** (`output: 'static'`): sin adapter ni worker; Cloudflare Pages sirve `dist/`. `404` pasa a estático.
+- OG: el `.wasm` de resvg se lee del disco con `node:fs` en build (antes lo resolvía el adapter Cloudflare).
+- Documentación (`/docs`, `AGENTS.md`) y `robots.txt` alineados con el portfolio estático y el backoffice externo.
+- Dependencias subidas a últimas estables: **Astro 6**, **TypeScript 6**, **Biome 2** (config migrada), **Vitest 4**, supabase-js, simple-icons.
+- Imágenes: avatar del nav y logos de empresa servidos como **webp** optimizado vía `astro:assets` (el avatar pasó de ~201 KB a ~1 KB).
+
+### Added
+
+- **Accesibilidad**: landmarks correctos (`nav`/`main`/`footer` hermanos), skip-link visible al foco, contraste WCAG AA; test **axe-core** (`e2e/a11y.spec.ts`, claro y oscuro) en CI.
+- **SEO**: JSON-LD `Person` enriquecido con `worksFor`, `alumniOf` y `knowsAbout`.
+- **CI**: jobs `e2e` (Playwright + axe) y `lighthouse` (Lighthouse CI con budgets).
+
+### Security
+
+- **CSP sin `'unsafe-inline'`**: la política la genera Astro 6 (`security.csp`) por `<meta>` con hashes SHA-256 de scripts/estilos; los colores de iconos pasaron de `style=` inline a `globals.css` (`[data-ti]`). `_headers` añade COOP/CORP, `object-src 'none'`, `frame-src 'none'`, `frame-ancestors`, `upgrade-insecure-requests` y `connect-src` más estricto.
+
+## [3.0.0] — 2026-06-08 — Reescritura v3
 
 Reescritura completa del portfolio: diseño **Liquid Glass**, **Astro 5** + Cloudflare (SSR híbrido), contenido en **Supabase**, **i18n es/en** y **backoffice** privado end-to-end.
 
@@ -26,11 +52,11 @@ Reescritura completa del portfolio: diseño **Liquid Glass**, **Astro 5** + Clou
 ### Calidad e infraestructura
 
 - Tests Vitest (helpers, mappers, i18n, schemas, factory CRUD) + e2e Playwright (público, theme, guards admin).
-- CI (GitHub Actions: check + test + build), Dependabot.
+- CI (GitHub Actions: check + test + build).
 - Factory genérico de endpoints CRUD; observabilidad de errores en endpoints; `DeleteForm` reutilizable.
 - Sync de pivots M:N **atómico** vía RPC (`set_entity_technologies`); **audit log** (`admin_audit_log`) de las acciones del backoffice.
 - Documentación completa en `/docs` (17 documentos) + `AGENTS.md`.
 
-### Pendiente de configuración manual
+### Release y configuración manual
 
-Setup externo del ingeniero para operar en vivo: Google OAuth + primer admin, secreto `CF_DEPLOY_HOOK_URL`, deploy `v3 → develop → main`, branch protection con el check `verify`. Detalle en [`docs/17-improvements.md`](docs/17-improvements.md) → *Pasos manuales*.
+v3.0.0 **desplegada a producción** (`sebasgrios.es`) vía release `develop → main` (PR #10); tag `v3.0.0`; rama `v3` eliminada. Google OAuth y el primer admin (`user_roles`) están configurados. Endurecimiento opcional restante del ingeniero: secreto `CF_DEPLOY_HOOK_URL` (botón Publicar), branch protection con el check `verify`, rate limiting y backups. Detalle en [`docs/17-improvements.md`](docs/17-improvements.md) → *Pasos manuales*.

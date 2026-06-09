@@ -2,7 +2,7 @@
   "name": "portfolio",
   "description": "Portfolio de Sebastián González Ríos",
   "type": "module",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "author": {
     "name": "Sebastián González Ríos",
@@ -16,7 +16,7 @@
     "dev": "astro dev --host",
     "start": "astro dev",
     "build": "astro check && astro build",
-    "preview": "wrangler pages dev dist",
+    "preview": "astro preview",
     "check": "astro check && biome check .",
     "format": "biome format --write .",
     "lint": "biome lint .",
@@ -29,29 +29,25 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@astrojs/cloudflare": "^12.6.13",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@resvg/resvg-wasm": "^2.6.2",
-    "@supabase/ssr": "^0.10.3",
-    "@supabase/supabase-js": "^2.106.2",
-    "@tailwindcss/forms": "^0.5.11",
-    "@tailwindcss/typography": "^0.5.19",
+    "@supabase/supabase-js": "^2.107.0",
     "@tailwindcss/vite": "^4.3.0",
-    "astro": "^5.18.2",
+    "astro": "^6.4.4",
     "satori": "^0.26.0",
     "tailwindcss": "^4.3.0",
-    "typescript": "^5.9.3",
-    "zod": "^3.25.76"
+    "typescript": "^6.0.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@astrojs/check": "^0.9.9",
+    "@axe-core/playwright": "^4.11.3",
+    "@biomejs/biome": "^2.4.16",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.60.0",
     "sharp": "^0.34.5",
-    "simple-icons": "^16.22.0",
-    "vitest": "^2.1.9",
-    "wrangler": "^3.114.17"
+    "simple-icons": "^16.23.0",
+    "vitest": "^4.1.8"
   },
   "packageManager": "pnpm@11.1.3"
 }

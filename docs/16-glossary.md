@@ -29,7 +29,7 @@ Términos del dominio del portfolio.
 | **Repo (repository)** | Funciones en `/src/lib/data/repos.ts` que encapsulan queries a Supabase y devuelven tipos de dominio (vía `mappers.ts`). |
 | **Mapper** | Función pura que convierte row de DB (snake_case) a tipo de dominio (camelCase). |
 | **Prerender** | Página generada en build time, servida como HTML estático. |
-| **SSR** | Server-side render por request. Solo `/admin/**` y endpoints `/api`. |
+| **SSR** | Server-side render por request. El portfolio **no** usa SSR (es estático); el backoffice (repo aparte) sí. |
 | **Deploy hook** | URL de Cloudflare Pages que, llamada por POST, dispara un nuevo deploy. Se llama desde el backoffice tras una mutación. |
 | **RLS** | Row Level Security de Postgres. Habilitado en todas las tablas; políticas permiten lectura pública y escritura solo a admins. |
 | **Singleton (tabla)** | Tabla con exactamente una row, enforced por `generated stored` column + `unique`. Aplica a `profile`. |

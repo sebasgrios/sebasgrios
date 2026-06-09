@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "./fonts.css";
 
-@plugin "@tailwindcss/typography";
-@plugin "@tailwindcss/forms";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
@@ -58,11 +56,11 @@
   --bg-2: oklch(0.955 0.006 285);
   --text: oklch(0.2 0.012 285);
   --text-soft: oklch(0.46 0.012 285);
-  --text-faint: oklch(0.62 0.01 285);
+  --text-faint: oklch(0.52 0.012 285);
   --border: oklch(0.88 0.008 285 / 0.9);
   --hairline: oklch(0.8 0.01 285 / 0.6);
 
-  --accent: oklch(0.58 var(--accent-c) var(--accent-h));
+  --accent: oklch(0.54 var(--accent-c) var(--accent-h));
   --accent-bright: oklch(0.66 var(--accent-c) var(--accent-h));
   --accent-soft: oklch(0.7 0.12 var(--accent-h) / 0.16);
   --on-accent: oklch(0.99 0.01 285);
@@ -82,7 +80,7 @@
   --bg-2: oklch(0.2 0.014 285);
   --text: oklch(0.965 0.004 285);
   --text-soft: oklch(0.72 0.012 285);
-  --text-faint: oklch(0.55 0.012 285);
+  --text-faint: oklch(0.6 0.012 285);
   --border: oklch(0.4 0.014 285 / 0.5);
   --hairline: oklch(0.5 0.014 285 / 0.35);
 
@@ -439,6 +437,27 @@
     box-shadow: 0 8px 18px -10px color-mix(in oklab, var(--tech-glow) 55%, transparent);
   }
 }
+
+/* Tech brand colors — static mirror of brand() in src/lib/icons/techIconRegistry.ts.
+   Applied via [data-ti] on TechIcon/Tag so a hashed CSP needs no inline style. */
+[data-ti="typescript"] { --tech-color: #3178C6; }
+[data-ti="javascript"] { --tech-color: #F7DF1E; }
+[data-ti="react"], [data-ti="react16"], [data-ti="reactnative"] { --tech-color: #61DAFB; }
+[data-ti="nextjs"], [data-ti="githubcopilot"] { --tech-color: #A1A1AA; }
+[data-ti="astro"] { --tech-color: #BC52EE; }
+[data-ti="redux"] { --tech-color: #764ABC; }
+[data-ti="tailwindcss"] { --tech-color: #06B6D4; }
+[data-ti="html"] { --tech-color: #E34F26; }
+[data-ti="css"] { --tech-color: #663399; }
+[data-ti="nodejs"] { --tech-color: #5FA04E; }
+[data-ti="jenkins"] { --tech-color: #D24939; }
+[data-ti="bitbucket"] { --tech-color: #0052CC; }
+[data-ti="git"] { --tech-color: #F03C2E; }
+[data-ti="cloudflare"] { --tech-color: #F38020; }
+[data-ti="mysql"] { --tech-color: #4479A1; }
+[data-ti="wordpress"] { --tech-color: #21759B; }
+[data-ti="php"] { --tech-color: #777BB4; }
+[data-ti="java"] { --tech-color: #F89820; }
 
 @keyframes status-pulse {
   0% {

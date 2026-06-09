@@ -1,6 +1,6 @@
 # 11 · Accessibility
 
-Compromiso: **WCAG 2.2 AA**. Verificación manual + axe-core en M7.
+Compromiso: **WCAG 2.2 AA**. Verificación manual + **axe-core automatizado** (`e2e/a11y.spec.ts`, claro y oscuro, `/` y `/en/`) y **Lighthouse CI** en cada PR.
 
 ## Reglas obligatorias
 
@@ -8,7 +8,7 @@ Compromiso: **WCAG 2.2 AA**. Verificación manual + axe-core en M7.
 
 - Un único `<h1>` por página (el del Hero).
 - Jerarquía heading sin saltos (`h1 → h2 → h3`).
-- Landmarks: `<header>`, `<nav>`, `<main>`, `<footer>`. Cada `<section>` con `aria-labelledby` apuntando a su `<h2>`.
+- Landmarks: `<nav>` y `<footer>` como **hermanos** de `<main>` (navigation / main / contentinfo), nunca anidados dentro de `<main>` (slots `nav`/`footer` en `BaseLayout`). Cada `<section>` con `aria-labelledby` apuntando a su `<h2>`.
 - `<a>` para navegación, `<button>` para acciones (no mezclar).
 
 ### Imágenes
@@ -88,7 +88,9 @@ Usar mínimo necesario. Lo nativo prima sobre ARIA. Casos justificados:
 - `aria-controls` en burger apuntando a `nav-mobile`.
 - `aria-hidden="true"` en background blobs/noise y en iconos puramente decorativos dentro de botones que ya tienen label.
 
-## Forms (futuro backoffice)
+## Forms (backoffice, repo aparte)
+
+> El portfolio público no tiene formularios; estas reglas aplican al backoffice (`sebasgrios-backoffice`).
 
 - Cada `<input>` con `<label>` asociado (no placeholder-only).
 - Errores con `aria-live="polite"` y `aria-invalid="true"` en el input.

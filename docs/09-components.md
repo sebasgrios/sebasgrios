@@ -227,30 +227,9 @@ Componentes individuales en `/src/components/icons/`. Reutilizables:
 
 Cada uno acepta props `class`, `width`, `height` (default 24).
 
-## Backoffice (`/admin`)
+## Backoffice
 
-Layout y componentes propios del panel (SSR, `noindex`). Ver [13-backoffice](./13-backoffice.md).
-
-### `AdminLayout.astro`
-
-Envuelve `BaseLayout` con chrome de admin (volver al panel, salir) + `<Toast/>`. Carga un `<script>` que: liga los acordeones (`.acc-trigger`), auto-expande la sección de un campo `required` que falle validación, confirma los `form[data-confirm]` y muestra/oculta el toast.
-
-### Formularios
-
-| Componente | Uso |
-|---|---|
-| `AdminField.astro` | input/textarea etiquetado (`text/email/url/date/number`, `multiline`). |
-| `AdminLocalized.astro` | par es/en de `AdminField` para campos `jsonb {es,en}`. |
-| `AdminLocalizedList.astro` | N filas `AdminLocalized` para listas localizadas (bullets, badges). |
-| `AdminSelect.astro` | `<select>` etiquetado (iconKey de stack, modeKey de rol). |
-| `AdminTechPicker.astro` | grid de checkboxes de tecnologías (pivot M:N), marca las asignadas. |
-| `AdminAccordion.astro` | tarjeta Glass colapsable (header + chevron + panel animado `grid-rows`). |
-| `Toast.astro` | pill liquid-glass superior, **color por estado** (verde ok / rojo error), vía flash cookie. |
-| `*Fields.astro` | bloque de campos por entidad (`Education/Company/Role/Project Fields`), reutilizado por crear y editar. |
-
-### Patrón de página/endpoint
-
-Cada entidad: página `src/pages/admin/<entity>.astro` (lista de acordeones + acordeón "nuevo") y endpoint `src/pages/api/<entity>.ts` (un `POST` que despacha `create/update/delete` según el campo oculto `_action`). Lecturas en `repos.ts` (`fetch*Admin`), escrituras en `mutations.ts`, validación en `lib/admin/schemas.ts`, parseo en `lib/admin/forms.ts`, flash en `lib/admin/flash.ts`, Storage en `lib/data/storage.ts`.
+El panel de edición y sus componentes se reescribieron en Next.js y viven en un repositorio separado. Ver [13-backoffice](./13-backoffice.md).
 
 ## JS cliente (mínimo)
 

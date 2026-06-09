@@ -1,5 +1,5 @@
-import type { Technology } from '@/lib/domain/types';
 import { describe, expect, it } from 'vitest';
+import type { Technology } from '@/lib/domain/types';
 import type { Database } from './database.types';
 import { mapProfile, mapRole, mapTechnology } from './mappers';
 

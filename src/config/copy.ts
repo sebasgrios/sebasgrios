@@ -33,8 +33,6 @@ interface ChromeCopy {
   errors: {
     notFoundTitle: string;
     notFoundLead: string;
-    unauthorizedTitle: string;
-    unauthorizedLead: string;
     backToPortfolio: string;
   };
 }
@@ -88,8 +86,6 @@ export const COPY: Record<Locale, ChromeCopy> = {
     errors: {
       notFoundTitle: 'Página no encontrada',
       notFoundLead: 'La ruta que intentas visitar no existe o ha sido movida.',
-      unauthorizedTitle: 'Esta zona es privada',
-      unauthorizedLead: 'Solo el ingeniero (y editores autorizados) pueden acceder al backoffice.',
       backToPortfolio: 'Volver al portfolio',
     },
   },
@@ -141,8 +137,6 @@ export const COPY: Record<Locale, ChromeCopy> = {
     errors: {
       notFoundTitle: 'Page not found',
       notFoundLead: 'The page you tried to visit does not exist or has been moved.',
-      unauthorizedTitle: 'This area is private',
-      unauthorizedLead: 'Only the engineer (and authorized editors) can access the backoffice.',
       backToPortfolio: 'Back to portfolio',
     },
   },

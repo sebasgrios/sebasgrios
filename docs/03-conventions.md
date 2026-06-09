@@ -33,7 +33,7 @@ Reglas estrictas. Aplican a humanos y a agentes.
 - **Sin `any`**. Si es inevitable, `unknown` + narrowing.
 - **Sin `console.log`** en código de producción. Usar el logger del worker.
 - **Sin abreviaturas** salvo aceptadas (`url`, `id`, `db`, `api`).
-- Funciones puras siempre que sea posible. Side-effects aislados en `/src/lib/data` y `/src/pages/api`.
+- Funciones puras siempre que sea posible. Side-effects aislados en `/src/lib/data`.
 - Early returns sobre `else` anidados.
 - Imports ordenados (Biome lo enfuerza): node builtins → externos → internos `@/` → relativos.
 
@@ -70,7 +70,7 @@ Ejemplos válidos:
 📚 describe stack groups RLS policies
 🔨 extract row-to-domain mapper in repos
 🚀 lazy-load below-the-fold project images
-📦 add @astrojs/cloudflare adapter
+📦 add @astrojs/sitemap integration
 👷 add github actions workflow for build
 🔧 bump astro from 5.18 to 5.19
 🚨 add tests for pickLocale fallback
@@ -88,17 +88,18 @@ Subject **imperativo** ("add", no "added"/"adds"), sin punto final, sin emojis a
 
 ## Branching
 
-- `main` — producción.
-- `develop` — pre-prod, integración.
-- `v3` — rama de trabajo de esta reescritura.
+- `main` — producción (`sebasgrios.es`).
+- `develop` — integración y rama de trabajo.
 
-Flujo de esta v3 (ver [15-workflows](./15-workflows.md)):
+Flujo (ver [15-workflows](./15-workflows.md)):
 
 ```
-work commits ─▶ v3 ─PR─▶ develop ─PR─▶ main
+work commits ─▶ develop ─PR─▶ main
 ```
 
-No se hace push directo a `main` ni a `develop` sin PR. La rama `v3` puede recibir commits directos durante el desarrollo.
+`develop` puede recibir commits directos; los cambios grandes van por rama de feature → PR a `develop`. A `main` solo se llega por PR. La rama `v3` de la reescritura se mergeó y eliminó tras el release de v3.0.0 (existe el tag `v3.0.0`).
+
+Histórico: 2026-06-08 — v3.0.0 desplegada a producción y eliminada la rama `v3`. El flujo pasa de `v3 → develop → main` a `develop → main`.
 
 ## Pull Requests
 
@@ -128,7 +129,7 @@ Antes de cualquier commit:
 
 - **Secretos** nunca en repo. `.env.local` ignorado por git (ya está en `.gitignore`).
 - Variables públicas: prefijo `PUBLIC_` (Astro las expone al cliente).
-- `SUPABASE_SERVICE_ROLE_KEY` solo en variables de entorno del worker, jamás en cliente, jamás en logs.
+- Secretos (p. ej. service-role key) solo en variables de entorno del servicio que los use, jamás en cliente, jamás en logs.
 - Validar **toda** input externa (formularios, query params) con Zod.
 
 ## Accesibilidad obligatoria

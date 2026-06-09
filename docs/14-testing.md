@@ -10,7 +10,7 @@
 
 ```
               ▲
-        e2e   │  Playwright (futuro backoffice + smoke público)
+        e2e   │  Playwright (smoke público)
               │
        integ  │  Repos contra Supabase local (M4+)
               │
@@ -31,10 +31,8 @@ Configuración en `vitest.config.ts`. Carpetas `**/*.test.ts` colocadas junto al
 | `lib/domain/stats.ts` | `computeYearsOfExperience` (frontera de año), `countUniqueSectors`, `countProjects`. |
 | `lib/data/mappers.ts` | row snake_case → camelCase para cada entidad. |
 | `lib/i18n/getLocale.ts` | `getLocaleFromPath` (prefijo `/en/`, fallback). |
-| `lib/admin/forms.ts` | parseo de `FormData` (localized, bool, listas indexadas). |
-| `lib/admin/schemas.ts` | validación Zod de cada entidad (profile, technology, stack, education, company, role, project): locales requeridos, fechas, URLs vacías→null, enums, uuids, coerción de orden. |
 
-Suite actual: **57 tests** en 7 ficheros (`*.test.ts` colocados junto al código).
+Suite actual: **29 tests** en 5 ficheros (`*.test.ts` colocados junto al código).
 
 ### Patrón de test
 
@@ -61,14 +59,9 @@ Smoke tests en `/e2e/`:
 
 1. `public.spec.ts`: visita `/` y `/en/`, secciones, locale switch, hreflang, JSON-LD.
 2. `theme.spec.ts`: click theme toggle alterna `data-theme` y persiste tras reload.
-3. `admin.spec.ts`: guards del backoffice sin sesión (`/admin`→302 login, `POST /api/*`→401, `/admin/login` renderiza, `/api/auth/signin`→302).
+3. `a11y.spec.ts`: **axe-core** sobre `/` y `/en/` en claro y oscuro; 0 violaciones serias/críticas (WCAG A/AA).
 
-(Pendiente: e2e del flujo admin autenticado y `responsive.spec.ts`.)
-
-### Futuros (cuando exista backoffice)
-
-4. `admin-login.spec.ts`: redirect a login si no hay sesión.
-5. `admin-edit.spec.ts`: login → editar profile → guardar → ver cambio en `/`.
+(Pendiente: `responsive.spec.ts`.)
 
 ## RLS tests
 
@@ -81,10 +74,13 @@ await expect(anon.from('profile').update({ full_name: 'X' })).rejects.toThrow();
 
 ## CI
 
-`.github/workflows/ci.yml` (GitHub Actions) corre en PRs a `develop`/`main` y push a `v3`/`develop`: `pnpm check` + `pnpm test` + `pnpm build`. El `build` solo necesita la anon key pública (hardcodeada) → sin secretos. Falta marcarlo como *required status check* en GitHub (ver [17-improvements](./17-improvements.md), paso manual B). `e2e` aún no está en CI (necesita servidor + más tiempo).
+`.github/workflows/ci.yml` (GitHub Actions) corre en PRs a `develop`/`main` y en push a `develop`, en tres jobs:
+- **`verify`**: `pnpm check` + `pnpm test` + `pnpm build` (sin secretos; la anon key es pública).
+- **`e2e`**: Playwright (chromium) — smoke público + `a11y` (axe).
+- **`lighthouse`**: build + `lhci autorun` con budgets (`lighthouserc.json`): a11y y SEO como *error* (≥0.9), perf y best-practices como *warn*. Umbrales conservadores; subir a ≥0.95 tras confirmar el primer run verde.
 
 ## Lo que NO se testea
 
 - Renderizado de componentes Astro (snapshot tests dan poco valor frente al coste de mantenerlos).
 - Animaciones / parallax (visual; se valida a ojo).
-- Cloudflare Workers runtime específico (lo cubre el deploy preview).
+- La CSP efectiva por cabeceras `_headers` (no se aplica en `astro preview`; se valida en el deploy preview de Cloudflare).
