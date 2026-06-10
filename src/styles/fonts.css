@@ -63,3 +63,30 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* Metric-adjusted fallbacks — zero-CLS font swap.
+   Generated once with @capsizecss/core `createFontStack()` from the real woff2
+   metrics (Satoshi-Black / GeneralSans-Regular: unitsPerEm 1000, ascent 1010,
+   descent -240, lineGap 100, xWidthAvg 486 / 450) matched against Arial. The
+   overrides make Arial occupy the exact same box as the web font, so when the
+   real font swaps in there is no reflow. Wired into --font-display / --font-sans
+   in globals.css. Regenerate if the font files change. */
+@font-face {
+  font-family: "Satoshi Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-display: swap;
+  ascent-override: 92.6458%;
+  descent-override: 22.0149%;
+  line-gap-override: 9.1729%;
+  size-adjust: 109.0173%;
+}
+
+@font-face {
+  font-family: "General Sans Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-display: swap;
+  ascent-override: 100.0575%;
+  descent-override: 23.776%;
+  line-gap-override: 9.9067%;
+  size-adjust: 100.9419%;
+}

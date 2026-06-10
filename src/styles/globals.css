@@ -19,8 +19,8 @@
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
 
-  --font-display: "Satoshi", system-ui, sans-serif;
-  --font-sans: "General Sans", system-ui, sans-serif;
+  --font-display: "Satoshi", "Satoshi Fallback", system-ui, sans-serif;
+  --font-sans: "General Sans", "General Sans Fallback", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --radius-glass: 22px;
