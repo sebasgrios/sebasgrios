@@ -6,7 +6,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto s
 
 ### Changed
 
-- **Héroe · stats**: rediseño de los bloques de cifras. "Años de experiencia" pasa a un **banner rectangular a lo ancho** en la parte superior, con "sectores" y "proyectos" en dos columnas debajo (todos horizontales/rectangulares, con jerarquía). La etiqueta de sectores deja de duplicar el número.
+- **Héroe · stats**: rediseño de los bloques de cifras. "Años de experiencia" pasa a la **parte superior** y "sectores"/"proyectos" a **dos columnas debajo**; bloques **rectangulares de ancho contenido** (no a todo lo ancho), con la cifra grande y la etiqueta debajo. La etiqueta de sectores deja de duplicar el número.
 
 ### Fixed
 

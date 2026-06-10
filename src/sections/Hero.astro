@@ -133,32 +133,32 @@ const sectorsLabel = copy.hero.statSectors;
         }
       </div>
       <div
-        class="enter [animation-delay:0.24s] mt-10 flex flex-col gap-3.5 max-[940px]:max-w-[460px] max-[940px]:mx-auto"
+        class="enter [animation-delay:0.24s] mt-10 flex flex-col gap-3.5 w-full max-w-[360px] max-[940px]:mx-auto"
       >
-        <Glass class="stat flex items-center gap-4 px-6 py-[18px] rounded-[var(--radius-glass-sm)]">
+        <Glass class="stat self-start px-6 py-4 rounded-[var(--radius-glass-sm)]">
           <div
-            class="font-display font-black text-[clamp(2rem,4.2vw,2.7rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent whitespace-nowrap"
+            class="font-display font-black text-[clamp(1.9rem,4vw,2.6rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
           >
             +{stats.yearsOfExperience} {locale === 'es' ? 'años' : 'years'}
           </div>
-          <div class="text-[0.85rem] text-text-soft leading-snug">{copy.hero.statYears}</div>
+          <div class="text-[0.8rem] text-text-soft mt-1.5">{copy.hero.statYears}</div>
         </Glass>
-        <div class="flex gap-3.5 max-[460px]:gap-2.5">
-          <Glass class="stat flex-1 flex items-center gap-3 px-5 py-[18px] rounded-[var(--radius-glass-sm)]">
+        <div class="flex gap-3.5">
+          <Glass class="stat flex-1 px-5 py-4 rounded-[var(--radius-glass-sm)]">
             <div
-              class="font-display font-black text-[clamp(1.7rem,3.6vw,2.3rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
+              class="font-display font-black text-[clamp(1.6rem,3.4vw,2.1rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
             >
               {stats.sectorsCount}
             </div>
-            <div class="text-[0.78rem] text-text-soft leading-tight">{sectorsLabel}</div>
+            <div class="text-[0.8rem] text-text-soft mt-1.5">{sectorsLabel}</div>
           </Glass>
-          <Glass class="stat flex-1 flex items-center gap-3 px-5 py-[18px] rounded-[var(--radius-glass-sm)]">
+          <Glass class="stat flex-1 px-5 py-4 rounded-[var(--radius-glass-sm)]">
             <div
-              class="font-display font-black text-[clamp(1.7rem,3.6vw,2.3rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
+              class="font-display font-black text-[clamp(1.6rem,3.4vw,2.1rem)] leading-none tracking-[-0.03em] bg-[linear-gradient(120deg,var(--accent-bright),oklch(0.7_0.18_calc(var(--accent-h)+55)))] bg-clip-text text-transparent"
             >
               {stats.projectsCount}
             </div>
-            <div class="text-[0.78rem] text-text-soft leading-tight">{copy.hero.statProjects}</div>
+            <div class="text-[0.8rem] text-text-soft mt-1.5">{copy.hero.statProjects}</div>
           </Glass>
         </div>
       </div>
