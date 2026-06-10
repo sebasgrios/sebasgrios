@@ -2,6 +2,16 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.1.0] — 2026-06-09
+
+### Changed
+
+- **Héroe · stats**: rediseño de los bloques de cifras. "Años de experiencia" pasa a un **banner rectangular a lo ancho** en la parte superior, con "sectores" y "proyectos" en dos columnas debajo (todos horizontales/rectangulares, con jerarquía). La etiqueta de sectores deja de duplicar el número.
+
+### Fixed
+
+- **Contacto · footer**: faltaba separación entre la sección de Contacto y el divisor del footer (el footer quedó fuera de `<main>` tras el fix de landmarks de a11y, perdiendo el `gap` de sección). Se añade `margin-top` al footer con el ritmo de sección.
+
 ## [4.0.3] — 2026-06-09
 
 ### Changed
