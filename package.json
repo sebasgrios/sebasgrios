@@ -2,7 +2,7 @@
   "name": "portfolio",
   "description": "Portfolio de Sebastián González Ríos",
   "type": "module",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "private": true,
   "author": {
     "name": "Sebastián González Ríos",

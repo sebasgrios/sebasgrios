@@ -2,6 +2,12 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.1.1] — 2026-06-10
+
+### Fixed
+
+- **Rendimiento (móvil) · CLS**: el *swap* de fuente (FOUT) reflowaba la columna del héroe al cargar Satoshi/General Sans bajo *throttling*, disparando el **CLS a 0,314** (Lighthouse móvil **81**). Se añaden **fuentes de respaldo con métricas ajustadas** (`size-adjust`/`ascent-override`/`descent-override`/`line-gap-override`, generadas con `@capsizecss/core` a partir de las métricas reales de los `.woff2` y matcheadas contra Arial), conectadas a `--font-display`/`--font-sans`. El respaldo ocupa exactamente la misma caja que la fuente web, así que el *swap* **no produce desplazamiento** (CLS≈0 verificado a 360/375/412/1280 px) y se mantiene la fuente *custom* siempre visible (sin el sacrificio de `font-display: optional`).
+
 ## [4.1.0] — 2026-06-09
 
 ### Changed
