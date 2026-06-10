@@ -13,7 +13,7 @@ const { profile } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class="wrap pt-10 pb-[60px] border-t border-hairline">
+<footer class="wrap mt-[clamp(48px,7vw,96px)] pt-10 pb-[60px] border-t border-hairline">
   <div class="flex flex-wrap items-center justify-between gap-4">
     <div class="text-text-faint text-[0.85rem]">© {year} {profile.fullName}</div>
     <div class="flex gap-2">
