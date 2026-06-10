@@ -53,7 +53,7 @@ export const COPY: Record<Locale, ChromeCopy> = {
       cta: 'Hablemos',
       statYears: 'de experiencia profesional',
       statSectors: 'sectores',
-      statProjects: 'proyectos propios en producción',
+      statProjects: 'proyectos propios',
     },
     sections: {
       experience: {
@@ -104,7 +104,7 @@ export const COPY: Record<Locale, ChromeCopy> = {
       cta: "Let's talk",
       statYears: 'of professional experience',
       statSectors: 'sectors',
-      statProjects: 'live personal projects',
+      statProjects: 'personal projects',
     },
     sections: {
       experience: {
