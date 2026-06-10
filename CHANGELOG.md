@@ -2,6 +2,13 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.1.2] — 2026-06-10
+
+### Security
+
+- **`security.txt` (RFC 9116)**: añadido en `/.well-known/security.txt` con el contacto para reportar incidencias de seguridad (resuelve el aviso "Security.txt no configurado" del Security Center de Cloudflare).
+- **CSP `img-src` endurecido**: eliminado el comodín `https://*.supabase.co` (vestigial — las imágenes se optimizan a `/_astro` en *build* vía `astro:assets`, no hay peticiones a Supabase en *runtime*). Queda en `img-src 'self' data:`. `image.remotePatterns` se mantiene intacto (lo usa el *build* para descargar las imágenes de origen).
+
 ## [4.1.1] — 2026-06-10
 
 ### Fixed
