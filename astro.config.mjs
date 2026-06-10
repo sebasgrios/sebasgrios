@@ -16,7 +16,7 @@ export default defineConfig({
         "form-action 'self'",
         "object-src 'none'",
         "frame-src 'none'",
-        "img-src 'self' data: https://*.supabase.co",
+        "img-src 'self' data:",
         "font-src 'self' data:",
         "connect-src 'self' https://cloudflareinsights.com",
       ],
