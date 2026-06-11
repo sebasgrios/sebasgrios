@@ -2,6 +2,16 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.2.0] — 2026-06-12
+
+### Removed
+
+- **Tooling de schema v3 (Supabase)**: eliminado `supabase/` (config, 14 migraciones, `seed.sql`) y los scripts `db:types`/`db:reset`/`db:push`. El **schema pasa a ser propiedad del repo del backoffice** (`sebasgrios-backoffice`, monorepo): allí viven las migraciones y el seed y se aplican al Supabase vivo. Este repo queda como sitio estático que **solo lee** Supabase en build (anon key + RLS public read); se limpian también las referencias de la Supabase CLI en `.gitignore` y `biome.json`.
+
+### Changed
+
+- **Docs y briefing reenfocados v3 → v4**: `AGENTS.md` describe ahora el portfolio como sitio público estático con el schema en el backoffice (regla "solo lectura en build", tabla Tooling/BD actualizada, v3 a histórico); los docs de schema/deployment/workflows/conventions/content-model pasan a punteros al backoffice. Header `x-portfolio-version` `v3` → `v4`.
+
 ## [4.1.2] — 2026-06-10
 
 ### Security
