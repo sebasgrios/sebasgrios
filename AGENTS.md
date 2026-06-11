@@ -6,20 +6,19 @@ Briefing autocontenido para cualquier sesión/agente (Claude, Copilot, etc.) que
 
 Portfolio personal de **Sebastián González Ríos** (`sebasgrios.es`).
 
-Es la **v3**, una reescritura completa que:
-- Migra de Astro 4 a **Astro 6**; hoy es un **sitio 100% estático** servido por Cloudflare Pages (sin SSR ni adapter).
-- Reemplaza el contenido en `.ts` estáticos por **Supabase** (Postgres + Storage), leído en build.
-- Implementa un nuevo diseño "Liquid Glass" con i18n es/en.
+Es la **v4**: el **sitio público estático** del portfolio. Hoy:
+- **Astro 6**, **sitio 100% estático** servido por Cloudflare Pages (sin SSR ni adapter).
+- Contenido en **Supabase** (Postgres + Storage), **leído en build** (anon key + RLS public read).
+- Diseño "Liquid Glass" con i18n es/en.
 
-El **backoffice** (edición de contenido) se reescribió en **Next.js** y vive en un **repo separado** (`sebasgrios-backoffice`, `backoffice.sebasgrios.es`); ya no está en este repo. Ver [`docs/13-backoffice.md`](./docs/13-backoffice.md).
+El **backoffice** (edición de contenido) vive en un **repo separado** (`sebasgrios-backoffice`, Next.js, `backoffice.sebasgrios.es`) y es el **dueño del schema** (`supabase/`, migraciones, seed); ya no está en este repo. Ver [`docs/13-backoffice.md`](./docs/13-backoffice.md).
 
-Estado actual: **portfolio público estático en producción** en `sebasgrios.es` (Astro 6 + Supabase + Cloudflare Pages). La rama de desarrollo `v3` de la reescritura se mergeó y ya no existe (tag `v3.0.0`). Backlog en [`docs/17-improvements.md`](./docs/17-improvements.md).
+Estado actual: **portfolio público estático en producción** en `sebasgrios.es` (Astro 6 + Supabase + Cloudflare Pages). Backlog en [`docs/17-improvements.md`](./docs/17-improvements.md).
 
-Hitos cerrados:
-- **M1–M7** docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics.
-- **Mejoras de cierre**: CI, imágenes webp (`astro:assets`), headers de cache SWR.
-- **Paso a estático**: eliminado el backoffice SSR del repo (movido a `sebasgrios-backoffice`); `output: 'static'`, sin adapter ni worker.
-- Changelog en [`CHANGELOG.md`](./CHANGELOG.md). Backlog/mejoras futuras en [`docs/17-improvements.md`](./docs/17-improvements.md).
+Histórico:
+- **v3** (`v3.0.0`): reescritura completa Astro 4 → Astro 6, datos `.ts` estáticos → Supabase, nuevo diseño "Liquid Glass" + i18n. Hitos **M1–M7** (docs, scaffold, design system, Supabase, secciones públicas, i18n, SEO/OG/Analytics) + cierre (CI, imágenes webp con `astro:assets`, headers de cache SWR). La rama `v3` se mergeó y ya no existe.
+- **v4**: el backoffice SSR se sacó del repo a `sebasgrios-backoffice` y el portfolio pasó a **estático puro** (`output: 'static'`, sin adapter ni worker); el schema/migraciones pasan a ser propiedad del backoffice.
+- Changelog en [`CHANGELOG.md`](./CHANGELOG.md).
 
 ## Documentación de referencia
 
@@ -39,8 +38,8 @@ Documentos críticos:
 |---|---|
 | Framework | Astro 6, **sitio estático** (`output: 'static'`, sin adapter). Cloudflare Pages sirve `dist/`. |
 | Estilo | Tailwind v4 (via `@tailwindcss/vite`), TypeScript strict. |
-| Tooling | **Biome** (lint+format), Vitest, Playwright, Supabase CLI. NO ESLint/Prettier. |
-| BD | Supabase. Proyecto creado: **`sebasgrios`** (ref `nzbodijggjxhshqqpnue`, Frankfurt eu-central-1, free tier). Claude opera vía el **Supabase CLI ya instalado localmente**. Storage para imágenes/logos. |
+| Tooling | **Biome** (lint+format), Vitest, Playwright. NO ESLint/Prettier. |
+| BD | Supabase (Postgres + Storage), **solo lectura en build** (anon key + RLS public read). El **schema y las migraciones son del backoffice** (`sebasgrios-backoffice`); este repo no tiene `supabase/`. Proyecto: **`sebasgrios`** (ref `nzbodijggjxhshqqpnue`, Frankfurt eu-central-1, free tier). |
 | i18n | `jsonb {es, en}` en columnas traducibles. Routing `/` (es) + `/en/` con `prefixDefaultLocale:false`. |
 | Schema | Híbrido: `text[]` para highlights, tabla `technologies` reutilizable con pivots M:N. |
 | Hero | Stats computadas (años, sectores, proyectos). Badges flotantes + status pill editables desde `profile`. |
@@ -119,7 +118,7 @@ npm run e2e            # playwright
 5. **Cuando cambies un contrato** (schema, viewModel, repos) actualiza `/docs` en el mismo commit.
 6. **No `any`, no `console.log`, no comentarios** salvo invariante no obvia.
 7. **Respeta `prefers-reduced-motion`** y `prefers-color-scheme` en cualquier animación o color.
-8. **Validaciones Zod** en cualquier input externo (forms, query params, webhooks).
+8. **Solo lectura de Supabase en build** (anon key + RLS public read). Cero escrituras, cero secretos en runtime: las mutaciones viven en el backoffice (`sebasgrios-backoffice`).
 9. **Secrets** solo en `.env.local` (ignorado) o en Cloudflare Pages env vars. Nunca en repo, nunca en logs.
 10. **Imágenes** remotas desde Supabase Storage, optimizadas en build (`astro:assets` + `sharp`).
 
