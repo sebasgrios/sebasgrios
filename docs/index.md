@@ -14,7 +14,7 @@ Cada documento es autocontenido y enlaza al resto. Las decisiones cerradas con e
 | 03 | [Conventions](./03-conventions.md) | Naming, code style, commits, branching, PR. |
 | 04 | [Design system](./04-design-system.md) | Tokens, tipografía, paleta, liquid glass, animaciones, breakpoints. |
 | 05 | [Content model](./05-content-model.md) | Secciones, copy fijo vs editable, hero stats, tweaks fijos. |
-| 06 | [Data schema](./06-data-schema.md) | Tablas Supabase, columnas, índices, RLS, migraciones, seed. |
+| 06 | [Data schema](./06-data-schema.md) | Puntero: schema propiedad del backoffice; qué lee el portfolio (tipos, mappers, repos). |
 | 07 | [Internationalization](./07-i18n.md) | Locales, routing `/en/`, patrón jsonb, fallback. |
 | 08 | [Routing & pages](./08-routing-pages.md) | Árbol de páginas, anchors estables, sitemap, robots, SEO. |
 | 09 | [Components](./09-components.md) | Catálogo de componentes Astro/UI, props, uso. |
@@ -35,7 +35,7 @@ Cada documento es autocontenido y enlaza al resto. Las decisiones cerradas con e
 ## Reglas para mantener esta documentación
 
 1. **Un cambio que afecte a otra capa debe actualizar la documentación en el mismo commit.** Sin excepciones.
-2. Los documentos no contienen código de la app; solo decisiones, contratos y diagramas. El código vive en `/src` y `/supabase`.
+2. Los documentos no contienen código de la app; solo decisiones, contratos y diagramas. El código vive en `/src`.
 3. Cuando una decisión cambie, actualiza el `[DECIDIDO]` correspondiente y deja una nota `Histórico:` al final del documento con la fecha y la razón.
 4. Idioma: documentación en español; identificadores, código, SQL, commits y nombres de archivo en inglés.
 5. Si añades un documento nuevo, regístralo en esta tabla y enlázalo desde al menos un documento existente.

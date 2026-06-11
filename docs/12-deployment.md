@@ -15,11 +15,8 @@
 | `npm run format` | `biome format --write .`. |
 | `npm test` | `vitest run`. |
 | `npm run e2e` | `playwright test`. |
-| `npm run db:types` | `supabase gen types typescript --linked > src/lib/data/database.types.ts`. |
-| `npm run db:reset` | `supabase db reset` (entorno local). |
-| `npm run db:push` | `supabase db push` (entorno linked). |
 
-Los `db:*` se conservan mientras `supabase/` viva en este repo; el backoffice pasará a ser el dueño del schema (ver [13-backoffice](./13-backoffice.md)).
+No hay comandos `db:*`: el **schema** (migraciones, seed, tipos) es propiedad del repo del backoffice (`sebasgrios-backoffice`), que aplica las migraciones al Supabase vivo. Este repo solo **lee** Supabase en build. Ver [13-backoffice](./13-backoffice.md) y [06-data-schema](./06-data-schema.md).
 
 ## Variables de entorno
 

@@ -88,9 +88,6 @@ Documentos críticos:
 │   │   └── i18n.ts        # locales
 │   ├── scripts/           # effects.client.ts
 │   └── styles/            # fonts.css, globals.css
-├── supabase/
-│   ├── migrations/        # 0001_*.sql, ...
-│   └── seed.sql
 ├── e2e/                   # Playwright
 ├── astro.config.mjs
 ├── biome.json
@@ -109,10 +106,9 @@ npm test               # vitest
 npm run build          # astro check + astro build
 npm run preview        # astro preview (sirve dist/)
 npm run e2e            # playwright
-npm run db:types       # gen types from supabase
-npm run db:reset       # reset local db (migraciones + seed)
-npm run db:push        # push migrations to linked project
 ```
+
+> El **schema** (migraciones, seed, tipos) es propiedad del backoffice (`sebasgrios-backoffice`); este repo no tiene `supabase/` ni scripts `db:*`. Solo **lee** Supabase en build. Ver [`docs/06-data-schema.md`](./docs/06-data-schema.md).
 
 ## Reglas inquebrantables
 
@@ -125,7 +121,7 @@ npm run db:push        # push migrations to linked project
 7. **Respeta `prefers-reduced-motion`** y `prefers-color-scheme` en cualquier animación o color.
 8. **Validaciones Zod** en cualquier input externo (forms, query params, webhooks).
 9. **Secrets** solo en `.env.local` (ignorado) o en Cloudflare Pages env vars. Nunca en repo, nunca en logs.
-10. **Imágenes** desde Supabase Storage (no `src/images` en v3).
+10. **Imágenes** remotas desde Supabase Storage, optimizadas en build (`astro:assets` + `sharp`).
 
 ## Cómo razonar antes de cambiar código
 
