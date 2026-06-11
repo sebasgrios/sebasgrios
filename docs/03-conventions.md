@@ -120,10 +120,7 @@ Antes de cualquier commit:
 
 ## Migraciones SQL
 
-- Archivos numerados secuencialmente en `/supabase/migrations/NNNN_descripcion.sql`.
-- Nunca editar una migración ya merged; añadir una nueva.
-- Cada migración debe ser idempotente cuando sea posible (`IF NOT EXISTS`).
-- Cada migración que añada una tabla debe incluir su `RLS` y políticas en el mismo archivo.
+Las migraciones viven en el repo del **backoffice** (`sebasgrios-backoffice`), dueño del schema; este repo no tiene `supabase/`. Allí aplican estas convenciones: archivos numerados (`NNNN_descripcion.sql`), nunca editar una ya merged (añadir nueva), idempotentes cuando sea posible (`IF NOT EXISTS`), y cada tabla nueva incluye su `RLS` y políticas en el mismo archivo. Ver [06-data-schema](./06-data-schema.md).
 
 ## Seguridad
 

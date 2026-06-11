@@ -2,7 +2,7 @@
   "name": "portfolio",
   "description": "Portfolio de Sebastián González Ríos",
   "type": "module",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "private": true,
   "author": {
     "name": "Sebastián González Ríos",
@@ -23,9 +23,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "db:types": "supabase gen types typescript --linked > src/lib/data/database.types.ts",
-    "db:reset": "supabase db reset",
-    "db:push": "supabase db push",
     "astro": "astro"
   },
   "dependencies": {

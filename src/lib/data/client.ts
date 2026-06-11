@@ -11,7 +11,7 @@ export function getServerClient(): AppSupabaseClient {
   cached = createClient<Database>(SUPABASE.url, SUPABASE.anonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
     db: { schema: 'public' },
-    global: { headers: { 'x-portfolio-version': 'v3' } },
+    global: { headers: { 'x-portfolio-version': 'v4' } },
   });
   return cached;
 }
