@@ -74,23 +74,9 @@ Ejemplo:
 > 6. Verifica que los stats muestran los números correctos (+3 años, etc.).
 > Si todo OK, dime "ok" y commiteo.
 
-## Aplicar migración Supabase
+## Cambios de schema (migraciones, seed, tipos)
 
-```bash
-# crear archivo
-touch supabase/migrations/0013_descripcion.sql
-# escribir SQL idempotente
-supabase db push                # aplica al proyecto linked
-npm run db:types                # regenera tipos
-git add supabase/migrations/0013_descripcion.sql src/lib/data/database.types.ts
-git commit -m "🔨 add column X to roles"
-```
-
-## Reset local de DB
-
-```bash
-supabase db reset    # drop + migraciones + seed
-```
+El **schema es propiedad del backoffice** (`sebasgrios-backoffice`): allí viven `supabase/` (migraciones + seed) y se aplica `supabase db push` al Supabase vivo. Este repo **no** contiene `supabase/` ni scripts `db:*`. Cuando una migración cambia columnas que el portfolio lee, **sincroniza `src/lib/data/database.types.ts`** desde el backoffice y ajusta `repos.ts`/`mappers.ts`. Ver [06-data-schema](./06-data-schema.md) y [13-backoffice](./13-backoffice.md).
 
 ## Fuentes Satoshi y General Sans (self-host, hecho)
 
@@ -111,29 +97,13 @@ Se obtuvieron del subset Latin de la API de Fontshare (`api.fontshare.com/v2/css
 
 `BaseLayout.astro` hace `preload` solo de **Satoshi-Black** (H1, candidata a LCP) y **GeneralSans-Regular** (cuerpo). JetBrains Mono llega vía `@fontsource-variable/jetbrains-mono` (dependencia npm, importada en `fonts.css`), no desde `public/fonts/`.
 
-## Subir imágenes iniciales (M4)
+## Media (Storage)
 
-Claude lo orquesta usando la **Supabase CLI local del ingeniero**:
-
-1. `supabase storage create-bucket avatars hero companies projects --public` (o equivalente del CLI vigente).
-2. Subir los assets:
-   ```bash
-   supabase storage cp src/images/avatar.webp        ss:///avatars/avatar.webp
-   supabase storage cp src/images/sebasgrios.webp    ss:///hero/photo.webp
-   supabase storage cp /tmp/design-extract/sebasgrios/project/portfolio/logos/search-it.jpeg ss:///companies/search-it.jpeg
-   supabase storage cp /tmp/design-extract/sebasgrios/project/portfolio/logos/ntt-data.jpeg  ss:///companies/ntt-data.jpeg
-   supabase storage cp src/images/bastiangr.webp     ss:///projects/bastiangr.webp
-   # ... resto de proyectos
-   ```
-3. Anotar las URLs públicas (`https://<ref>.supabase.co/storage/v1/object/public/<bucket>/<path>`).
-4. Reemplazar URLs en `/supabase/seed.sql`.
-5. `supabase db reset` para resembrar.
+Los buckets de imágenes (avatar, hero, logos de empresas, capturas de proyectos) viven en el **mismo Supabase Storage**, y su gestión (subida, reemplazo, seed) es parte del **backoffice** (`sebasgrios-backoffice`). El portfolio solo consume las URLs públicas (`https://<ref>.supabase.co/storage/v1/object/public/<bucket>/<path>`), optimizadas en build vía `astro:assets` + `sharp` (ver [01-architecture](./01-architecture.md)).
 
 ## Añadir/editar contenido (rol, proyecto, etc.)
 
-Vía el **backoffice** (repo aparte `sebasgrios-backoffice`): edita la entidad y pulsa **Publicar**, que dispara el deploy hook de Cloudflare y reconstruye este sitio estático.
-
-Para sembrar contenido inicial sin backoffice (bootstrap), aún se puede editar `/supabase/seed.sql` + `supabase db reset`.
+Vía el **backoffice** (repo aparte `sebasgrios-backoffice`): edita la entidad y pulsa **Publicar**, que dispara el deploy hook de Cloudflare y reconstruye este sitio estático. El seed de contenido inicial también vive allí.
 
 ## Cambiar el accent del portfolio
 
@@ -153,8 +123,8 @@ Cualquier cambio en contrato (schema, viewModel, repos) **debe** actualizar `/do
 | Flash de tema al cargar | Anti-flash script roto o cargado tarde | Verifica que el `<script>` inline está **antes** del `<link rel="stylesheet">`. |
 | Hydration mismatch | JS modifica DOM antes de Astro | Mover JS dentro de `<script>` deferred. |
 | Imagen lenta en LCP | Sin `fetchpriority="high"` o sin `loading="eager"` | Marcar la imagen del hero como eager + fetchpriority. |
-| `astro check` falla por tipos | DB types desactualizados | `npm run db:types`. |
-| RLS bloquea lectura desde el portfolio | Falta política `public read` | Añadir migración. |
+| `astro check` falla por tipos | `database.types.ts` desactualizado | Sincronizar `src/lib/data/database.types.ts` desde el backoffice. |
+| RLS bloquea lectura desde el portfolio | Falta política `public read` | Añadir migración en el backoffice. |
 
 ## Cuándo pedir al ingeniero antes de actuar
 

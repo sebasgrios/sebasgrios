@@ -171,4 +171,4 @@ Se migra desde:
 - `data.jsx` del diseño (v3 — fuente nueva con companies/roles/sectores).
 - `perfil_laboral.json` adjunto en el design archive (para datos finos).
 
-El script de seed vive en `/supabase/seed.sql` y se aplica con `supabase db reset`.
+El seed de contenido es propiedad del **backoffice** (`sebasgrios-backoffice`), que posee `supabase/` (migraciones + seed). Ver [06-data-schema](./06-data-schema.md) y [13-backoffice](./13-backoffice.md).
