@@ -2,6 +2,25 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). El proyecto sigue SemVer.
 
+## [4.3.0] — 2026-06-14
+
+### Changed
+
+- **Imagen OpenGraph rediseñada**: `/og/{locale}.png` se reconstruye a partir del diseño exportado de Claude Design, sobre los tokens del sistema «Liquid Glass». Layout de dos columnas (1200×630): a la izquierda el **avatar circular** en un anillo de cristal (con _fallback_ a iniciales en degradado acento→magenta si `profile.avatarUrl`/`photoUrl` no existe); a la derecha **nombre + primer apellido** en Satoshi Black 92px y la línea de rol con el diamante de acento, el puesto localizado y `+N años de experiencia` resaltado. _Blobs_ radiales de atmósfera azul/magenta. Se mantiene la salida `image/png` (Satori → resvg) y el prerender de ambos locales.
+
+### Added
+
+- **Fuentes TTF para Satori** (`src/assets/og/`): `Satoshi-Black`, `GeneralSans-Medium` y `GeneralSans-Semibold`, ya que Satori no parsea WOFF2. El avatar (WebP en Storage) se normaliza a PNG con `sharp` antes de incrustarlo como _data URI_, de modo que el _build_ estático no depende del host de Storage en tiempo de render.
+
+### Removed
+
+- **`inter-latin-500.ttf`**: la fuente Inter del OG anterior deja de usarse.
+
+### Fixed
+
+- **OG · rol largo**: la línea de rol se ajusta de tamaño (desde 25px, mínimo 16px) para que un puesto localizado largo no se recorte en el borde de la columna.
+- **OG · `initWasm`**: `ensureWasm` tolera un runtime WASM ya inicializado (robustez ante _hot-reload_ y múltiples páginas en un mismo proceso de _build_).
+
 ## [4.2.0] — 2026-06-12
 
 ### Removed
