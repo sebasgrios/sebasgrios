@@ -1,0 +1,36 @@
+name: Bug report
+description: Report something that is not working as expected on the site.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected to happen.
+      placeholder: When I open the timeline on mobile, ...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can the issue be reproduced?
+      placeholder: |
+        1. Go to '...'
+        2. Scroll to '...'
+        3. See error
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Affected page
+      description: The URL where the issue occurs.
+      placeholder: https://sebasgrios.es/es/
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, operating system and device.
+      placeholder: Chrome 140 · macOS 15 · iPhone 15

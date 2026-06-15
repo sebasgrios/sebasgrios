@@ -8,7 +8,7 @@ test.describe('public content', () => {
     await expect(page.locator('.hero__role')).toHaveText('IA-Driven Engineer');
     await expect(page.locator('[data-nav-link]')).toHaveCount(4);
     await expect(page.locator('#path')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Lorem Platform' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'BastianGR' })).toBeVisible();
     await expect(page.locator('.footer__brand')).toHaveText('SebasGRios');
   });
 
@@ -20,9 +20,11 @@ test.describe('public content', () => {
 
   test('private-repo project hides the code button', async ({ page }) => {
     await page.goto('/es/');
-    // Three projects, all have a demo link; only two expose a code link.
-    await expect(page.getByRole('link', { name: 'Ver demo' })).toHaveCount(3);
-    await expect(page.getByRole('link', { name: 'Código' })).toHaveCount(2);
+    // Three projects, all have a demo link; only one exposes a code link
+    // (BastianGR is marked privateRepo, Clara Romero has no repo).
+    // `exact` avoids matching the project thumbnail's "{name} — Ver página" label.
+    await expect(page.getByRole('link', { name: 'Ver página', exact: true })).toHaveCount(3);
+    await expect(page.getByRole('link', { name: 'Código', exact: true })).toHaveCount(1);
   });
 
   test('root redirects to a locale', async ({ page }) => {
