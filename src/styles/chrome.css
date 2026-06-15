@@ -1,5 +1,5 @@
 /* =========================================================================
-   Site chrome: header, nav, language + theme controls, mobile menu.
+   Site chrome: header, nav, theme control, mobile menu.
    ========================================================================= */
 .header {
   position: fixed;
@@ -135,31 +135,6 @@
 .icon-btn svg {
   width: 18px;
   height: 18px;
-}
-
-.lang-toggle {
-  display: flex;
-  align-items: center;
-  padding: 3px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--bg-elev);
-  font-family: var(--font-mono);
-  font-size: 12px;
-}
-.lang-toggle a {
-  cursor: pointer;
-  color: var(--fg-faint);
-  padding: 5px 9px;
-  border-radius: 999px;
-  font-weight: 600;
-  transition:
-    color 0.2s var(--ease),
-    background-color 0.2s var(--ease);
-}
-.lang-toggle a.is-active {
-  color: var(--bg);
-  background: var(--fg);
 }
 
 /* Theme button: show the icon for the action available in the current theme. */

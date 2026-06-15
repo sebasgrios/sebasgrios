@@ -34,20 +34,6 @@ const t = useTranslations(locale);
     </nav>
 
     <div class="header__actions">
-      <div class="lang-toggle" role="group" aria-label={t('a11y.lang')}>
-        <a
-          href="/es/"
-          class:list={['lang', { 'is-active': locale === 'es' }]}
-          hreflang="es"
-          data-astro-prefetch
-        >ES</a>
-        <a
-          href="/en/"
-          class:list={['lang', { 'is-active': locale === 'en' }]}
-          hreflang="en"
-          data-astro-prefetch
-        >EN</a>
-      </div>
       <button
         type="button"
         class="icon-btn theme"
