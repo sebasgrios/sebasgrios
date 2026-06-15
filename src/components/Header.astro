@@ -96,6 +96,16 @@ const t = useTranslations(locale);
 
   // Header: shadow once scrolled, hide on scroll-down / reveal on scroll-up.
   let lastY = 0;
+  // While the pinned timeline is engaged (desktop only: vertical scroll drives
+  // its horizontal travel), keep the header hidden — scrolling back through the
+  // cards reads as "scroll up" and would otherwise reveal it. The pin
+  // (.is-pinned) only exists on desktop with motion allowed.
+  const timeline = document.querySelector<HTMLElement>('[data-timeline]');
+  const timelineEngaged = () => {
+    if (!timeline?.classList.contains('is-pinned')) return false;
+    const rect = timeline.getBoundingClientRect();
+    return rect.top <= 0 && rect.bottom >= window.innerHeight;
+  };
   // While the user navigates via an in-page anchor, the smooth scroll travels
   // downward and would otherwise hide the header. Lock it visible until the
   // scroll settles (no scroll event for a short window).
@@ -122,6 +132,11 @@ const t = useTranslations(locale);
       header?.classList.remove('is-hidden');
       lastY = y;
       releaseNavLock();
+      return;
+    }
+    if (timelineEngaged()) {
+      header?.classList.add('is-hidden');
+      lastY = y;
       return;
     }
     header?.classList.toggle('is-hidden', y > lastY && y > 200);
