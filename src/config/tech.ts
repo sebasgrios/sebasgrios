@@ -22,6 +22,7 @@ export const TECH: Record<string, string> = {
   Java: '#ED8B00',
   'C#': '#99CC00',
   Astro: '#FF5D01',
+  Azure: '#0078D4',
   Cloudflare: '#F38020',
   WordPress: '#21759B',
   Servidores: '#22C55E',
