@@ -1,9 +1,16 @@
 ---
+import { seo } from '@/config/seo';
 import { DEFAULT_LOCALE, site } from '@/config/site';
 
 // Root landing: detects the browser language client-side and redirects to the
 // matching locale. The <noscript> fallback and crawlers go to the default.
 const fallback = `/${DEFAULT_LOCALE}/`;
+
+// Social scrapers (LinkedIn, X, Discord, WhatsApp) don't run the redirect JS,
+// so the bare domain must carry its own Open Graph card — mirroring the default
+// locale's metadata. Stays noindex; OG tags are still read by social crawlers.
+const meta = seo[DEFAULT_LOCALE];
+const ogImage = `${site.url}/og/${DEFAULT_LOCALE}.png`;
 ---
 
 <!doctype html>
@@ -15,7 +22,21 @@ const fallback = `/${DEFAULT_LOCALE}/`;
     <link rel="alternate" hreflang="es" href={`${site.url}/es/`} />
     <link rel="alternate" hreflang="en" href={`${site.url}/en/`} />
     <link rel="alternate" hreflang="x-default" href={`${site.url}/`} />
-    <title>SebasGRios</title>
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={meta.ogTitle} />
+    <meta property="og:description" content={meta.ogDescription} />
+    <meta property="og:url" content={`${site.url}/${DEFAULT_LOCALE}/`} />
+    <meta property="og:locale" content={meta.ogLocale} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.ogTitle} />
+    <meta name="twitter:description" content={meta.ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
     <script is:inline>
       (() => {
         const lang = (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
