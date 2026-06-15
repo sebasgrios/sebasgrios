@@ -119,10 +119,13 @@
     box-shadow 0.3s var(--ease),
     transform 0.3s var(--ease);
 }
-.tl-card:hover {
-  border-color: var(--dot);
-  box-shadow: 0 16px 50px -22px rgba(0, 0, 0, 0.3);
-  transform: translateY(-3px);
+/* Hover lift only for real pointers — on touch, :hover sticks after a tap. */
+@media (hover: hover) {
+  .tl-card:hover {
+    border-color: var(--dot);
+    box-shadow: 0 16px 50px -22px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+  }
 }
 .tl-card__node {
   position: absolute;
