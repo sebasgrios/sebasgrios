@@ -1,0 +1,55 @@
+{
+  "nav.home": "Home",
+  "nav.now": "Now",
+  "nav.path": "Journey",
+  "nav.work": "Work",
+
+  "a11y.skip": "Skip to content",
+  "a11y.theme": "Toggle theme",
+  "a11y.menu": "Open menu",
+
+  "hero.role": "AI-Driven Engineer",
+  "hero.desc": "I design and build maintainable, growth-ready software systems — from legacy monoliths to microfrontends — leaning on AI-driven workflows to ship faster and with sharper engineering judgement.",
+  "hero.claim": "Building scalable software with AI-driven workflows.",
+  "hero.contact": "Get in touch",
+  "hero.linkedin": "LinkedIn",
+  "hero.m.exp": "Years of experience",
+  "hero.m.sectors": "Sectors",
+  "hero.m.deployed": "Deployed projects",
+  "hero.available": "Open to new opportunities",
+  "hero.media": "Portrait / product shot",
+
+  "now.k": "Now",
+  "now.title": "What I am working on",
+  "now.i.label": "Especially interested in",
+
+  "path.k": "Journey",
+  "path.title": "Experience & education",
+  "path.lead": "A single timeline merging professional experience and academic education, from most recent to oldest.",
+  "path.hint": "Scroll to travel the timeline",
+  "path.scroll": "scroll",
+  "path.or": "or",
+
+  "work.k": "Work",
+  "work.title": "Personal projects",
+  "work.demo": "View site",
+  "work.code": "Code",
+
+  "footer.top": "Back to top",
+
+  "m.remote": "Remote",
+  "m.hybrid": "Hybrid",
+  "m.onsite": "On-site",
+  "kind.work": "Experience",
+  "kind.edu": "Education",
+  "dur.year": "yr",
+  "dur.years": "yrs",
+  "dur.month": "mo",
+  "dur.months": "mos",
+  "present": "Present",
+
+  "notFound.title": "404",
+  "notFound.lead": "It looks like this route does not exist.",
+  "notFound.sub": "Let's go build something useful instead.",
+  "notFound.home": "Back to home"
+}

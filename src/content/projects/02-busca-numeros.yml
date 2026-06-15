@@ -1,0 +1,11 @@
+order: 2
+name: "BuscaNumeros"
+date: "2025"
+image: "buscanumeros"
+desc:
+  es: "Juego web de agilidad visual para localizar números ocultos contrarreloj, desarrollado íntegramente con asistencia de IA y desplegado en el edge para una respuesta instantánea."
+  en: "A web game of visual agility for spotting hidden numbers against the clock, built end-to-end with AI assistance and deployed on the edge for instant response."
+tech: ["Claude Code", "Next.js", "Cloudflare"]
+demo: "https://busca-numeros.pages.dev"
+repo: "https://github.com/sebasgrios/busca-numeros"
+privateRepo: false

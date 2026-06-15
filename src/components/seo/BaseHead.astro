@@ -1,0 +1,62 @@
+---
+import { seo } from '@/config/seo';
+import { site } from '@/config/site';
+import type { Locale } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+  /** Override the per-locale SEO title. */
+  title?: string;
+  /** Override the per-locale SEO description. */
+  description?: string;
+  /** Path after the locale segment (e.g. "" for home). Leading slash optional. */
+  path?: string;
+  noindex?: boolean;
+}
+
+const { locale, title, description, path = '', noindex = false } = Astro.props;
+
+const meta = seo[locale];
+const pageTitle = title ?? meta.title;
+const pageDescription = description ?? meta.description;
+
+const clean = path.replace(/^\/+/, '');
+const localizedPath = (l: Locale) => (clean ? `${site.url}/${l}/${clean}` : `${site.url}/${l}/`);
+
+const canonical = localizedPath(locale);
+const ogImage = `${site.url}/og/${locale}.png`;
+const robots = noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#fcfcfc" />
+
+<title>{pageTitle}</title>
+<meta name="description" content={pageDescription} />
+<meta name="author" content={site.author} />
+<meta name="robots" content={robots} />
+<meta name="keywords" content={meta.keywords.join(', ')} />
+<link rel="canonical" href={canonical} />
+
+<link rel="alternate" hreflang="es" href={localizedPath('es')} />
+<link rel="alternate" hreflang="en" href={localizedPath('en')} />
+<link rel="alternate" hreflang="x-default" href={`${site.url}/`} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={meta.ogTitle} />
+<meta property="og:description" content={meta.ogDescription} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={meta.ogLocale} />
+<meta property="og:locale:alternate" content={seo[locale === 'es' ? 'en' : 'es'].ogLocale} />
+<meta property="og:image" content={ogImage} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={meta.ogTitle} />
+<meta name="twitter:description" content={meta.ogDescription} />
+<meta name="twitter:image" content={ogImage} />
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="sitemap" href="/sitemap-index.xml" />

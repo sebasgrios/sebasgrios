@@ -1,0 +1,62 @@
+---
+import { seo } from '@/config/seo';
+import { site } from '@/config/site';
+import type { Locale } from '@/config/site';
+import { social } from '@/config/social';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const meta = seo[locale];
+const home = `${site.url}/${locale}/`;
+
+// knowsAbout reinforces the professional identity for search engines.
+const knowsAbout = [
+  'Frontend Architecture',
+  'AI Engineering',
+  'Developer Experience',
+  'Cloud Infrastructure',
+];
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.author,
+  alternateName: site.name,
+  jobTitle: meta.ogTitle.split('—')[1]?.trim() ?? 'AI-Driven Engineer',
+  description: meta.ogDescription,
+  url: site.url,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.location.locality,
+    addressCountry: site.location.country,
+  },
+  knowsAbout,
+  sameAs: [social.github, social.linkedin],
+};
+
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  inLanguage: [...site.locales],
+  author: { '@type': 'Person', name: site.author },
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: home },
+    { '@type': 'ListItem', position: 2, name: 'Journey', item: `${home}#path` },
+    { '@type': 'ListItem', position: 3, name: 'Work', item: `${home}#work` },
+  ],
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(person)} />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(website)} />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />

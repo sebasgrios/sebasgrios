@@ -1,0 +1,25 @@
+---
+/**
+ * Anti-flash theme bootstrap. Runs synchronously in <head> before first paint
+ * so the correct theme is applied with no flash of the wrong colours.
+ * Source of truth: localStorage `sgr-theme` → falls back to OS preference.
+ * Mirrors the prototype keys (sgr-theme / sgr-lang).
+ */
+---
+
+<script is:inline>
+  (() => {
+    try {
+      const saved = localStorage.getItem('sgr-theme');
+      const theme =
+        saved === 'light' || saved === 'dark'
+          ? saved
+          : window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+</script>

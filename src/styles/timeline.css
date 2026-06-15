@@ -1,0 +1,287 @@
+/* =========================================================================
+   Timeline (Trayectoria) — a single horizontal track of experience + education.
+
+   Progressive enhancement:
+   · Base (no-JS / reduced-motion): the viewport is a normal horizontal scroll
+     container, so every card is reachable without scripts.
+   · `.is-pinned` (added by JS when motion is allowed): the section grows tall,
+     the pin sticks, and vertical scroll drives horizontal travel (Apple style).
+
+   Invariant: no ancestor of `.timeline__pin` may set overflow hidden/auto/scroll
+   or `position: sticky` breaks. `body { overflow-x: clip }` keeps that safe.
+   ========================================================================= */
+.timeline {
+  padding-top: var(--section-pad);
+  position: relative;
+  /* Single source of truth for the card width — also drives the pinned
+     lead/trail padding that centers the first and last cards. */
+  --tl-card-w: min(86vw, 420px);
+}
+.timeline__pin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.timeline__head {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  width: 100%;
+  padding-inline: var(--gutter);
+}
+.timeline__lead {
+  margin-top: 14px;
+  max-width: 52ch;
+}
+.timeline__progress {
+  height: 2px;
+  background: var(--line);
+  border-radius: 2px;
+  margin-top: 22px;
+  overflow: hidden;
+  display: none;
+}
+.timeline__progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+.timeline__viewport {
+  margin-top: clamp(1.5rem, 3vw, 2.4rem);
+  position: relative;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 20px;
+}
+.timeline__track {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1rem, 2vw, 1.6rem);
+  padding-inline: var(--gutter);
+  /* `max-content` grows the track with its cards (so it overflows and the pin
+     can drive horizontal travel); `min-width: 100%` + `justify-content: center`
+     centers the cards when they fit, without clipping the first card when they
+     don't (no free space to distribute once overflowing). */
+  width: max-content;
+  min-width: 100%;
+  justify-content: center;
+}
+.timeline__track::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 92px;
+  height: 1px;
+  background: var(--line);
+  z-index: 0;
+}
+
+/* ---------- Pinned mode (JS + motion allowed) ---------- */
+.timeline.is-pinned .timeline__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.timeline.is-pinned .timeline__viewport {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+.timeline.is-pinned .timeline__track {
+  /* Lead/trail space = half the viewport minus half a card, so the first card
+     starts centered and the last card ends centered as the pin scrubs. */
+  padding-inline: calc(50% - var(--tl-card-w) / 2);
+  will-change: transform;
+}
+.timeline.is-pinned .timeline__progress {
+  display: block;
+}
+
+/* ---------- Cards ---------- */
+.tl-card {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: var(--tl-card-w);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 26px 26px 28px;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: center;
+  transition:
+    border-color 0.3s var(--ease),
+    box-shadow 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+.tl-card:hover {
+  border-color: var(--dot);
+  box-shadow: 0 16px 50px -22px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+}
+.tl-card__node {
+  position: absolute;
+  top: -45px;
+  left: 30px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+}
+.tl-card__node::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 22px;
+  background: var(--line);
+}
+.tl-card__top {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 16px;
+}
+.tl-card__logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 15px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  color: var(--fg);
+}
+/* Brand logo: an optimized square avatar filling the same box the kind icons
+   use (full-bleed, clipped to the box radius). */
+.tl-card__logo--img {
+  padding: 0;
+  overflow: hidden;
+  background: none;
+}
+.tl-card__logo--img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.tl-card__kind {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--fg-faint);
+}
+.tl-card__kind[data-kind="edu"] {
+  /* Accent as small text fails AA; keep the accent border but use a readable
+     foreground (with the Neutral accent the two read the same anyway). */
+  color: var(--fg-soft);
+  border-color: color-mix(in oklch, var(--accent) 40%, transparent);
+}
+.tl-card__org {
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.tl-card__role {
+  color: var(--fg-soft);
+  font-size: var(--step-0);
+  margin-top: 2px;
+}
+.tl-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--fg-faint);
+}
+.tl-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+/* Force the sector onto its own line so every card reads the same: mode +
+   location on the first line, sector on the second. */
+.tl-card__meta-sector {
+  flex-basis: 100%;
+}
+.tl-card__meta svg {
+  width: 13px;
+  height: 13px;
+}
+.tl-card__dates {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.tl-card__dates .yr {
+  font-family: var(--font-mono);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+/* Duration as a discreet label pill — spelled-out units, no clock icon, so it
+   never reads as a clock time (e.g. "8 m" → "8 meses"). */
+.tl-card__dates .dur {
+  font-size: var(--step--1);
+  color: var(--fg-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 9px;
+  white-space: nowrap;
+}
+.tl-card__desc {
+  margin-top: 14px;
+  color: var(--fg-soft);
+  font-size: var(--step-0);
+  flex: 1;
+}
+.tl-card__tags {
+  margin-top: 18px;
+}
+
+.tl-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  color: var(--fg-faint);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+.tl-hint svg {
+  width: 16px;
+  height: 16px;
+}
+.tl-hint kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+}
+/* The "scroll ↓" cue only applies in pinned mode. */
+.timeline:not(.is-pinned) .tl-hint .keys {
+  display: none;
+}

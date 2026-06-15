@@ -1,0 +1,97 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import type { Locale } from '@/config/site';
+import { pickLocalized, useTranslations } from '@/i18n';
+import { getProjects } from '@/lib/content';
+import Icon from '../Icon.astro';
+import TagRow from '../TagRow.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const projects = await getProjects();
+const total = projects.length;
+
+// Project screenshots keyed by `image` slug. Optimized webp in src/assets/projects
+// runs through the asset pipeline (srcset/webp); null slug falls back to a placeholder.
+const shotModules = import.meta.glob<{ default: ImageMetadata }>('../../assets/projects/*.webp', {
+  eager: true,
+});
+const shots: Record<string, ImageMetadata> = {};
+for (const [path, mod] of Object.entries(shotModules)) {
+  const name = path.split('/').pop()?.replace('.webp', '');
+  if (name) shots[name] = mod.default;
+}
+---
+
+<section class="section shell" id="work">
+  <div class="section__head">
+    <div>
+      <p class="eyebrow">{t('work.k')}</p>
+      <h2 class="section__title" style="margin-top:12px">{t('work.title')}</h2>
+    </div>
+    <span class="section__num">— 03</span>
+  </div>
+
+  <div class="proj">
+    {
+      projects.map((entry, i) => {
+        const p = entry.data;
+        return (
+          <div class:list={['proj__row', { flip: i % 2 === 1 }]}>
+            <span class="proj__num reveal" data-d="1">
+              {String(i + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+            </span>
+            <h3 class="proj__name reveal" data-d="1">{p.name}</h3>
+            <p class="proj__date mono reveal" data-d="1">{p.date}</p>
+            <a
+              class="proj__media reveal"
+              data-d="1"
+              href={p.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${p.name} — ${t('work.demo')}`}
+            >
+              {p.image && shots[p.image] ? (
+                <Image
+                  class="proj__shot"
+                  src={shots[p.image]}
+                  alt={p.name}
+                  widths={[600, 900, 1400]}
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="media-ph">
+                  <div class="frame">
+                    <span class="media-ph__tag mono">project shot · {p.name}</span>
+                  </div>
+                </div>
+              )}
+            </a>
+            <p class="proj__desc reveal" data-d="1">{pickLocalized(p.desc, locale)}</p>
+            <div class="proj__tags reveal" data-d="1">
+              <TagRow items={p.tech} tabbable />
+            </div>
+            <div class="proj__links reveal" data-d="1">
+              <a class="btn btn--primary" href={p.demo} target="_blank" rel="noopener noreferrer">
+                {t('work.demo')}
+                <Icon name="arrowUpRight" size={16} />
+              </a>
+              {!p.privateRepo && p.repo && (
+                <a class="btn btn--ghost" href={p.repo} target="_blank" rel="noopener noreferrer">
+                  <Icon name="github" size={16} />
+                  {t('work.code')}
+                </a>
+              )}
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>
