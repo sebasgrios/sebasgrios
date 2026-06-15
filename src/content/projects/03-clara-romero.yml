@@ -1,0 +1,11 @@
+order: 3
+name: "Clara Romero"
+date: "2019"
+image: "clararomero"
+desc:
+  es: "Mi primer proyecto personal: un sitio web corporativo para una peluquería local, orientado a reforzar su presencia online y la captación de clientes."
+  en: "My first personal project: a corporate website for a local hair salon, aimed at strengthening its online presence and client acquisition."
+tech: ["WordPress"]
+demo: "https://clararomero.com"
+repo: null
+privateRepo: false

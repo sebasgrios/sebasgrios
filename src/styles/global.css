@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./base.css";
+@import "./components.css";
+@import "./chrome.css";
+@import "./hero.css";
+@import "./now.css";
+@import "./timeline.css";
+@import "./projects.css";
+@import "./footer.css";
+
+/* Dark mode is driven by the `data-theme` attribute (system + manual toggle),
+   not the OS media query, so the manual switch wins. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Expose the design tokens to Tailwind utilities. `inline` keeps them as
+   references, so theme switching (data-theme) stays live. */
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-fg-soft: var(--fg-soft);
+  --color-fg-faint: var(--fg-faint);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-dot: var(--dot);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --radius-card: var(--radius);
+  --radius-card-lg: var(--radius-lg);
+
+  --ease-smooth: var(--ease);
+  --ease-out-smooth: var(--ease-out);
+}

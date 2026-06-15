@@ -1,0 +1,183 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import type { Locale } from '@/config/site';
+import { type UIKey, pickLocalized, useTranslations } from '@/i18n';
+import { getTimeline } from '@/lib/content';
+import { formatDuration, formatRange } from '@/lib/dates';
+import Icon from '../Icon.astro';
+import TagRow from '../TagRow.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const items = await getTimeline();
+
+const units = {
+  year: t('dur.year'),
+  years: t('dur.years'),
+  month: t('dur.month'),
+  months: t('dur.months'),
+};
+const present = t('present');
+
+// Brand logos keyed by `logoImg` slug. Optimized webp avatars in src/assets/brand
+// are run through the asset pipeline (srcset/webp); null slug falls back to a
+// kind icon (school / office).
+const brandModules = import.meta.glob<{ default: ImageMetadata }>('../../assets/brand/*.webp', {
+  eager: true,
+});
+const brandLogos: Record<string, ImageMetadata> = {};
+for (const [path, mod] of Object.entries(brandModules)) {
+  const name = path.split('/').pop()?.replace('.webp', '');
+  if (name) brandLogos[name] = mod.default;
+}
+---
+
+<section class="timeline" id="path" data-timeline>
+  <div class="timeline__pin">
+    <div class="timeline__head">
+      <div class="section__head" style="margin-bottom:0">
+        <div>
+          <p class="eyebrow">{t('path.k')}</p>
+          <h2 class="section__title" style="margin-top:12px">{t('path.title')}</h2>
+        </div>
+        <span class="section__num">— 02</span>
+      </div>
+      <p class="now__lead timeline__lead">{t('path.lead')}</p>
+      <div class="timeline__progress" aria-hidden="true"><i data-timeline-fill></i></div>
+    </div>
+
+    <div class="timeline__viewport" tabindex="0" role="group" aria-label={t('path.title')}>
+      <div class="timeline__track" data-timeline-track>
+        {
+          items.map((item) => (
+            <article class="tl-card">
+              <span class="tl-card__node" aria-hidden="true" />
+              <div class="tl-card__top">
+                {item.logoImg && brandLogos[item.logoImg] ? (
+                  <div class="tl-card__logo tl-card__logo--img">
+                    <Image
+                      src={brandLogos[item.logoImg]}
+                      alt={pickLocalized(item.org, locale)}
+                      width={44}
+                      height={44}
+                      densities={[2, 3]}
+                      loading="lazy"
+                    />
+                  </div>
+                ) : (
+                  <div class="tl-card__logo">
+                    <Icon name={item.kind === 'edu' ? 'graduationCap' : 'building'} size={22} />
+                  </div>
+                )}
+                <span class="tl-card__kind" data-kind={item.kind}>
+                  {t(item.kind === 'edu' ? 'kind.edu' : 'kind.work')}
+                </span>
+              </div>
+              <h3 class="tl-card__org">{pickLocalized(item.org, locale)}</h3>
+              <p class="tl-card__role">{pickLocalized(item.role, locale)}</p>
+              <div class="tl-card__meta">
+                <span>
+                  <Icon name="briefcase" size={13} />
+                  {t(`m.${item.mode}` as UIKey)}
+                </span>
+                <span>
+                  <Icon name="mapPin" size={13} />
+                  {item.loc}
+                </span>
+                <span class="tl-card__meta-sector">
+                  <Icon name="compass" size={13} />
+                  {pickLocalized(item.sector, locale)}
+                </span>
+              </div>
+              <div class="tl-card__dates">
+                <span class="yr">{formatRange(item.start, item.end, present)}</span>
+                <span class="dur">{formatDuration(item.start, item.end, units)}</span>
+              </div>
+              <p class="tl-card__desc">{pickLocalized(item.desc, locale)}</p>
+              <div class="tl-card__tags">
+                <TagRow items={item.tech} />
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="tl-hint">
+      <Icon name="arrowRight" size={16} />
+      <span>{t('path.hint')}</span>
+      <span class="keys"><kbd>{t('path.scroll')} ↓</kbd></span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-timeline]');
+  const track = document.querySelector<HTMLElement>('[data-timeline-track]');
+  const fill = document.querySelector<HTMLElement>('[data-timeline-fill]');
+
+  if (section && track) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const desktop = window.matchMedia('(min-width: 901px)');
+    const viewport = track.parentElement as HTMLElement;
+
+    // Distance the track must travel so the first card starts centered and the
+    // last ends centered (the track's lead/trail padding positions both ends).
+    const travel = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+
+    const measure = () => {
+      section.style.minHeight = `calc(100vh + ${travel()}px)`;
+    };
+
+    let pinned = false;
+    let raf = 0;
+
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        const total = section.offsetHeight - window.innerHeight;
+        const scrolled = Math.min(Math.max(-rect.top, 0), total);
+        const p = total > 0 ? scrolled / total : 0;
+        track.style.transform = `translate3d(${-p * travel()}px,0,0)`;
+        if (fill) fill.style.width = `${(p * 100).toFixed(2)}%`;
+      });
+    };
+
+    const enable = () => {
+      pinned = true;
+      section.classList.add('is-pinned');
+      measure();
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    };
+
+    const disable = () => {
+      pinned = false;
+      section.classList.remove('is-pinned');
+      section.style.minHeight = '';
+      track.style.transform = '';
+      window.removeEventListener('scroll', onScroll);
+    };
+
+    // Pin only on desktop, when motion is allowed and the track overflows.
+    // On mobile the cards stay a native horizontal swipe and the page keeps its
+    // normal vertical scroll.
+    const sync = () => {
+      const shouldPin = !reduce.matches && desktop.matches && travel() > 0;
+      if (shouldPin && !pinned) enable();
+      else if (!shouldPin && pinned) disable();
+      else if (pinned) measure();
+    };
+
+    sync();
+    window.addEventListener('resize', sync, { passive: true });
+    reduce.addEventListener('change', sync);
+    desktop.addEventListener('change', sync);
+  }
+</script>

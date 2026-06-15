@@ -1,0 +1,35 @@
+---
+import { TECH_ICON, techColor } from '@/config/tech';
+import Icon from './Icon.astro';
+import { brandPath } from './icons/brand';
+
+interface Props {
+  name: string;
+  /** Make the tag keyboard-focusable (used inside project cards). */
+  tabbable?: boolean;
+}
+
+const { name, tabbable = false } = Astro.props;
+const color = techColor(name);
+const logo = brandPath(name);
+const icon = TECH_ICON[name];
+---
+
+<span class="tech-tag" style={`--tc:${color}`} tabindex={tabbable ? 0 : undefined}>
+  <span class="ico" aria-hidden="true">
+    {
+      logo ? (
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+          <path d={logo} />
+        </svg>
+      ) : icon ? (
+        <Icon name={icon} size={13} stroke={2} />
+      ) : (
+        <span
+          style={`width:11px;height:11px;border-radius:4px;display:block;background:${color};box-shadow:0 0 0 1px color-mix(in oklch, ${color} 50%, transparent)`}
+        />
+      )
+    }
+  </span>
+  {name}
+</span>

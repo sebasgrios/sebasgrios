@@ -1,17 +1,10 @@
-import { defineConfig } from 'vitest/config';
+/// <reference types="vitest/config" />
+import { getViteConfig } from 'astro/config';
 
-export default defineConfig({
+export default getViteConfig({
   test: {
+    globals: true,
     environment: 'node',
-    include: ['src/**/*.test.ts'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'html'],
-    },
-  },
-  resolve: {
-    alias: {
-      '@': new URL('./src/', import.meta.url).pathname,
-    },
+    include: ['src/**/*.{test,spec}.ts'],
   },
 });

@@ -1,0 +1,28 @@
+---
+import { type IconName, ICON_PATHS } from './icons/paths';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  stroke?: number;
+  class?: string;
+}
+
+const { name, size = 20, stroke = 2, class: className } = Astro.props;
+const paths = ICON_PATHS[name];
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={stroke}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  {paths.map((d) => <path d={d} />)}
+</svg>

@@ -1,0 +1,17 @@
+start: "2019-09"
+end: "2021-06"
+mode: onsite
+loc: "Málaga, ES"
+org:
+  es: "IES Pablo Picasso"
+  en: "IES Pablo Picasso"
+role:
+  es: "Grado Superior · DAM"
+  en: "Higher Degree · Multiplatform App Development"
+sector:
+  es: "Educación"
+  en: "Education"
+desc:
+  es: "Fundamentos de programación orientada a objetos, estructuras de datos y diseño de soluciones. Profundicé en bases de datos, aplicaciones de escritorio y seguridad, consolidando una base técnica versátil."
+  en: "Fundamentals of object-oriented programming, data structures and solution design. Deepened my knowledge of databases, desktop applications and security, consolidating a versatile technical foundation."
+tech: ["Java", "C#", "MariaDB"]

@@ -1,172 +1,43 @@
 ---
-import BgField from '@/components/BgField.astro';
-import BgNoise from '@/components/BgNoise.astro';
-import type { Locale } from '@/config/i18n';
-import { SITE } from '@/config/site';
-import '@/styles/globals.css';
+import BaseHead from '@/components/seo/BaseHead.astro';
+import Schema from '@/components/seo/Schema.astro';
+import ThemeScript from '@/components/ThemeScript.astro';
+import type { Locale } from '@/config/site';
+import { useTranslations } from '@/i18n';
+import '@/styles/global.css';
 
 interface Props {
-  title: string;
-  description: string;
   locale: Locale;
-  canonical?: string;
-  ogImage?: string;
-  ogImageAlt?: string;
-  personName?: string;
-  personRole?: string;
-  worksFor?: string;
-  alumniOf?: string[];
-  knowsAbout?: string[];
+  title?: string;
+  description?: string;
+  path?: string;
   noindex?: boolean;
+  /** Emit JSON-LD structured data (home only). */
+  schema?: boolean;
 }
 
-const {
-  title,
-  description,
-  locale,
-  canonical,
-  ogImage,
-  ogImageAlt,
-  personName,
-  personRole,
-  worksFor,
-  alumniOf,
-  knowsAbout,
-  noindex = false,
-} = Astro.props;
-
-const canonicalUrl = canonical ?? new URL(Astro.url.pathname, SITE.url).toString();
-const alternateEs = new URL(Astro.url.pathname.replace(/^\/en\//, '/'), SITE.url).toString();
-const alternateEn = new URL(
-  Astro.url.pathname.startsWith('/en/') ? Astro.url.pathname : `/en${Astro.url.pathname}`,
-  SITE.url
-).toString();
-const ogImageUrl = ogImage ?? new URL(`/og/${locale}.png`, SITE.url).toString();
-const ogImageAltText = ogImageAlt ?? title;
-const ogLocale = locale === 'es' ? 'es_ES' : 'en_US';
-const ogLocaleAlternate = locale === 'es' ? 'en_US' : 'es_ES';
-
-type JsonLdNode = Record<string, unknown>;
-const graph: JsonLdNode[] = [];
-if (!noindex) {
-  graph.push({
-    '@type': 'WebSite',
-    name: SITE.name,
-    url: SITE.url,
-    inLanguage: locale === 'es' ? 'es-ES' : 'en-US',
-  });
-  if (personName) {
-    const person: JsonLdNode = {
-      '@type': 'Person',
-      name: personName,
-      jobTitle: personRole,
-      description,
-      email: SITE.defaultEmail,
-      url: SITE.url,
-      image: ogImageUrl,
-      knowsLanguage: ['es', 'en'],
-      sameAs: [SITE.defaultLinkedin, SITE.defaultGithub],
-    };
-    if (worksFor) {
-      person.worksFor = { '@type': 'Organization', name: worksFor };
-    }
-    if (alumniOf?.length) {
-      person.alumniOf = alumniOf.map((name) => ({ '@type': 'EducationalOrganization', name }));
-    }
-    if (knowsAbout?.length) {
-      person.knowsAbout = knowsAbout;
-    }
-    graph.push(person);
-  }
-}
-const jsonLd = graph.length
-  ? JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c')
-  : null;
+const { locale, title, description, path, noindex = false, schema = true } = Astro.props;
+const t = useTranslations(locale);
 ---
 
 <!doctype html>
 <html lang={locale} data-theme="light">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="author" content={personName ?? SITE.name} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="theme-color" content="#f7f7f8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1e1f24" media="(prefers-color-scheme: dark)" />
-    <link
-      rel="preload"
-      href="/fonts/satoshi/Satoshi-Black.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
+    <ThemeScript />
+    <BaseHead
+      locale={locale}
+      title={title}
+      description={description}
+      path={path}
+      noindex={noindex}
     />
-    <link
-      rel="preload"
-      href="/fonts/general-sans/GeneralSans-Regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="canonical" href={canonicalUrl} />
-    {
-      !noindex && (
-        <>
-          <link rel="alternate" hreflang="es" href={alternateEs} />
-          <link rel="alternate" hreflang="en" href={alternateEn} />
-          <link rel="alternate" hreflang="x-default" href={alternateEs} />
-        </>
-      )
-    }
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="generator" content={Astro.generator} />
-    <meta property="og:site_name" content={SITE.name} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:locale" content={ogLocale} />
-    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
-    <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={ogImageAltText} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageUrl} />
-    <meta name="twitter:image:alt" content={ogImageAltText} />
-    {jsonLd && <script is:inline type="application/ld+json" set:html={jsonLd} />}
-    <script is:inline>
-      (function () {
-        try {
-          var s = localStorage.getItem('sgr-theme');
-          var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.dataset.theme = s || (dark ? 'dark' : 'light');
-        } catch (e) {
-          document.documentElement.dataset.theme = 'light';
-        }
-      })();
-    </script>
+    {schema && <Schema locale={locale} />}
   </head>
   <body>
-    <BgField />
-    <BgNoise />
-    <a
-      href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[200] focus:rounded-full focus:border focus:border-glass-border focus:bg-bg-2 focus:px-4 focus:py-2 focus:text-sm focus:text-text focus:shadow-lg"
-    >
-      {locale === 'es' ? 'Saltar al contenido' : 'Skip to main content'}
-    </a>
-    <slot name="nav" />
-    <main id="main" tabindex="-1">
-      <slot />
-    </main>
-    <slot name="footer" />
+    <a class="skip-link" href="#main">{t('a11y.skip')}</a>
+    <slot />
     <script>
-      import '@/scripts/effects.client.ts';
+      import '@/scripts/reveal';
     </script>
   </body>
 </html>

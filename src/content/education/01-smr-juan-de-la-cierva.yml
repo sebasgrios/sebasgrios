@@ -1,0 +1,17 @@
+start: "2017-09"
+end: "2019-06"
+mode: onsite
+loc: "Málaga, ES"
+org:
+  es: "IES Juan de la Cierva"
+  en: "IES Juan de la Cierva"
+role:
+  es: "Grado Medio · SMR"
+  en: "Vocational Degree · IT Systems & Networks"
+sector:
+  es: "Educación"
+  en: "Education"
+desc:
+  es: "Formación de base en infraestructura: instalación y mantenimiento de equipos, redes y servicios. Adquirí una mentalidad orientada al diagnóstico, la configuración y la mejora continua de sistemas."
+  en: "Foundational training in IT infrastructure: installing and maintaining equipment, networks and services. Developed a mindset geared toward diagnosis, configuration and continuous system improvement."
+tech: ["WordPress", "Servidores", "Personales"]

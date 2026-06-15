@@ -2,53 +2,31 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
+const SITE = 'https://sebasgrios.es';
+
+// 100% static site served by Cloudflare Pages — no adapter, no SSR.
 export default defineConfig({
-  site: 'https://sebasgrios.es',
+  site: SITE,
   output: 'static',
-  build: {
-    inlineStylesheets: 'always',
-  },
-  security: {
-    csp: {
-      directives: [
-        "default-src 'self'",
-        "base-uri 'self'",
-        "form-action 'self'",
-        "object-src 'none'",
-        "frame-src 'none'",
-        "img-src 'self' data:",
-        "font-src 'self' data:",
-        "connect-src 'self' https://cloudflareinsights.com",
-      ],
-      scriptDirective: {
-        resources: ["'self'", 'https://static.cloudflareinsights.com'],
-      },
-      styleDirective: {
-        resources: ["'self'"],
-      },
-    },
-  },
+  prefetch: { defaultStrategy: 'hover' },
   i18n: {
-    defaultLocale: 'es',
     locales: ['es', 'en'],
+    defaultLocale: 'es',
     routing: {
-      prefixDefaultLocale: false,
+      // both locales live under a prefix (/es, /en); `/` is handled by a
+      // language-detecting landing page (see Phase 8).
+      prefixDefaultLocale: true,
       redirectToDefaultLocale: false,
     },
   },
+  // hreflang/alternate links live in <head> (the authoritative signal), so the
+  // sitemap just lists the indexable locale homes and drops the `/` redirect.
   integrations: [
     sitemap({
-      i18n: {
-        defaultLocale: 'es',
-        locales: { es: 'es-ES', en: 'en-US' },
-      },
-      filter: (page) => !page.includes('/404'),
+      filter: (page) => page !== `${SITE}/`,
     }),
   ],
   vite: {
     plugins: [tailwindcss()],
-  },
-  image: {
-    remotePatterns: [{ protocol: 'https', hostname: '*.supabase.co' }],
   },
 });

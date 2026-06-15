@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '@/assets/sebas-hero.webp';
+import type { Locale } from '@/config/site';
+import { settings } from '@/config/settings';
+import { site } from '@/config/site';
+import { social } from '@/config/social';
+import { useTranslations } from '@/i18n';
+import { yearsOfExperience } from '@/lib/dates';
+import Icon from '../Icon.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const years = yearsOfExperience();
+const { sectors, deployed } = settings.metrics;
+const showAvailability = settings.showAvailability;
+---
+
+<section class="hero shell" id="hero">
+  <div class="hero__grid">
+    <div class="hero__col">
+      <p class="eyebrow reveal" data-d="1">{site.name}</p>
+      <h1 class="hero__name reveal" data-d="1">
+        Sebastián<br />González <span class="hero__brand">Ríos</span>
+      </h1>
+      <p class="hero__role reveal" data-d="2">{t('hero.role')}</p>
+      <div class="hero__stack reveal" data-d="2">
+        {
+          settings.heroStack.map((tech, i) => (
+            <>
+              {i > 0 && <span class="dot" aria-hidden="true" />}
+              <b>{tech}</b>
+            </>
+          ))
+        }
+      </div>
+      <p class="hero__desc reveal" data-d="3">{t('hero.desc')}</p>
+      <p class="hero__claim reveal" data-d="3">{t('hero.claim')}</p>
+      <div class="hero__cta reveal" data-d="4">
+        <a class="btn btn--primary" href={`mailto:${social.email}`}>
+          <Icon name="mail" size={17} />{t('hero.contact')}
+        </a>
+        <a class="btn btn--ghost" href={social.linkedin} target="_blank" rel="noopener noreferrer">
+          <Icon name="linkedin" size={17} />{t('hero.linkedin')}
+        </a>
+      </div>
+      <div class="hero__metrics reveal" data-d="5">
+        <div class="metric">
+          <div class="metric__val">+{years}</div>
+          <div class="metric__label">{t('hero.m.exp')}</div>
+        </div>
+        <div class="metric">
+          <div class="metric__val">{sectors}</div>
+          <div class="metric__label">{t('hero.m.sectors')}</div>
+        </div>
+        <div class="metric">
+          <div class="metric__val">{deployed}</div>
+          <div class="metric__label">{t('hero.m.deployed')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__col hero__col--media reveal" data-d="3">
+      <figure class="hero__media">
+        {
+          showAvailability && (
+            <span class="availability glass">
+              <span class="pulse" aria-hidden="true">
+                <i />
+              </span>
+              {t('hero.available')}
+            </span>
+          )
+        }
+        <Image
+          class="hero__portrait"
+          src={portrait}
+          alt={site.author}
+          widths={[400, 640, 900, 1024]}
+          sizes="(max-width: 900px) 380px, 520px"
+          loading="eager"
+        />
+      </figure>
+    </div>
+  </div>
+</section>

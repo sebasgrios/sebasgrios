@@ -1,0 +1,18 @@
+logoImg: searchit
+start: "2025-11"
+end: null
+mode: remote
+loc: "Málaga, ES"
+org:
+  es: "SearchIT"
+  en: "SearchIT"
+role:
+  es: "Ingeniero de Software"
+  en: "Software Engineer"
+sector:
+  es: "FinTech · Banca privada"
+  en: "FinTech · Private Banking"
+desc:
+  es: "Lidero la evolución tecnológica de una plataforma de banca privada, dirigiendo la migración de sistemas legacy hacia un ecosistema de microfrontends escalable con TypeScript y React. Integro Spec-Driven Development y herramientas de IA generativa, y coordino la automatización DevOps en Jenkins y Bitbucket para optimizar los ciclos de entrega."
+  en: "Leading the technological evolution of a private-banking platform, directing the migration of legacy systems toward a scalable microfrontends ecosystem with TypeScript and React. Integrating Spec-Driven Development and generative-AI tooling, and coordinating DevOps automation in Jenkins and Bitbucket to optimise delivery cycles."
+tech: ["GitHub Copilot", "React"]

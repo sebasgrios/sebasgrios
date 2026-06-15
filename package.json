@@ -1,50 +1,40 @@
 {
-  "name": "portfolio",
-  "description": "Portfolio de Sebastián González Ríos",
+  "name": "sebasgrios",
   "type": "module",
-  "version": "4.3.0",
+  "version": "5.0.0",
   "private": true,
-  "author": {
-    "name": "Sebastián González Ríos",
-    "email": "contact@sebasgrios.es",
-    "url": "https://www.sebasgrios.es"
-  },
+  "packageManager": "pnpm@11.5.3",
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=24"
   },
   "scripts": {
-    "dev": "astro dev --host",
-    "start": "astro dev",
+    "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check && biome check .",
-    "format": "biome format --write .",
-    "lint": "biome lint .",
+    "format": "biome check --write .",
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.3",
-    "@fontsource-variable/jetbrains-mono": "^5.2.8",
-    "@resvg/resvg-wasm": "^2.6.2",
-    "@supabase/supabase-js": "^2.107.0",
-    "@tailwindcss/vite": "^4.3.0",
-    "astro": "^6.4.4",
+    "@fontsource-variable/geist": "^5.2.9",
+    "@fontsource-variable/geist-mono": "^5.2.8",
+    "astro": "^6.4.6",
     "satori": "^0.26.0",
-    "tailwindcss": "^4.3.0",
-    "typescript": "^6.0.3"
+    "satori-html": "^0.3.2"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@astrojs/sitemap": "^3.7.3",
     "@axe-core/playwright": "^4.11.3",
-    "@biomejs/biome": "^2.4.16",
-    "@lhci/cli": "^0.15.1",
+    "@biomejs/biome": "^2.5.0",
     "@playwright/test": "^1.60.0",
+    "@tailwindcss/vite": "^4.3.1",
     "sharp": "^0.34.5",
-    "simple-icons": "^16.23.0",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.8"
-  },
-  "packageManager": "pnpm@11.1.3"
+  }
 }

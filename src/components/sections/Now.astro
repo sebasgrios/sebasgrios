@@ -1,0 +1,42 @@
+---
+import type { Locale } from '@/config/site';
+import { useTranslations } from '@/i18n';
+import { pickLocalized } from '@/i18n';
+import { getNow } from '@/lib/content';
+import type { IconName } from '../icons/paths';
+import Icon from '../Icon.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const now = await getNow();
+---
+
+<section class="now" id="now">
+  <div class="shell now__grid">
+    <div>
+      <p class="eyebrow reveal">{t('now.k')}</p>
+      <h2 class="section__title now__title reveal" data-d="1">{t('now.title')}</h2>
+      <p class="now__lead reveal" data-d="2">{pickLocalized(now.lead, locale)}</p>
+    </div>
+    <div>
+      <p class="eyebrow reveal now__interests-label">{t('now.i.label')}</p>
+      <div class="now__interests">
+        {
+          now.interests.map((interest, i) => (
+            <div class="now__interest reveal" data-d={i + 1}>
+              <Icon name={interest.icon as IconName} size={19} />
+              <span>
+                <b>{pickLocalized(interest.title, locale)}</b> —{' '}
+                <span class="now__interest-desc">{pickLocalized(interest.desc, locale)}</span>
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

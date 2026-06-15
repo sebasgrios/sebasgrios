@@ -1,13 +1,9 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": ["src", "src/env.d.ts"],
+  "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": true,
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {

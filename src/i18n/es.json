@@ -1,0 +1,55 @@
+{
+  "nav.home": "Inicio",
+  "nav.now": "Actualmente",
+  "nav.path": "Trayectoria",
+  "nav.work": "Proyectos",
+
+  "a11y.skip": "Saltar al contenido",
+  "a11y.theme": "Cambiar tema",
+  "a11y.menu": "Abrir menú",
+
+  "hero.role": "IA-Driven Engineer",
+  "hero.desc": "Diseño y construyo sistemas software mantenibles y preparados para crecer, del monolito legacy a los microfrontends, apoyándome en flujos de trabajo con IA para entregar más rápido y con mejor criterio de ingeniería.",
+  "hero.claim": "Construyo software escalable con flujos de trabajo impulsados por IA.",
+  "hero.contact": "Contactar",
+  "hero.linkedin": "LinkedIn",
+  "hero.m.exp": "Años de experiencia",
+  "hero.m.sectors": "Sectores",
+  "hero.m.deployed": "Proyectos desplegados",
+  "hero.available": "Disponible para nuevas oportunidades",
+  "hero.media": "Retrato / product shot",
+
+  "now.k": "Actualmente",
+  "now.title": "En qué ando ahora",
+  "now.i.label": "Interesado especialmente en",
+
+  "path.k": "Trayectoria",
+  "path.title": "Experiencia y formación",
+  "path.lead": "Una línea de tiempo única que combina experiencia profesional y formación académica, de lo más reciente a lo más antiguo.",
+  "path.hint": "Desplázate para recorrer la línea de tiempo",
+  "path.scroll": "scroll",
+  "path.or": "o",
+
+  "work.k": "Proyectos",
+  "work.title": "Proyectos personales",
+  "work.demo": "Ver página",
+  "work.code": "Código",
+
+  "footer.top": "Volver arriba",
+
+  "m.remote": "Remoto",
+  "m.hybrid": "Híbrido",
+  "m.onsite": "Presencial",
+  "kind.work": "Experiencia",
+  "kind.edu": "Formación",
+  "dur.year": "año",
+  "dur.years": "años",
+  "dur.month": "mes",
+  "dur.months": "meses",
+  "present": "Actualidad",
+
+  "notFound.title": "404",
+  "notFound.lead": "Parece que esta ruta no existe.",
+  "notFound.sub": "Volvamos a construir algo útil.",
+  "notFound.home": "Volver al inicio"
+}

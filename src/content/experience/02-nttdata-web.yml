@@ -1,0 +1,18 @@
+logoImg: nttdata
+start: "2023-07"
+end: "2025-01"
+mode: remote
+loc: "Málaga, ES"
+org:
+  es: "NTT DATA"
+  en: "NTT DATA"
+role:
+  es: "Desarrollador Web"
+  en: "Web Developer"
+sector:
+  es: "FinTech · Banca"
+  en: "FinTech · Banking"
+desc:
+  es: "Desarrollo y mantenimiento de una aplicación web en React para la carga, gestión y automatización del etiquetado de Adobe Analytics y Adobe Target, optimizando los flujos de trabajo internos de los equipos operativos."
+  en: "Built and maintained a React web application for loading, managing and automating Adobe Analytics and Adobe Target tagging, optimising the internal workflows of operational teams."
+tech: ["React"]

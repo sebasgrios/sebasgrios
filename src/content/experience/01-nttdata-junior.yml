@@ -1,0 +1,18 @@
+logoImg: nttdata
+start: "2022-07"
+end: "2023-07"
+mode: remote
+loc: "Málaga, ES"
+org:
+  es: "NTT DATA"
+  en: "NTT DATA"
+role:
+  es: "Desarrollador de Aplicaciones Junior"
+  en: "Junior Application Developer"
+sector:
+  es: "PropTech · Inmobiliario"
+  en: "PropTech · Real Estate"
+desc:
+  es: "Participé en el desarrollo de una PWA para el sector inmobiliario, incorporando prácticas de calidad desde las primeras fases. Consolidé criterio técnico y ritmo de entrega en un entorno de proyecto real."
+  en: "Contributed to the development of a PWA for the real-estate sector, embedding quality practices from the earliest stages. Consolidated technical judgement and delivery pace within a real project environment."
+tech: ["React"]

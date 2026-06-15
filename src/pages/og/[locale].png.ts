@@ -1,346 +1,92 @@
-import { readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { initWasm, Resvg } from '@resvg/resvg-wasm';
 import type { APIRoute } from 'astro';
 import satori from 'satori';
+import { html } from 'satori-html';
 import sharp from 'sharp';
-import { isLocale, type Locale } from '@/config/i18n';
-import { fetchProfile } from '@/lib/data/repos';
-import { pickLocale } from '@/lib/domain/i18n';
-import { computeYearsOfExperience } from '@/lib/domain/stats';
-import type { Profile } from '@/lib/domain/types';
+import { seo } from '@/config/seo';
+import { settings } from '@/config/settings';
+import { LOCALES, type Locale, site } from '@/config/site';
 
-const nodeRequire = createRequire(import.meta.url);
-
-// Design tokens flattened to sRGB for Satori (which cannot parse oklch()).
-// Source: sistema-de-diseño-sebasgrios — light theme.
-const C = {
-  bg: '#fafafd',
-  text: '#15151b',
-  textSoft: '#57575f',
-  textFaintAlpha: 'rgba(104,104,112,0.6)',
-  accent: '#3364db',
-  blob1: 'rgba(51,100,219,0.30)',
-  blob1End: 'rgba(51,100,219,0)',
-  blob2: 'rgba(207,129,227,0.22)',
-  blob2End: 'rgba(207,129,227,0)',
-} as const;
-
-const OG = { width: 1200, height: 630 } as const;
-
-const FONT_FILES = [
-  { name: 'Satoshi', file: 'Satoshi-Black.ttf', weight: 900 as const },
-  { name: 'General Sans', file: 'GeneralSans-Medium.ttf', weight: 500 as const },
-  { name: 'General Sans', file: 'GeneralSans-Semibold.ttf', weight: 600 as const },
-];
-
-interface OgFont {
-  name: string;
-  weight: 500 | 600 | 900;
-  style: 'normal';
-  data: Buffer;
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale } }));
 }
 
-let wasmInitialized = false;
-let fontCache: OgFont[] | null = null;
+// Read at build from the project root (cwd is stable during `astro build`).
+const font = (file: string) => readFileSync(join(process.cwd(), 'src/assets/og', file));
+const regular = font('Geist-Regular.otf');
+const medium = font('Geist-Medium.otf');
+const semibold = font('Geist-SemiBold.otf');
 
-async function ensureWasm() {
-  if (wasmInitialized) return;
-  try {
-    const wasm = await readFile(nodeRequire.resolve('@resvg/resvg-wasm/index_bg.wasm'));
-    await initWasm(wasm);
-  } catch (error) {
-    // The WASM runtime is global; a module reload (HMR) re-runs this with the
-    // runtime already initialized. Any other failure is a real problem.
-    if (!(error instanceof Error) || !error.message.includes('Already initialized')) {
-      throw error;
-    }
+// Circular avatar from the hero photo, embedded as a PNG data URI so the SVG
+// renderer can rasterise it reliably (computed once, shared by both locales).
+const heroPhoto = readFileSync(join(process.cwd(), 'src/assets/sebas-hero.webp'));
+let avatarUri: Promise<string> | null = null;
+const getAvatarUri = () => {
+  if (!avatarUri) {
+    const size = 440;
+    const circle = Buffer.from(
+      `<svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#fff"/></svg>`,
+    );
+    avatarUri = sharp(heroPhoto)
+      .resize(size, size, { fit: 'cover', position: 'top' })
+      .composite([{ input: circle, blend: 'dest-in' }])
+      .png()
+      .toBuffer()
+      .then((buf) => `data:image/png;base64,${buf.toString('base64')}`);
   }
-  wasmInitialized = true;
-}
+  return avatarUri;
+};
 
-async function loadFonts(): Promise<OgFont[]> {
-  if (fontCache) return fontCache;
-  const base = join(process.cwd(), 'src/assets/og');
-  fontCache = await Promise.all(
-    FONT_FILES.map(async ({ name, file, weight }) => ({
-      name,
-      weight,
-      style: 'normal' as const,
-      data: await readFile(join(base, file)),
-    }))
-  );
-  return fontCache;
-}
-
-// Name + first surname only (e.g. "Sebastián González Ríos" → "Sebastián González").
-function displayName(fullName: string): string {
-  return fullName.trim().split(/\s+/).slice(0, 2).join(' ');
-}
-
-function initials(fullName: string): string {
-  return displayName(fullName)
-    .split(/\s+/)
-    .map((w) => w[0]?.toUpperCase() ?? '')
-    .join('');
-}
-
-function experienceText(years: number, locale: Locale): string {
-  return locale === 'es' ? `+${years} años de experiencia` : `+${years} years of experience`;
-}
-
-// The role line is a single non-wrapping row; a long localized role would
-// otherwise overflow the right column and clip. Shrink the font from the
-// design's 25px only as far as needed to fit the available width.
-function roleFontSize(role: string, experience: string): number {
-  const IDEAL = 25;
-  const MIN = 16;
-  const CONTENT_WIDTH = 608; // 60% column minus its 88px/24px padding
-  const FIXED = 59; // diamond + separator dot + the three 14px gaps
-  const AVG_ADVANCE = 0.54; // approx General Sans medium glyph width per em
-  const chars = role.length + experience.length;
-  const fit = (CONTENT_WIDTH - FIXED) / (chars * AVG_ADVANCE);
-  return Math.max(MIN, Math.min(IDEAL, fit));
-}
-
-// Satori (and resvg) only decode PNG/JPEG, while Storage serves WebP. Normalize
-// to a PNG data URI so the static build never depends on the live Storage host
-// at render time and the format is always one both engines can size and raster.
-async function loadAvatar(profile: Profile): Promise<string | null> {
-  const url = profile.avatarUrl ?? profile.photoUrl;
-  if (!url) return null;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    const source = Buffer.from(await res.arrayBuffer());
-    const png = await sharp(source).resize(380, 380, { fit: 'cover' }).png().toBuffer();
-    return `data:image/png;base64,${png.toString('base64')}`;
-  } catch {
-    return null;
-  }
-}
-
-export const prerender = true;
+const WIDTH = 1200;
+const HEIGHT = 630;
 
 export const GET: APIRoute = async ({ params }) => {
-  if (!isLocale(params.locale)) {
-    return new Response('not found', { status: 404 });
-  }
-  const locale = params.locale;
-  const profile = await fetchProfile();
-  const name = displayName(profile.fullName);
-  const role = pickLocale(profile.role, locale);
-  const years = computeYearsOfExperience(profile);
-  const experience = experienceText(years, locale);
-  const roleSize = roleFontSize(role, experience);
-  const avatar = await loadAvatar(profile);
+  const locale = params.locale as Locale;
+  const meta = seo[locale];
+  const role = meta.ogTitle.split('—')[1]?.trim() ?? 'AI-Driven Engineer';
+  const stack = settings.heroStack.join('   ·   ');
+  const avatar = await getAvatarUri();
 
-  const fonts = await loadFonts();
-  await ensureWasm();
+  // Two invisible columns (40 / 60): circular avatar on the left, the most
+  // relevant info on the right — mirroring the portfolio hero.
+  const markup = html(`
+    <div style="display:flex;width:100%;height:100%;background:#111114;color:#fafafa;font-family:Geist;padding:70px">
+      <div style="display:flex;width:40%;align-items:center;justify-content:center">
+        <div style="display:flex;width:404px;height:404px;border-radius:404px;background:#1c1c22;align-items:center;justify-content:center">
+          <img src="${avatar}" width="380" height="380" style="width:380px;height:380px" />
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center;width:60%;padding-left:48px">
+        <div style="display:flex;font-size:22px;letter-spacing:6px;color:#8a8a92;font-weight:500">SEBASGRIOS</div>
+        <div style="display:flex;font-size:58px;font-weight:600;letter-spacing:-2px;line-height:1.05;margin-top:20px">${site.author}</div>
+        <div style="display:flex;font-size:30px;font-weight:500;color:#c8c8ce;margin-top:16px">${role}</div>
+        <div style="display:flex;font-size:21px;color:#8a8a92;margin-top:14px">${stack}</div>
+        <div style="display:flex;font-size:24px;color:#c8c8ce;border-left:3px solid #fafafa;padding-left:22px;margin-top:30px">${meta.ogDescription}</div>
+      </div>
+    </div>
+  `);
 
-  const avatarInner = avatar
-    ? {
-        type: 'img',
-        props: {
-          src: avatar,
-          style: { width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' },
-        },
-      }
-    : {
-        type: 'div',
-        props: {
-          style: {
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: `linear-gradient(135deg, ${C.accent} 0%, ${C.blob2.replace('0.22', '1')} 100%)`,
-            color: '#ffffff',
-            fontFamily: 'Satoshi',
-            fontWeight: 900,
-            fontSize: '128px',
-          },
-          children: initials(profile.fullName),
-        },
-      };
+  // satori-html returns a VNode that is structurally compatible with satori's
+  // expected ReactNode at runtime, but the two declared types differ.
+  const element = markup as unknown as Parameters<typeof satori>[0];
 
-  const svg = await satori(
-    {
-      type: 'div',
-      props: {
-        style: {
-          position: 'relative',
-          width: `${OG.width}px`,
-          height: `${OG.height}px`,
-          display: 'flex',
-          alignItems: 'stretch',
-          overflow: 'hidden',
-          background: C.bg,
-        },
-        children: [
-          // Atmosphere — two accent blobs.
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'absolute',
-                top: '-220px',
-                left: '-160px',
-                width: '560px',
-                height: '560px',
-                background: `radial-gradient(circle, ${C.blob1} 0%, ${C.blob1End} 70%)`,
-              },
-            },
-          },
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'absolute',
-                bottom: '-260px',
-                right: '-120px',
-                width: '520px',
-                height: '520px',
-                background: `radial-gradient(circle, ${C.blob2} 0%, ${C.blob2End} 70%)`,
-              },
-            },
-          },
-          // Left column (40%) — avatar inside a glass ring.
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'relative',
-                width: '40%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '40px',
-              },
-              children: {
-                type: 'div',
-                props: {
-                  style: {
-                    width: '380px',
-                    height: '380px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    padding: '11px',
-                    boxSizing: 'border-box',
-                    background: 'rgba(255,255,255,0.36)',
-                    border: '1px solid rgba(255,255,255,0.85)',
-                    boxShadow:
-                      '0 18px 50px -18px rgba(45,45,56,0.28), 0 2px 8px -2px rgba(45,45,56,0.12)',
-                  },
-                  children: avatarInner,
-                },
-              },
-            },
-          },
-          // Right column (60%) — name + role line.
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'relative',
-                flex: '1 1 auto',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                padding: '0 88px 0 24px',
-              },
-              children: [
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      display: 'flex',
-                      fontFamily: 'Satoshi',
-                      fontWeight: 900,
-                      fontSize: '92px',
-                      lineHeight: 0.98,
-                      letterSpacing: '-1.84px',
-                      color: C.text,
-                    },
-                    children: name,
-                  },
-                },
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      marginTop: '26px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '14px',
-                      fontFamily: 'General Sans',
-                      fontWeight: 500,
-                      fontSize: `${roleSize}px`,
-                      letterSpacing: '-0.01em',
-                      color: C.textSoft,
-                    },
-                    children: [
-                      {
-                        type: 'div',
-                        props: {
-                          style: {
-                            width: '11px',
-                            height: '11px',
-                            borderRadius: '3px',
-                            background: C.accent,
-                            transform: 'rotate(45deg)',
-                          },
-                        },
-                      },
-                      { type: 'div', props: { style: { display: 'flex' }, children: role } },
-                      {
-                        type: 'div',
-                        props: {
-                          style: {
-                            width: '6px',
-                            height: '6px',
-                            borderRadius: '50%',
-                            background: C.textFaintAlpha,
-                          },
-                        },
-                      },
-                      {
-                        type: 'div',
-                        props: {
-                          style: {
-                            display: 'flex',
-                            fontWeight: 600,
-                            color: C.accent,
-                          },
-                          children: experience,
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    { width: OG.width, height: OG.height, fonts }
-  );
+  const svg = await satori(element, {
+    width: WIDTH,
+    height: HEIGHT,
+    fonts: [
+      { name: 'Geist', data: regular, weight: 400, style: 'normal' },
+      { name: 'Geist', data: medium, weight: 500, style: 'normal' },
+      { name: 'Geist', data: semibold, weight: 600, style: 'normal' },
+    ],
+  });
 
-  const png = new Resvg(svg, { fitTo: { mode: 'width', value: OG.width } }).render().asPng();
+  const png = await sharp(Buffer.from(svg)).png().toBuffer();
 
-  return new Response(png as unknown as BodyInit, {
+  return new Response(new Uint8Array(png), {
     headers: {
       'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+      'Cache-Control': 'public, max-age=31536000, immutable',
     },
   });
 };
-
-export function getStaticPaths() {
-  return [{ params: { locale: 'es' } }, { params: { locale: 'en' } }];
-}

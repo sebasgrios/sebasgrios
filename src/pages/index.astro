@@ -1,45 +1,32 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Nav from '@/components/Nav.astro';
-import Contact from '@/sections/Contact.astro';
-import Education from '@/sections/Education.astro';
-import Experience from '@/sections/Experience.astro';
-import Footer from '@/sections/Footer.astro';
-import Hero from '@/sections/Hero.astro';
-import Projects from '@/sections/Projects.astro';
-import Stack from '@/sections/Stack.astro';
-import { loadHomeData } from '@/lib/data/loaders';
-import { pickLocale } from '@/lib/domain/i18n';
+import { DEFAULT_LOCALE, site } from '@/config/site';
 
-export const prerender = true;
-
-const locale = 'es' as const;
-const data = await loadHomeData();
-const { profile, companies, education, stackGroups, projects, stats } = data;
-const metaTitle = pickLocale(profile.metaTitle, locale);
-const metaDescription = pickLocale(profile.metaDescription, locale);
-const personRole = pickLocale(profile.role, locale);
-const worksFor = companies[0]?.name;
-const alumniOf = [...new Set(education.map((e) => e.school))];
-const knowsAbout = [...new Set(stackGroups.flatMap((g) => g.technologies.map((t) => t.label)))];
+// Root landing: detects the browser language client-side and redirects to the
+// matching locale. The <noscript> fallback and crawlers go to the default.
+const fallback = `/${DEFAULT_LOCALE}/`;
 ---
 
-<BaseLayout
-  title={metaTitle}
-  description={metaDescription}
-  locale={locale}
-  personName={profile.fullName}
-  personRole={personRole}
-  worksFor={worksFor}
-  alumniOf={alumniOf}
-  knowsAbout={knowsAbout}
->
-  <Nav slot="nav" locale={locale} shortName={profile.shortName} avatarUrl={profile.avatarUrl} />
-  <Hero locale={locale} profile={profile} stats={stats} />
-  <Experience locale={locale} companies={companies} />
-  <Education locale={locale} education={education} />
-  <Stack locale={locale} stackGroups={stackGroups} />
-  <Projects locale={locale} projects={projects} />
-  <Contact locale={locale} profile={profile} />
-  <Footer slot="footer" profile={profile} />
-</BaseLayout>
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={`${site.url}/${DEFAULT_LOCALE}/`} />
+    <link rel="alternate" hreflang="es" href={`${site.url}/es/`} />
+    <link rel="alternate" hreflang="en" href={`${site.url}/en/`} />
+    <link rel="alternate" hreflang="x-default" href={`${site.url}/`} />
+    <title>SebasGRios</title>
+    <script is:inline>
+      (() => {
+        const lang = (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+        location.replace(`/${lang}/`);
+      })();
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content={`0; url=${fallback}`} />
+    </noscript>
+  </head>
+  <body>
+    <a href={fallback}>SebasGRios</a>
+  </body>
+</html>
