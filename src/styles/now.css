@@ -1,0 +1,65 @@
+/* ========================== Now / Actualmente ========================== */
+.now {
+  background: var(--bg-elev);
+  border-block: 1px solid var(--line-soft);
+  padding-block: clamp(2.5rem, 4vw, 3.6rem);
+}
+.now__grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+}
+.now__title {
+  font-size: var(--step-2);
+  margin-top: 12px;
+}
+.now__lead {
+  font-size: var(--step-1);
+  color: var(--fg);
+  max-width: 34ch;
+  margin-top: 16px;
+}
+.now__interests-label {
+  margin-bottom: 8px;
+}
+.now__interests {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.now__interest {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 4px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--fg-soft);
+  transition:
+    color 0.25s var(--ease),
+    padding-left 0.25s var(--ease);
+}
+.now__interest:hover {
+  color: var(--fg);
+  padding-left: 10px;
+}
+.now__interest svg {
+  width: 19px;
+  height: 19px;
+  color: var(--accent);
+  flex: none;
+}
+.now__interest b {
+  font-weight: 540;
+  color: var(--fg);
+}
+.now__interest-desc {
+  color: var(--fg-faint);
+}
+
+@media (max-width: 900px) {
+  .now__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

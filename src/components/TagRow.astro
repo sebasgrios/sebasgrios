@@ -1,0 +1,14 @@
+---
+import TechTag from './TechTag.astro';
+
+interface Props {
+  items: string[];
+  tabbable?: boolean;
+}
+
+const { items, tabbable = false } = Astro.props;
+---
+
+<div class="tags">
+  {items.map((name) => <TechTag name={name} tabbable={tabbable} />)}
+</div>

@@ -1,0 +1,11 @@
+order: 1
+name: "BastianGR"
+date: "2025"
+image: "bastiangr"
+desc:
+  es: "Sitio web personal construido con foco en rendimiento, simplicidad y SEO, con una base mantenible y fácilmente escalable."
+  en: "Personal website built with a focus on performance, simplicity and SEO, on a maintainable and easily scalable foundation."
+tech: ["Astro", "Cloudflare"]
+demo: "https://bastiangr.es"
+repo: "https://github.com/sebasgrios/bastiangr"
+privateRepo: false

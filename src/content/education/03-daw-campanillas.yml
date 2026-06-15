@@ -1,0 +1,17 @@
+start: "2021-09"
+end: "2022-06"
+mode: onsite
+loc: "Málaga, ES"
+org:
+  es: "IES Campanillas"
+  en: "IES Campanillas"
+role:
+  es: "Grado Superior · DAW"
+  en: "Higher Degree · Web Application Development"
+sector:
+  es: "Educación"
+  en: "Education"
+desc:
+  es: "Visión completa del desarrollo web, de la lógica de programación a la comunicación entre interfaces. Desarrollé un enfoque práctico para convertir ideas en productos funcionales, con énfasis en maquetación, diseño y estructura."
+  en: "A complete view of web development, from programming logic to interface communication. Built a practical approach to turning ideas into functional products, with emphasis on layout, design and structure."
+tech: ["Laravel", "MariaDB"]

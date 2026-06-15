@@ -1,0 +1,43 @@
+---
+import BaseHead from '@/components/seo/BaseHead.astro';
+import Schema from '@/components/seo/Schema.astro';
+import ThemeScript from '@/components/ThemeScript.astro';
+import type { Locale } from '@/config/site';
+import { useTranslations } from '@/i18n';
+import '@/styles/global.css';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  path?: string;
+  noindex?: boolean;
+  /** Emit JSON-LD structured data (home only). */
+  schema?: boolean;
+}
+
+const { locale, title, description, path, noindex = false, schema = true } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<!doctype html>
+<html lang={locale} data-theme="light">
+  <head>
+    <ThemeScript />
+    <BaseHead
+      locale={locale}
+      title={title}
+      description={description}
+      path={path}
+      noindex={noindex}
+    />
+    {schema && <Schema locale={locale} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t('a11y.skip')}</a>
+    <slot />
+    <script>
+      import '@/scripts/reveal';
+    </script>
+  </body>
+</html>

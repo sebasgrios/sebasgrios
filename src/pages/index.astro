@@ -1,0 +1,32 @@
+---
+import { DEFAULT_LOCALE, site } from '@/config/site';
+
+// Root landing: detects the browser language client-side and redirects to the
+// matching locale. The <noscript> fallback and crawlers go to the default.
+const fallback = `/${DEFAULT_LOCALE}/`;
+---
+
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={`${site.url}/${DEFAULT_LOCALE}/`} />
+    <link rel="alternate" hreflang="es" href={`${site.url}/es/`} />
+    <link rel="alternate" hreflang="en" href={`${site.url}/en/`} />
+    <link rel="alternate" hreflang="x-default" href={`${site.url}/`} />
+    <title>SebasGRios</title>
+    <script is:inline>
+      (() => {
+        const lang = (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+        location.replace(`/${lang}/`);
+      })();
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content={`0; url=${fallback}`} />
+    </noscript>
+  </head>
+  <body>
+    <a href={fallback}>SebasGRios</a>
+  </body>
+</html>

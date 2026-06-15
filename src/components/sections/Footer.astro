@@ -1,0 +1,28 @@
+---
+import type { Locale } from '@/config/site';
+import { site } from '@/config/site';
+import { social } from '@/config/social';
+import { useTranslations } from '@/i18n';
+import Icon from '../Icon.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<footer class="footer">
+  <div class="shell">
+    <a class="footer__top" href="#hero">
+      <Icon name="arrowUp" size={15} />{t('footer.top')}
+    </a>
+    <div class="footer__brand">{site.name}</div>
+    <div class="footer__cc">
+      <a href={`${social.github}/sebasgrios/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">
+        <Icon name="scale" size={14} />MIT License
+      </a>
+    </div>
+  </div>
+</footer>

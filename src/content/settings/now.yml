@@ -1,0 +1,32 @@
+lead:
+  es: "Trabajando como Ingeniero de Software en SearchIT, donde participo en la migración de una plataforma de banca privada hacia una arquitectura de microfrontends escalable, apoyándome en ingeniería asistida por IA para acelerar la entrega sin sacrificar el criterio técnico."
+  en: "Working as a Software Engineer at SearchIT, where I contribute to the migration of a private-banking platform toward a scalable microfrontends architecture, leaning on AI-assisted engineering to accelerate delivery without sacrificing technical judgement."
+interests:
+  - icon: layout
+    title:
+      es: "Arquitectura Frontend"
+      en: "Frontend Architecture"
+    desc:
+      es: "Diseño de arquitecturas frontend mantenibles y design systems escalables."
+      en: "Designing maintainable frontend architectures and scalable design systems."
+  - icon: sparkles
+    title:
+      es: "Ingeniería con IA"
+      en: "AI Engineering"
+    desc:
+      es: "Integración de IA generativa y Spec-Driven Development en el ciclo de desarrollo."
+      en: "Integrating generative AI and Spec-Driven Development into the delivery cycle."
+  - icon: cpu
+    title:
+      es: "Developer Experience"
+      en: "Developer Experience"
+    desc:
+      es: "Tooling y automatización que aceleran al equipo sin renunciar a la calidad."
+      en: "Tooling and automation that speed up the team without giving up quality."
+  - icon: cloud
+    title:
+      es: "Infraestructura Cloud"
+      en: "Cloud Infrastructure"
+    desc:
+      es: "Despliegue y computación en el edge sobre Cloudflare."
+      en: "Deployment and edge computing on Cloudflare."

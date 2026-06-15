@@ -1,0 +1,6 @@
+/* Self-hosted variable fonts (no CDN). Fontsource ships the woff2 locally and
+   Vite fingerprints + serves them from the build output. Only the upright
+   (wght) axis is imported — the design never uses italics. Non-latin subsets
+   stay declared but are fetched on demand via unicode-range. */
+@import "@fontsource-variable/geist/wght.css";
+@import "@fontsource-variable/geist-mono/wght.css";

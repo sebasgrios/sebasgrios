@@ -1,0 +1,18 @@
+logoImg: nttdata
+start: "2025-01"
+end: "2025-11"
+mode: remote
+loc: "Málaga, ES"
+org:
+  es: "NTT DATA"
+  en: "NTT DATA"
+role:
+  es: "Programador Full Stack"
+  en: "Full Stack Developer"
+sector:
+  es: "Cleantech · Reciclaje"
+  en: "Cleantech · Recycling"
+desc:
+  es: "Lideré el desarrollo y mantenimiento del ecosistema digital de un proyecto de reciclaje: una aplicación móvil nativa en React Native y un backoffice de gestión en React. Garanticé la sincronización de datos y la coherencia de experiencia entre plataformas."
+  en: "Led the development and maintenance of the digital ecosystem for a recycling project: a native React Native mobile app and a React management backoffice. Ensured data synchronisation and a consistent experience across platforms."
+tech: ["React", "React Native", "Moleculer", "MongoDB"]

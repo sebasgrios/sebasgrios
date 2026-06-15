@@ -1,0 +1,33 @@
+# build output
+dist/
+.output/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+
+# environment
+.env
+.env.production
+.env.*.local
+
+# test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+coverage/
+
+# macOS
+.DS_Store
+
+# editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/

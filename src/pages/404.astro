@@ -1,0 +1,66 @@
+---
+import Icon from '@/components/Icon.astro';
+import { DEFAULT_LOCALE } from '@/config/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import en from '@/i18n/en.json';
+import es from '@/i18n/es.json';
+
+// Cloudflare Pages serves this single /404.html for any unknown route, so it
+// can't be locale-prefixed. It renders in the default locale and swaps to
+// English client-side when the browser prefers it.
+const strings = { es, en };
+---
+
+<BaseLayout locale={DEFAULT_LOCALE} title="404 — SebasGRios" noindex schema={false}>
+  <main id="main" class="notfound">
+    <p class="notfound__code">{es['notFound.title']}</p>
+    <h1 class="notfound__lead" data-nf="lead">{es['notFound.lead']}</h1>
+    <p class="notfound__sub" data-nf="sub">{es['notFound.sub']}</p>
+    <a class="btn btn--primary notfound__home" href={`/${DEFAULT_LOCALE}/`} data-nf-home>
+      <Icon name="arrowRight" size={17} />
+      <span data-nf="home">{es['notFound.home']}</span>
+    </a>
+  </main>
+
+  <script is:inline define:vars={{ strings }}>
+    if ((navigator.language || 'es').toLowerCase().startsWith('en')) {
+      const t = strings.en;
+      document.documentElement.lang = 'en';
+      document.querySelector('[data-nf="lead"]').textContent = t['notFound.lead'];
+      document.querySelector('[data-nf="sub"]').textContent = t['notFound.sub'];
+      document.querySelector('[data-nf="home"]').textContent = t['notFound.home'];
+      document.querySelector('[data-nf-home]').setAttribute('href', '/en/');
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  .notfound {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+    padding: var(--gutter);
+  }
+  .notfound__code {
+    font-family: var(--font-mono);
+    font-size: var(--step-4);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: var(--fg-faint);
+  }
+  .notfound__lead {
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+  }
+  .notfound__sub {
+    color: var(--fg-soft);
+    max-width: 38ch;
+  }
+  .notfound__home {
+    margin-top: 18px;
+  }
+</style>
