@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/sebasgrios/sebasgrios/security/advisories/new
+    about: Please report security issues privately, not as a public issue.
+  - name: Contact
+    url: https://sebasgrios.es
+    about: For anything else, reach out through the website.
