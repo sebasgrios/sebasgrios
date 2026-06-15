@@ -1,7 +1,7 @@
 {
   "name": "sebasgrios",
   "type": "module",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "private": true,
   "packageManager": "pnpm@11.5.3",
   "engines": {
