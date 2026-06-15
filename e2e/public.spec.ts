@@ -20,10 +20,11 @@ test.describe('public content', () => {
 
   test('private-repo project hides the code button', async ({ page }) => {
     await page.goto('/es/');
-    // Three projects, all have a demo link; only two expose a code link.
+    // Three projects, all have a demo link; only one exposes a code link
+    // (BastianGR is marked privateRepo, Clara Romero has no repo).
     // `exact` avoids matching the project thumbnail's "{name} — Ver página" label.
     await expect(page.getByRole('link', { name: 'Ver página', exact: true })).toHaveCount(3);
-    await expect(page.getByRole('link', { name: 'Código', exact: true })).toHaveCount(2);
+    await expect(page.getByRole('link', { name: 'Código', exact: true })).toHaveCount(1);
   });
 
   test('root redirects to a locale', async ({ page }) => {

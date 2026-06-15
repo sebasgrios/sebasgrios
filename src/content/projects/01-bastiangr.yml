@@ -8,4 +8,4 @@ desc:
 tech: ["Astro", "Cloudflare"]
 demo: "https://bastiangr.es"
 repo: "https://github.com/sebasgrios/bastiangr"
-privateRepo: false
+privateRepo: true
